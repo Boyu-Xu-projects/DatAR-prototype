@@ -1,4 +1,9 @@
-﻿using System.Linq;
+﻿using Microsoft.MixedReality.Toolkit;
+using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.UI;
+using System;
+using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -42,23 +47,25 @@ public class ResourceSphereDuplicationBehaviour : MonoBehaviour
     {
         if (shouldDuplicateOnGrab)
         {
-            var duplicate = Instantiate(gameObject, GameObject.Find("StandaloneResourceSpherePool").transform);
-            duplicate.transform.localScale = new Vector3(_manufacturer.pointScale,_manufacturer.pointScale,_manufacturer.pointScale);
-            duplicate.GetComponent<ResourceSphereDuplicationBehaviour>().shouldDuplicateOnGrab = false;
-            //var hand = transform.parent.GetComponent<Hand>();
-            //hand.DetachObject(gameObject);
-            //hand.AttachObject(duplicate, hand.GetGrabStarting());
+            var duplicate = Instantiate(gameObject, transform.parent);
+            duplicate.transform.position = transform.position;
+            duplicate.transform.localScale = transform.localScale;
+            duplicate.GetComponent<Renderer>().material = GetComponent<Renderer>().material;
             
-            //// Set color to neutral
-            //if (GetComponent<ResourceComponent>().Resource.Types.Contains("rdf:Class"))
-            //{
-            //    duplicate.GetComponent<Renderer>().material = _colorService.classColor;
-            //}
-            //else
-            //{
-            //    duplicate.GetComponent<Renderer>().material = _colorService.neutralColor;
-            //}
-            //duplicate.GetComponentInChildren<TMP_Text>().alpha = duplicate.GetComponent<Renderer>().material.color.a;
+            transform.SetParent(GameObject.Find("StandaloneResourceSpherePool").transform, true);
+            transform.localScale = new Vector3(_manufacturer.pointScale,_manufacturer.pointScale,_manufacturer.pointScale);
+            GetComponent<ResourceSphereDuplicationBehaviour>().shouldDuplicateOnGrab = false;
+
+            // Set color to neutral
+            if (GetComponent<ResourceComponent>().Resource.Types.Contains("rdf:Class"))
+            {
+                GetComponent<Renderer>().material = _colorService.classColor;
+            }
+            else
+            {
+                GetComponent<Renderer>().material = _colorService.neutralColor;
+            }
+            GetComponentInChildren<TMP_Text>().alpha = GetComponent<Renderer>().material.color.a;
         }
     }
 }

@@ -50,7 +50,6 @@ public class Receptacle : MonoBehaviour
 
         // Check if currently slotted resource
         // If so, remove
-        Debug.Log("Exiting");
         if (resourceComponent.GetInstanceID() == _prevInstanceId)
         {
             _prevInstanceId = -1;
@@ -133,7 +132,6 @@ public class Receptacle : MonoBehaviour
             return;
         }
         _prevInstanceId = resourceComponent.GetInstanceID();
-        Debug.Log("Entering");
 
         StartCoroutine(SetCurrentlyTriggering());
         
@@ -142,7 +140,7 @@ public class Receptacle : MonoBehaviour
         {
             var previousItem = receptacle.transform.GetChild(0);
             previousItem.SetParent(GameObject.Find("StandaloneResourceSpherePool").transform);
-            previousItem.localPosition += new Vector3(0, 1.5f, 0f);
+            previousItem.localPosition += new Vector3(0, previousItem.transform.lossyScale.y * 1.5f, 0f);
         }
 
         // Detach from hand
@@ -158,7 +156,10 @@ public class Receptacle : MonoBehaviour
     private IEnumerator SetCurrentlyTriggering()
     {
         isTriggering = true;
-        yield return null;
+        for(var i = 0; i < 4; i++)
+        {
+            yield return null;
+        }
         isTriggering = false;
     }
 }

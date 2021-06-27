@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 6499431664653778288}
   - component: {fileID: 4793275726901906681}
   - component: {fileID: 2789678809286898365}
-  - component: {fileID: 4661956409852379362}
   - component: {fileID: 5278612021698788714}
   - component: {fileID: 543174655924871782}
   - component: {fileID: 237533912236639227}
@@ -130,6 +129,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointTargetToFace: {fileID: 0}
   pointRotateSpeed: 2
+  lockX: 0
+  lockY: 0
 --- !u!114 &6499431664653778288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,18 +174,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4661956409852379362
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 296552642795844531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ce9a256903e10a468a1c678de0ead5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5278612021698788714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,7 +235,18 @@ MonoBehaviour:
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6499431664653778288}
+        m_MethodName: DuplicateIfFixed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onManipulationEnded:
     m_PersistentCalls:
       m_Calls: []
