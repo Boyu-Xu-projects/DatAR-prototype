@@ -24,7 +24,6 @@ public class TurnTowardsUser : MonoBehaviour
             return;
         }
 
-        //TODO: Fix this rotation inconsistency properly
         var lookDir = transform.position - pointTargetToFace.position;
         if (lockX)
             lookDir.x = 0;

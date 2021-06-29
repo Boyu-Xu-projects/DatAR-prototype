@@ -27,6 +27,9 @@ public class QueryDiseaseCoocurrences : MonoBehaviour, IQueryState
     public string ErrorMessage { get; private set; }
 
     private List<FormattedCooccurrence> Cooccurrences;
+    private bool displayRatio = false;
+
+    public string CurrentFilter{ get; set; }
 
     public QueryDiseaseCoocurrences()
     {
@@ -41,6 +44,25 @@ public class QueryDiseaseCoocurrences : MonoBehaviour, IQueryState
         disease1Receptacle.slottedResourceContainerHasChanged.Subscribe(currentBatchId => GetDiseaseCooccurrences());
 
         disease2Receptacle.slottedResourceContainerHasChanged.Subscribe(currentBatchId => GetDiseaseCooccurrences());
+    }
+
+    public void SetDisplayRatio(bool value)
+    {
+        if(value == displayRatio)
+        {
+            return;
+        }
+
+        displayRatio = value;
+
+        if (CurrentFilter == null)
+        {
+            SelectOverview();
+        }
+        else
+        {
+            SelectFromClass(CurrentFilter);
+        }
     }
 
     async private void GetDiseaseCooccurrences()
@@ -113,7 +135,7 @@ public class QueryDiseaseCoocurrences : MonoBehaviour, IQueryState
                 value.Where(x => x.Disease.Id == disease2Id).FirstOrDefault()?.AppearTimes ?? 0
                 ))
             .GroupBy(x => x.Class)
-            .OrderByDescending(x => x.Sum(y => y.Disease1.Item2 + y.Disease2.Item2))
+            .OrderByDescending(x => x.Sum(y => y.Disease1Cooccurences + y.Disease2Cooccurences))
             .SelectMany(x => x)
             .ToList();
 
@@ -162,26 +184,50 @@ public class QueryDiseaseCoocurrences : MonoBehaviour, IQueryState
         BrainConcepts.GenerateConceptList(
                 Cooccurrences
                     .GroupBy(x => x.Class)
-                    .SelectMany(x => x.OrderByDescending(r => r.Disease1.Item2 + r.Disease2.Item2).Take(3))
-                    .ToList()
+                    .SelectMany(x => x.OrderByDescending(r => r.Disease1Cooccurences + r.Disease2Cooccurences).Take(3))
+                    .ToList(),
+                displayRatio,
+                false
             );
     }
 
-    public void SelectFromClass(Interactable thisButton, string brainClass)
+    //TODO: CLean this up...
+    public void SelectFromClass(string brainClass, Interactable thisButton = null)
     {
+        if(thisButton == null)
+        {
+            BrainConcepts.GenerateConceptList(
+                Cooccurrences
+                    .Where(x => x.Class == brainClass)
+                    .OrderByDescending(x => x.Disease1Cooccurences + x.Disease2Cooccurences)
+                    .Take(5)
+                    .ToList(),
+                displayRatio,
+                true
+            );
+
+            CurrentFilter = brainClass;
+
+            return;
+        }
+
         if (thisButton.IsToggled)
         {
             BrainConcepts.GenerateConceptList(
-            Cooccurrences
-                .Where(x => x.Class == brainClass)
-                .OrderByDescending(x => x.Disease1.Item2 + x.Disease2.Item2)
-                .Take(5)
-                .ToList()
+                Cooccurrences
+                    .Where(x => x.Class == brainClass)
+                    .OrderByDescending(x => x.Disease1Cooccurences + x.Disease2Cooccurences)
+                    .Take(5)
+                    .ToList(),
+                displayRatio,
+                true
             );
+
+            CurrentFilter = brainClass;
 
             thisButton.transform.parent.GetComponentsInChildren<Interactable>().ForEach(siblingButton =>
             {
-                if(siblingButton != thisButton)
+                if (siblingButton != thisButton)
                 {
                     siblingButton.IsToggled = false;
                 }
@@ -190,6 +236,7 @@ public class QueryDiseaseCoocurrences : MonoBehaviour, IQueryState
         else
         {
             SelectOverview();
+            CurrentFilter = null;
         }
     }
 }
@@ -198,14 +245,23 @@ public class FormattedCooccurrence
 {
     public string Concept { get; private set; }
     public string Class { get; private set; }
-    public Tuple<string, int> Disease1 { get; private set; }
-    public Tuple<string, int> Disease2 { get; private set; }
+    public string Disease1Id { get; private set; }
+    public string Disease2Id { get; private set; }
+    public int Disease1Cooccurences { get; private set; }
+    public int Disease2Cooccurences { get; private set; }
+    public double Disease1Ratio { get; private set; }
+    public double Disease2Ratio { get; private set; }
 
     public FormattedCooccurrence(string _Concept, string _Class, string _Disease1, int _Disease1Cooccurrences, string _Disease2, int _Disease2Cooccurrences)
     {
         Concept = _Concept;
         Class = _Class;
-        Disease1 = new Tuple<string, int>(_Disease1, _Disease1Cooccurrences);
-        Disease2 = new Tuple<string, int>(_Disease2, _Disease2Cooccurrences);
+        Disease1Id = _Disease1;
+        Disease2Id = _Disease2;
+        Disease1Cooccurences = _Disease1Cooccurrences;
+        Disease2Cooccurences = _Disease2Cooccurrences;
+
+        Disease1Ratio = ((double)Disease1Cooccurences / (Disease1Cooccurences + Disease2Cooccurences)) * 100d;
+        Disease2Ratio = ((double)Disease2Cooccurences / (Disease1Cooccurences + Disease2Cooccurences)) * 100d;
     }
 }

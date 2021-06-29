@@ -10,7 +10,7 @@ public class BrainConceptManager : MonoBehaviour
     public BrainConceptSphere ConceptPrefab;
     public float MaxHistogramScale;
 
-    public void GenerateConceptList(List<FormattedCooccurrence> cooccurrences)
+    public void GenerateConceptList(List<FormattedCooccurrence> cooccurrences, bool displayRatio, bool centerAndUpscale)
     {
         foreach (Transform oldConcept in transform)
         {
@@ -22,16 +22,42 @@ public class BrainConceptManager : MonoBehaviour
         {
             var conceptObject = Instantiate(ConceptPrefab, transform);
             conceptObject.transform.localPosition = new Vector3(0, -0.6f * transform.childCount, 0);
-            conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, cooccurrence.Disease1.Item2, cooccurrence.Disease2.Item2);
+
+            if (!displayRatio)
+            {
+                conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, cooccurrence.Disease1Cooccurences, cooccurrence.Disease2Cooccurences);
+            }
+            else
+            {
+                conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, (int) cooccurrence.Disease1Ratio, (int) cooccurrence.Disease2Ratio);
+            }
         }
 
-        SetHistogramValues();
+        SetHistogramValues(displayRatio);
+
+        //TODO: Hardcode for now, fix properly later
+        if (centerAndUpscale)
+        {
+            //foreach (var conceptObject in GetComponentsInChildren<BrainConceptSphere>())
+            //{
+            //    conceptObject.transform.position -= new Vector3(0, 0.25f, 0);
+            //}
+            transform.localPosition = new Vector3(0, 2.25f, 0);
+            transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
+        }
+        else
+        {
+            transform.localPosition = new Vector3(0, 5.5f, 0);
+            transform.localScale = new Vector3(1f, 1f, 1f);
+        }
     }
 
-    private void SetHistogramValues()
+    private void SetHistogramValues(bool displayRatio)
     {
         var allConcepts = GetComponentsInChildren<BrainConceptSphere>();
-        var maxDiseaseAppearTimes = allConcepts.SelectMany(x => new[] { x.Disease1AppearTimes, x.Disease2AppearTimes }).Max();
+        var maxDiseaseAppearTimes = (displayRatio) ? 
+            100 :
+            allConcepts.SelectMany(x => new[] { x.Disease1AppearTimes, x.Disease2AppearTimes }).Max();
 
         allConcepts.ForEach(concept =>
         {

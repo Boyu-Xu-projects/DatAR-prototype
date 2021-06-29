@@ -17,4 +17,9 @@ public class OutlineMaterialFix : MonoBehaviour
     {
         GetComponent<MeshRenderer>().materials = oldMaterials;
     }
+
+    public void OverrideOldMaterials(Material[] newOldMaterials)
+    {
+        oldMaterials = newOldMaterials;
+    }
 }

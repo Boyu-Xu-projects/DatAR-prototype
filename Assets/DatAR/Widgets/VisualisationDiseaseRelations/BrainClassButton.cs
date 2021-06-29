@@ -10,6 +10,6 @@ public class BrainClassButton : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        GetComponent<Interactable>().OnClick.AddListener(delegate { visualization.SelectFromClass(GetComponent<Interactable>(), brainClass); });
+        GetComponent<Interactable>().OnClick.AddListener(delegate { visualization.SelectFromClass(brainClass, GetComponent<Interactable>()); });
     }
 }

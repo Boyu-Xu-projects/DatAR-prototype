@@ -65,6 +65,7 @@ public class ResourceSphereDuplicationBehaviour : MonoBehaviour
             {
                 GetComponent<Renderer>().material = _colorService.neutralColor;
             }
+            GetComponent<OutlineMaterialFix>().OverrideOldMaterials(GetComponent<Renderer>().materials);
             GetComponentInChildren<TMP_Text>().alpha = GetComponent<Renderer>().material.color.a;
         }
     }
