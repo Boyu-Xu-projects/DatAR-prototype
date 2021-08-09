@@ -9,11 +9,11 @@ using DatAR.DataModels.Resources;
 using JsonLD.Core;
 using JsonSubTypes;
 using Newtonsoft.Json.Linq;
-using UniRx.Async;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using DatAR.Auxiliary.SharedScripts;
+using Cysharp.Threading.Tasks;
 
 public class SparqlService : MonoBehaviour
 {
