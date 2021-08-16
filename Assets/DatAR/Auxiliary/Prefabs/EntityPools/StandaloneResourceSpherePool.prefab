@@ -46,4 +46,4 @@ MonoBehaviour:
   defaultSpawnLocation: {fileID: 0}
   resourceSpherePrefab: {fileID: 296552642795844531, guid: d0ecc0f5cdb82da4997fb811e8c23532,
     type: 3}
-  pointScale: 0.6
+  pointScale: 0.03
