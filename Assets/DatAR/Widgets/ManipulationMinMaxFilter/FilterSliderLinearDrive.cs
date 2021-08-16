@@ -1,177 +1,177 @@
-﻿////======= Copyright (c) Valve Corporation, All rights reserved. ===============
+﻿////======= copyright (c) valve corporation, all rights reserved. ===============
 ////
-//// Purpose: Drives a linear mapping based on position between 2 positions
+//// purpose: drives a linear mapping based on position between 2 positions
 ////
 ////=============================================================================
-//// Modified by DatAR Research group
+//// modified by datar research group
 
-//using UnityEngine;
-//using Valve.VR.InteractionSystem;
+//using unityengine;
+//using valve.vr.interactionsystem;
 
-//namespace _main.Widgets.ManipulationMinMaxFilter
+//namespace _main.widgets.manipulationminmaxfilter
 //{
-//	public enum HandlePosition
-//	{
-//		Upper,
-//		Lower
-//	};
+//    public enum handleposition
+//    {
+//        upper,
+//        lower
+//    };
 
-////-------------------------------------------------------------------------
-//	[RequireComponent( typeof( Interactable ) )]
-//	public class FilterSliderLinearDrive : MonoBehaviour
-//	{
-//		public Transform startPosition;
-//		public Transform endPosition;
-//		public bool repositionGameObject = true;
-//		public bool maintainMomemntum = true;
-//		public float momemtumDampenRate = 5.0f;
+//    //-------------------------------------------------------------------------
+//    [requirecomponent(typeof(interactable))]
+//    public class filtersliderlineardrive : monobehaviour
+//    {
+//        public transform startposition;
+//        public transform endposition;
+//        public bool repositiongameobject = true;
+//        public bool maintainmomemntum = true;
+//        public float momemtumdampenrate = 5.0f;
 
-//		protected Hand.AttachmentFlags attachmentFlags = Hand.AttachmentFlags.DetachFromOtherHand;
+//        protected hand.attachmentflags attachmentflags = hand.attachmentflags.detachfromotherhand;
 
-//		protected float initialMappingOffset;
-//		protected int numMappingChangeSamples = 5;
-//		protected float[] mappingChangeSamples;
-//		protected float prevMapping = 0.0f;
-//		protected float mappingChangeRate;
-//		protected int sampleCount = 0;
+//        protected float initialmappingoffset;
+//        protected int nummappingchangesamples = 5;
+//        protected float[] mappingchangesamples;
+//        protected float prevmapping = 0.0f;
+//        protected float mappingchangerate;
+//        protected int samplecount = 0;
 
-//		protected Interactable interactable;
+//        protected interactable interactable;
 
-//		[SerializeField] private FilterSliderControllerComponent filterSliderController;
-//		[SerializeField] private HandlePosition handlePosition;
+//        [serializefield] private filterslidercontrollercomponent filterslidercontroller;
+//        [serializefield] private handleposition handleposition;
 
-//		protected virtual void Awake()
-//		{
-//			mappingChangeSamples = new float[numMappingChangeSamples];
-//			interactable = GetComponent<Interactable>();
-//		}
+//        protected virtual void awake()
+//        {
+//            mappingchangesamples = new float[nummappingchangesamples];
+//            interactable = getcomponent<interactable>();
+//        }
 
-//		private void SetControllerValue(float value)
-//		{
-//			if (handlePosition == HandlePosition.Lower)
-//			{
-//				filterSliderController.SetMinValue(value);
-//			}
-//			else
-//			{
-//				filterSliderController.SetMaxValue(value);
-//			}
-//		}
+//        private void setcontrollervalue(float value)
+//        {
+//            if (handleposition == handleposition.lower)
+//            {
+//                filterslidercontroller.setminvalue(value);
+//            }
+//            else
+//            {
+//                filterslidercontroller.setmaxvalue(value);
+//            }
+//        }
 
-//		private float GetControllerValue()
-//		{
-//			if (handlePosition == HandlePosition.Lower)
-//			{
-//				return filterSliderController.selectedRange.Value.x;
-//			}
-//			else
-//			{
-//				return filterSliderController.selectedRange.Value.y;
-//			}
-//		}
+//        private float getcontrollervalue()
+//        {
+//            if (handleposition == handleposition.lower)
+//            {
+//                return filterslidercontroller.selectedrange.value.x;
+//            }
+//            else
+//            {
+//                return filterslidercontroller.selectedrange.value.y;
+//            }
+//        }
 
-//		protected virtual void Start()
-//		{
-//			initialMappingOffset = GetControllerValue();
+//        protected virtual void start()
+//        {
+//            initialmappingoffset = getcontrollervalue();
 
-//			if ( repositionGameObject )
-//			{
-//				UpdateLinearMapping( transform );
-//			}
-//		}
+//            if (repositiongameobject)
+//            {
+//                updatelinearmapping(transform);
+//            }
+//        }
 
-//		protected virtual void HandHoverUpdate( Hand hand )
-//		{
-//			GrabTypes startingGrabType = hand.GetGrabStarting();
+//        protected virtual void handhoverupdate(hand hand)
+//        {
+//            grabtypes startinggrabtype = hand.getgrabstarting();
 
-//			if (interactable.attachedToHand == null && startingGrabType != GrabTypes.None)
-//			{
-//				initialMappingOffset = GetControllerValue() - CalculateLinearMapping( hand.transform );
-//				sampleCount = 0;
-//				mappingChangeRate = 0.0f;
+//            if (interactable.attachedtohand == null && startinggrabtype != grabtypes.none)
+//            {
+//                initialmappingoffset = getcontrollervalue() - calculatelinearmapping(hand.transform);
+//                samplecount = 0;
+//                mappingchangerate = 0.0f;
 
-//				hand.AttachObject(gameObject, startingGrabType, attachmentFlags);
-//			}
-//		}
+//                hand.attachobject(gameobject, startinggrabtype, attachmentflags);
+//            }
+//        }
 
-//		protected virtual void HandAttachedUpdate(Hand hand)
-//		{
-//			UpdateLinearMapping(hand.transform);
+//        protected virtual void handattachedupdate(hand hand)
+//        {
+//            updatelinearmapping(hand.transform);
 
-//			if (hand.IsGrabEnding(this.gameObject))
-//			{
-//				hand.DetachObject(gameObject);
-//			}
-//		}
+//            if (hand.isgrabending(this.gameobject))
+//            {
+//                hand.detachobject(gameobject);
+//            }
+//        }
 
-//		protected virtual void OnDetachedFromHand(Hand hand)
-//		{
-//			CalculateMappingChangeRate();
-//		}
-
-
-//		protected void CalculateMappingChangeRate()
-//		{
-//			//Compute the mapping change rate
-//			mappingChangeRate = 0.0f;
-//			int mappingSamplesCount = Mathf.Min( sampleCount, mappingChangeSamples.Length );
-//			if ( mappingSamplesCount != 0 )
-//			{
-//				for ( int i = 0; i < mappingSamplesCount; ++i )
-//				{
-//					mappingChangeRate += mappingChangeSamples[i];
-//				}
-//				mappingChangeRate /= mappingSamplesCount;
-//			}
-//		}
-
-//		public void OnMetaEngage(Transform handTransform)
-//		{
-//			initialMappingOffset = GetControllerValue() - CalculateLinearMapping( handTransform );
-//			sampleCount = 0;
-//			mappingChangeRate = 0.0f;
-//		}
-
-//		public void UpdateLinearMapping( Transform updateTransform )
-//		{
-//			prevMapping = GetControllerValue();
-
-//			SetControllerValue(Mathf.Clamp01(initialMappingOffset + CalculateLinearMapping(updateTransform)));
-
-//			mappingChangeSamples[sampleCount % mappingChangeSamples.Length] = ( 1.0f / Time.deltaTime ) * ( GetControllerValue() - prevMapping );
-//			sampleCount++;
-
-//			if ( repositionGameObject )
-//			{
-//				transform.position = Vector3.Lerp( startPosition.position, endPosition.position, GetControllerValue() );
-//			}
-//		}
-
-//		protected float CalculateLinearMapping( Transform updateTransform )
-//		{
-//			Vector3 direction = endPosition.position - startPosition.position;
-//			float length = direction.magnitude;
-//			direction.Normalize();
-
-//			Vector3 displacement = updateTransform.position - startPosition.position;
-
-//			return Vector3.Dot( displacement, direction ) / length;
-//		}
+//        protected virtual void ondetachedfromhand(hand hand)
+//        {
+//            calculatemappingchangerate();
+//        }
 
 
-//		protected virtual void Update()
-//		{
-//			if ( maintainMomemntum && mappingChangeRate != 0.0f )
-//			{
-//				//Dampen the mapping change rate and apply it to the mapping
-//				mappingChangeRate = Mathf.Lerp( mappingChangeRate, 0.0f, momemtumDampenRate * Time.deltaTime );
-//				SetControllerValue(Mathf.Clamp01( GetControllerValue() + ( mappingChangeRate * Time.deltaTime ) ));
+//        protected void calculatemappingchangerate()
+//        {
+//            //compute the mapping change rate
+//            mappingchangerate = 0.0f;
+//            int mappingsamplescount = mathf.min(samplecount, mappingchangesamples.length);
+//            if (mappingsamplescount != 0)
+//            {
+//                for (int i = 0; i < mappingsamplescount; ++i)
+//                {
+//                    mappingchangerate += mappingchangesamples[i];
+//                }
+//                mappingchangerate /= mappingsamplescount;
+//            }
+//        }
 
-//				if ( repositionGameObject )
-//				{
-//					transform.position = Vector3.Lerp( startPosition.position, endPosition.position, GetControllerValue() );
-//				}
-//			}
-//		}
-//	}
+//        public void onmetaengage(transform handtransform)
+//        {
+//            initialmappingoffset = getcontrollervalue() - calculatelinearmapping(handtransform);
+//            samplecount = 0;
+//            mappingchangerate = 0.0f;
+//        }
+
+//        public void updatelinearmapping(transform updatetransform)
+//        {
+//            prevmapping = getcontrollervalue();
+
+//            setcontrollervalue(mathf.clamp01(initialmappingoffset + calculatelinearmapping(updatetransform)));
+
+//            mappingchangesamples[samplecount % mappingchangesamples.length] = (1.0f / time.deltatime) * (getcontrollervalue() - prevmapping);
+//            samplecount++;
+
+//            if (repositiongameobject)
+//            {
+//                transform.position = vector3.lerp(startposition.position, endposition.position, getcontrollervalue());
+//            }
+//        }
+
+//        protected float calculatelinearmapping(transform updatetransform)
+//        {
+//            vector3 direction = endposition.position - startposition.position;
+//            float length = direction.magnitude;
+//            direction.normalize();
+
+//            vector3 displacement = updatetransform.position - startposition.position;
+
+//            return vector3.dot(displacement, direction) / length;
+//        }
+
+
+//        protected virtual void update()
+//        {
+//            if (maintainmomemntum && mappingchangerate != 0.0f)
+//            {
+//                //dampen the mapping change rate and apply it to the mapping
+//                mappingchangerate = mathf.lerp(mappingchangerate, 0.0f, momemtumdampenrate * time.deltatime);
+//                setcontrollervalue(mathf.clamp01(getcontrollervalue() + (mappingchangerate * time.deltatime)));
+
+//                if (repositiongameobject)
+//                {
+//                    transform.position = vector3.lerp(startposition.position, endposition.position, getcontrollervalue());
+//                }
+//            }
+//        }
+//    }
 //}

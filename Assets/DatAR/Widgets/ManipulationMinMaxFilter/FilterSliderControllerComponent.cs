@@ -4,7 +4,7 @@ using UniRx;
 using UnityEditor;
 using UnityEngine;
 
-namespace _main.Widgets.ManipulationMinMaxFilter
+namespace DatAR.Widgets.ManipulationMinMaxFilter
 {
     public class FilterSliderControllerComponent : MonoBehaviour
     {

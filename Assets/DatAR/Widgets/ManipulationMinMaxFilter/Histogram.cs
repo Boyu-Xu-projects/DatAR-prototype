@@ -7,7 +7,7 @@ using DatAR.DataModels.Resources;
 using UniRx;
 using UnityEngine;
 
-namespace _main.Widgets.ManipulationMinMaxFilter
+namespace DatAR.Widgets.ManipulationMinMaxFilter
 {
     public class Histogram : MonoBehaviour
     {

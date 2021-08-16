@@ -7,7 +7,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace _main.Widgets.ManipulationMinMaxFilter
+namespace DatAR.Widgets.ManipulationMinMaxFilter
 {
     public class ManipulationMinMaxFilter : MonoBehaviour
     {
