@@ -96,7 +96,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
             // Check if correct type
             if (!(rawPassable is Passable<CooccurrenceListPassable>))
             {
-                if (rawPassable.GetType().ToString() == "_main.DataModels.Passables.Passable")
+                if (rawPassable.GetType().ToString() == "DatAR.DataModels.Passables.Passable")
                 {
                     Debug.Log("3D Plot listening to data stream");
                     IsLoading.OnNext(QueryState.IsEmpty);

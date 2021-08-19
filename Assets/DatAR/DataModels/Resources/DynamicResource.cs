@@ -22,7 +22,7 @@ namespace DatAR.DataModels.Resources
         public DynamicResource(string id, List<string> types)
         {
             Id = id;
-            Types = types;
+            Types = types ?? new List<string>();
             OnDeserializedMethod(new StreamingContext());
         }
 
@@ -34,7 +34,7 @@ namespace DatAR.DataModels.Resources
 
         [JsonProperty("@type")]
         [JsonConverter(typeof(SingleOrArrayConverter<string>))]
-        public List<string> Types { get; set; }
+        public List<string> Types { get; set; } = new List<string>();
 
         [JsonProperty("rdfs:label")] public string Label { get; set; }
 

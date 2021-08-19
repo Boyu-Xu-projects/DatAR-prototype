@@ -51,7 +51,7 @@ namespace DatAR.Widgets.ManipulationMinMaxFilter
                 // Check if supported type
                 if (!(passable is Passable<CooccurrenceListPassable>))
                 {
-                    if (passable.GetType().ToString() == "_main.DataModels.Passables.Passable")
+                    if (passable.GetType().ToString() == "DatAR.DataModels.Passables.Passable")
                     {
                         Debug.Log("Filter listening to data stream");
                     }

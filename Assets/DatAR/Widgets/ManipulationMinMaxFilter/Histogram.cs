@@ -36,7 +36,7 @@ namespace DatAR.Widgets.ManipulationMinMaxFilter
                     // Check if correct type
                     if (!(passable is Passable<CooccurrenceListPassable>))
                     {
-                        if (passable.GetType().ToString() == "_main.DataModels.Passables.Passable")
+                        if (passable.GetType().ToString() == "DatAR.DataModels.Passables.Passable")
                         {
                             Debug.Log("Histogram listening to data stream");
                         }

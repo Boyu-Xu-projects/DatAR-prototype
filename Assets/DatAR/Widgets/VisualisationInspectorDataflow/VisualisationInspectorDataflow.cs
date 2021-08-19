@@ -32,7 +32,7 @@ namespace DatAR.Widgets.VisualisationInspectorDataflow
                 }
                 else
                 {
-                    if (rawPassable.GetType().ToString() == "_main.DataModels.Passables.Passable")
+                    if (rawPassable.GetType().ToString() == "DatAR.DataModels.Passables.Passable")
                     {
                         summaryText.text = $"Received no items. This data stream is empty.";
                     }

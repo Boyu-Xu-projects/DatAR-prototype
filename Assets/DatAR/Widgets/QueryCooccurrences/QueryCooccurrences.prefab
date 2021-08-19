@@ -276,6 +276,7 @@ GameObject:
   - component: {fileID: 3975832336998958985}
   - component: {fileID: 8263878378291998923}
   - component: {fileID: 3832454927527918992}
+  - component: {fileID: 9082237461948571478}
   m_Layer: 0
   m_Name: QueryCooccurrences
   m_TagString: Untagged
@@ -291,7 +292,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3618927719759872380}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_Children:
   - {fileID: 5325152153644006579}
@@ -449,6 +450,22 @@ MonoBehaviour:
   onHoverExited:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &9082237461948571478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3618927719759872380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b3e6359c9750ad4fb8a05c9b8704d7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
+  constraintOnRotation: 5
+  useLocalSpaceForConstraint: 0
 --- !u!1 &5325152153644006590
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,7 +560,7 @@ Transform:
   m_GameObject: {fileID: 7113978476523942608}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_Children:
   - {fileID: 1107036757832494862}
   m_Father: {fileID: 3426594384465342812}
@@ -1067,6 +1084,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: noun_Data Flow_2710766
+      objectReference: {fileID: 0}
+    - target: {fileID: 8742538545776668643, guid: 177102fef57b46d46832892c51e6b52c,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8742538545776668643, guid: 177102fef57b46d46832892c51e6b52c,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 7243324766535440047, guid: 177102fef57b46d46832892c51e6b52c,

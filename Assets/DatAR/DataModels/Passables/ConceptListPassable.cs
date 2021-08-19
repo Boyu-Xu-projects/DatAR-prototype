@@ -21,7 +21,7 @@ namespace DatAR.DataModels.Passables
         internal void OnDeserializedMethod(StreamingContext context)
         {
             Id = ComputeBlankNodeId(JsonConvert.SerializeObject(Resources));
-            ResourceTypes = Resources.SelectMany(resource => resource.Types).Distinct().ToList();
+            ResourceTypes = Resources.SelectMany(resource => resource.Types ?? Enumerable.Empty<string>()).Distinct().ToList();
         }
     }
 }
