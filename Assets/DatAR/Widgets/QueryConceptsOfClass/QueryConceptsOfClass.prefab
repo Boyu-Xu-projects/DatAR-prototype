@@ -468,6 +468,9 @@ GameObject:
   - component: {fileID: 5048702616093190559}
   - component: {fileID: 5247085810130832478}
   - component: {fileID: 4091293639923051125}
+  - component: {fileID: -6079402597113213328}
+  - component: {fileID: 6029759298233623284}
+  - component: {fileID: -8239426355069656972}
   m_Layer: 0
   m_Name: QueryConceptsOfClass
   m_TagString: Untagged
@@ -520,8 +523,7 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: f4cb42ee13583b749a7fd74cd50074f2, type: 2}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -619,16 +621,100 @@ MonoBehaviour:
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -6079402597113213328}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6029759298233623284}
+        m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
+        m_MethodName: RestorePreviousMaterials
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: -8239426355069656972}
+        m_TargetAssemblyTypeName: WidgetFactory, Assembly-CSharp
+        m_MethodName: GenerateWidget
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onManipulationEnded:
     m_PersistentCalls:
       m_Calls: []
   onHoverEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6029759298233623284}
+        m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
+        m_MethodName: StorePreviousMaterials
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: -6079402597113213328}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   onHoverExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -6079402597113213328}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6029759298233623284}
+        m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
+        m_MethodName: RestorePreviousMaterials
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5247085810130832478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -659,6 +745,46 @@ MonoBehaviour:
   proximityType: -1
   constraintOnRotation: 5
   useLocalSpaceForConstraint: 0
+--- !u!114 &-6079402597113213328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9145786511224493727}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa162a1be707e7f4bb2c94f4fd6df84f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMaterial: {fileID: 2100000, guid: 6c66fc1ac164cdf439dc9629a7539fc3, type: 2}
+  outlineWidth: 0.001
+--- !u!114 &6029759298233623284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9145786511224493727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea05885103958e84990ab31056f92bc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-8239426355069656972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9145786511224493727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53f41039bc29c654b9c1f3803e292bff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabToGenerate: {fileID: 9145786511224493727}
+  shouldDuplicateOnGrab: 1
 --- !u!1001 &492628426660453749
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -783,6 +909,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b20ae7c18784859489d557c193214171, type: 3}
+--- !u!4 &2038765709984492544 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1917702679333990773, guid: b20ae7c18784859489d557c193214171,
+    type: 3}
+  m_PrefabInstance: {fileID: 492628426660453749}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2038765709984492547 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1917702679333990774, guid: b20ae7c18784859489d557c193214171,
@@ -795,12 +927,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d19ead3f6d5a34c9f0e03b201d08b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &2038765709984492544 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1917702679333990773, guid: b20ae7c18784859489d557c193214171,
-    type: 3}
-  m_PrefabInstance: {fileID: 492628426660453749}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3758203433329260742
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -981,12 +1107,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42f187f070d5e0742b1354250bbabaa1, type: 3}
---- !u!4 &7523500029542110867 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1669900419512670938, guid: 42f187f070d5e0742b1354250bbabaa1,
-    type: 3}
-  m_PrefabInstance: {fileID: 9170589980813921353}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1829385681798713158 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7360907547410678543, guid: 42f187f070d5e0742b1354250bbabaa1,
@@ -999,3 +1119,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9000af96a139a24193c549aa689ab01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &7523500029542110867 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1669900419512670938, guid: 42f187f070d5e0742b1354250bbabaa1,
+    type: 3}
+  m_PrefabInstance: {fileID: 9170589980813921353}
+  m_PrefabAsset: {fileID: 0}
