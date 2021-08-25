@@ -20,7 +20,7 @@ public class SparqlService : MonoBehaviour
     [SerializeField] public SparqlConfig sparqlConfig;
     private JObject _context;
     private string _prefixes;
-    
+
     public static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings();
     private static readonly JsonLdOptions JsonLdOptions = new JsonLdOptions();
 
@@ -51,7 +51,7 @@ public class SparqlService : MonoBehaviour
 
         _debugService = GetComponent<DebugService>();
     }
-    
+
     public async UniTask<ClassListPassable> GetAvailableClasses()
     {
         var queryRequest = $@"
@@ -59,7 +59,7 @@ public class SparqlService : MonoBehaviour
                 ?type a rdf:Class . # Note: hardcoded
                 ?type rdfs:label ?label .
             }}
-            { (!string.IsNullOrEmpty(sparqlConfig.defaultSubGraph) ? $"FROM {sparqlConfig.defaultSubGraph}" : "" ) }
+            { (!string.IsNullOrEmpty(sparqlConfig.defaultSubGraph) ? $"FROM {sparqlConfig.defaultSubGraph}" : "") }
 
             WHERE {{
                 {{
@@ -70,7 +70,7 @@ public class SparqlService : MonoBehaviour
                     }}
                 }}
             }}";
-        
+
         var queryResponseRaw = await QueryEndpoint(queryRequest);
         return new ClassListPassable(await ConvertRdfToResourceList<DynamicResource>(queryResponseRaw));
     }
@@ -97,7 +97,7 @@ public class SparqlService : MonoBehaviour
                     }}
               }}
             }}";
-        
+
         var queryResponseRaw = await QueryEndpoint(queryRequest, "http://165.22.192.208:8890/sparql");
 
         return await ConvertRdfToResourceList<DescriptionResource>(queryResponseRaw);
@@ -106,7 +106,7 @@ public class SparqlService : MonoBehaviour
     public async UniTask<List<CoordsResource>> GetTopicModelCoordsOfType(string type, string serviceUrl = null, string serviceSubGraphUrl = null)
     {
         serviceSubGraphUrl = serviceSubGraphUrl != null ? $"FROM {serviceSubGraphUrl}" : "";
-        
+
         var queryRequest = $@"
             CONSTRUCT {{
                 ?id datar:coordX ?x ;
@@ -123,12 +123,12 @@ public class SparqlService : MonoBehaviour
                   datar:coordY ?y ;
                   datar:coordZ ?z .
             }}";
-        
+
         var queryResponseRaw = await QueryEndpoint(queryRequest, "http://165.22.192.208:8890/sparql");
 
         return await ConvertRdfToResourceList<CoordsResource>(queryResponseRaw);
     }
-    
+
     // Union class as an input, class to get all of the ids
     public async UniTask<List<DynamicResource>> GetCloseMatchingIds(List<string> resourceUris)
     {
@@ -143,7 +143,7 @@ public class SparqlService : MonoBehaviour
         {
             return new List<DynamicResource>(); // empty list
         }
-        
+
         var queryRequest = $@"
             CONSTRUCT {{
                 datar:testing skos:closeMatch ?id . 
@@ -161,12 +161,12 @@ public class SparqlService : MonoBehaviour
 
         queryRequest += $"}}";
         // Debug.Log(queryRequest);
-        
+
         var queryResponseRaw = await QueryEndpoint(queryRequest, "http://165.22.192.208:8890/sparql");
         // Debug.Log(queryResponseRaw);
         return await ConvertRdfToResourceList<DynamicResource>(queryResponseRaw);
     }
-    
+
     // Single ID as an input, returns all other matching IDs
     public async UniTask<List<DynamicResource>> GetCloseMatchingIds(string uri)
     {
@@ -196,7 +196,7 @@ public class SparqlService : MonoBehaviour
                 OPTIONAL {{ ?id a ?type . }}
                 }}
             }}";
-        
+
         queryRequest += "OPTIONAL { ?id a ?type } .\n";
         // if (filter.Length != null)
         // {
@@ -206,12 +206,12 @@ public class SparqlService : MonoBehaviour
         queryRequest += $@"FILTER(!regex(?id, {uri} ) )" + "\n";
         queryRequest += $"}}";
         // Debug.Log(queryRequest);
-        
+
         var queryResponseRaw = await QueryEndpoint(queryRequest, "http://165.22.192.208:8890/sparql");
         // Debug.Log(queryResponseRaw);
         return await ConvertRdfToResourceList<DynamicResource>(queryResponseRaw);
     }
-    
+
     public async UniTask<ConceptListPassable> GetAllConceptsOfClass(string classUri)
     {
         var queryRequest = $@"
@@ -219,7 +219,7 @@ public class SparqlService : MonoBehaviour
                 ?resource a {classUri} .
                 ?resource rdfs:label ?label .
             }}
-            { (!string.IsNullOrEmpty(sparqlConfig.defaultSubGraph) ? $"FROM {sparqlConfig.defaultSubGraph}" : "" ) }
+            { (!string.IsNullOrEmpty(sparqlConfig.defaultSubGraph) ? $"FROM {sparqlConfig.defaultSubGraph}" : "") }
             WHERE {{
                 {{
                     SELECT distinct ?resource ?label
@@ -241,7 +241,7 @@ public class SparqlService : MonoBehaviour
                 {conceptUri} a ?type .
                 {conceptUri} rdfs:label ?label .
             }}
-            { (!string.IsNullOrEmpty(sparqlConfig.defaultSubGraph) ? $"FROM {sparqlConfig.defaultSubGraph}" : "" ) }
+            { (!string.IsNullOrEmpty(sparqlConfig.defaultSubGraph) ? $"FROM {sparqlConfig.defaultSubGraph}" : "") }
             WHERE {{
                 {{
                     SELECT distinct ?type ?label 
@@ -255,7 +255,7 @@ public class SparqlService : MonoBehaviour
         var queryResponseRaw = await QueryEndpoint(queryRequest);
         return ConvertRdfToSingleResource<DynamicResource>(queryResponseRaw);
     }
-    
+
     public async UniTask<DynamicResource> GetSingleClass(string classUri)
     {
         var queryRequest = $@"
@@ -263,7 +263,7 @@ public class SparqlService : MonoBehaviour
                 {classUri} a rdf:Class . # Note: hardcoded
                 ?type rdfs:label ?label .
             }}
-            { (!string.IsNullOrEmpty(sparqlConfig.defaultSubGraph) ? $"FROM {sparqlConfig.defaultSubGraph}" : "" ) }
+            { (!string.IsNullOrEmpty(sparqlConfig.defaultSubGraph) ? $"FROM {sparqlConfig.defaultSubGraph}" : "") }
             WHERE {{
                 {{
                     SELECT distinct ?type ?label
@@ -277,12 +277,12 @@ public class SparqlService : MonoBehaviour
         var queryResponseRaw = await QueryEndpoint(queryRequest);
         return ConvertRdfToSingleResource<DynamicResource>(queryResponseRaw);
     }
-    
+
     public async UniTask<CooccurrenceListPassable> GetCooccurrenceStatementsWithConcept(string concept, string withClass)
     {
         var conceptResource = await GetSingleConcept(concept);
         var classResource = await GetSingleClass(withClass);
-        
+
         var queryRequest = $@"
             CONSTRUCT {{
               ?statement a datar:CooccurrenceStatement ;
@@ -293,7 +293,7 @@ public class SparqlService : MonoBehaviour
               ?classItem rdfs:label ?classItemLabel ;
                          a {withClass} .
             }}
-            { (!string.IsNullOrEmpty(sparqlConfig.defaultSubGraph) ? $"FROM {sparqlConfig.defaultSubGraph}" : "" ) }
+            { (!string.IsNullOrEmpty(sparqlConfig.defaultSubGraph) ? $"FROM {sparqlConfig.defaultSubGraph}" : "") }
             WHERE {{
               {{ ?statement rdf:subject {concept} ;
                          rdf:object ?classItem ;
@@ -369,6 +369,24 @@ public class SparqlService : MonoBehaviour
         var queryResponseRaw = await QueryEndpoint(queryRequest);
 
         return await ConvertRdfToResourceList<DiseaseRelationResource>(queryResponseRaw, frame);
+    }
+
+    public async UniTask<List<SentenceResource>> GetCooccurrenceSentences(string region, string disease){
+        var query = $@"
+            CONSTRUCT {{
+                ?statement lbdp:articleId ?aId ;
+                        lbdp:sentence ?s .
+            }}
+            FROM lbdg:region2disease2
+            WHERE {{
+                ?statement rdf:object {disease} ;
+                    rdf:subject {region} ;
+                    lbdp:articleId ?aId ;
+                    lbdp:sentence ?s .
+            }}";
+
+        var queryResponse = await QueryEndpoint(query);
+        return await ConvertRdfToResourceList<SentenceResource>(queryResponse);
     }
 
     /// <summary>

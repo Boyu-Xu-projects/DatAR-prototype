@@ -42,6 +42,11 @@ public class Receptacle : MonoBehaviour
             return;
         }
 
+        if (GetComponent<SphereCollider>().bounds.Intersects(other.bounds))
+        {
+            return;
+        }
+
         if (isTriggering)
         {
             return;
@@ -124,6 +129,8 @@ public class Receptacle : MonoBehaviour
         {
             return;
         }
+
+        Debug.Log($"Prev id: {_prevInstanceId} Cur id: {resourceComponent.GetInstanceID()}");
 
         // Check if not the same as previous resource
         // If not checked, this function runs three times. Yet to figure out why...
