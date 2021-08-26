@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/DatAR/Scenes/GhConfigurations.unity
+    guid: 78ca517bf260db54da731c65cbed8edb
+  - enabled: 0
     path: Assets/DatAR/Scenes/Playground.unity
     guid: 15e14f46bb6a5604cbff6f654852ac79
   m_configObjects:

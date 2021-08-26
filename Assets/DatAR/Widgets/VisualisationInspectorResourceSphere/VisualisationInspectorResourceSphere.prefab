@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1880443293837172434}
-  m_LocalRotation: {x: 0.24662477, y: -0, z: -0, w: 0.9691111}
+  m_LocalRotation: {x: 0, y: 0.96911055, z: -0.2466269, w: 0}
   m_LocalPosition: {x: 0, y: -0.3170003, z: 0}
   m_LocalScale: {x: 1.2383001, y: 0.55315936, z: 1.2383002}
   m_Children: []
   m_Father: {fileID: 6189994522476402958}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 28.556002, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 28.556002, y: 180, z: 0}
 --- !u!33 &6597921707209362427
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -107,16 +107,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2504789262083416668}
-  m_LocalRotation: {x: -0, y: 0.9691111, z: 0.24662477, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0.67600006}
+  m_LocalRotation: {x: -0.2466269, y: 0, z: 0, w: 0.96911055}
+  m_LocalPosition: {x: 0, y: 0, z: -0.622}
   m_LocalScale: {x: 0.078847215, y: 0.07884715, z: 0.07884721}
   m_Children: []
   m_Father: {fileID: 6189994522476402958}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -28.556002, y: 180.00002, z: 0}
+  m_LocalEulerAnglesHint: {x: -28.556002, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.275, y: -0.563}
+  m_AnchoredPosition: {x: 0.275, y: -0.663}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2113518254359255891
@@ -379,7 +379,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6662680995205686287
 RectTransform:
   m_ObjectHideFlags: 0
@@ -558,6 +558,9 @@ GameObject:
   - component: {fileID: 2280561938983528949}
   - component: {fileID: 8721504868061594069}
   - component: {fileID: 8735722098109856883}
+  - component: {fileID: 6678483578697344444}
+  - component: {fileID: 8806704199518964531}
+  - component: {fileID: -7489256724357941285}
   m_Layer: 0
   m_Name: VisualisationInspectorResourceSphere
   m_TagString: Untagged
@@ -738,16 +741,100 @@ MonoBehaviour:
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6678483578697344444}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8806704199518964531}
+        m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
+        m_MethodName: RestorePreviousMaterials
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: -7489256724357941285}
+        m_TargetAssemblyTypeName: WidgetFactory, Assembly-CSharp
+        m_MethodName: GenerateWidget
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onManipulationEnded:
     m_PersistentCalls:
       m_Calls: []
   onHoverEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8806704199518964531}
+        m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
+        m_MethodName: StorePreviousMaterials
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6678483578697344444}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   onHoverExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6678483578697344444}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8806704199518964531}
+        m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
+        m_MethodName: RestorePreviousMaterials
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8735722098109856883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,10 +847,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3e6359c9750ad4fb8a05c9b8704d7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handType: 3
+  handType: 1
   proximityType: 3
   constraintOnRotation: 5
   useLocalSpaceForConstraint: 0
+--- !u!114 &6678483578697344444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7328621777578735527}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa162a1be707e7f4bb2c94f4fd6df84f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMaterial: {fileID: 2100000, guid: 6c66fc1ac164cdf439dc9629a7539fc3, type: 2}
+  outlineWidth: 0.003
+--- !u!114 &8806704199518964531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7328621777578735527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea05885103958e84990ab31056f92bc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-7489256724357941285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7328621777578735527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53f41039bc29c654b9c1f3803e292bff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabToGenerate: {fileID: 7328621777578735527}
+  shouldDuplicateOnGrab: 1
 --- !u!1 &7328621778343450958
 GameObject:
   m_ObjectHideFlags: 0

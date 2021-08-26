@@ -319,6 +319,9 @@ GameObject:
   - component: {fileID: 8390831397312606787}
   - component: {fileID: 8862991804526116431}
   - component: {fileID: 3703577786124690875}
+  - component: {fileID: 3060133110693035388}
+  - component: {fileID: -316898425320160929}
+  - component: {fileID: 2574399747102135480}
   m_Layer: 0
   m_Name: VisualisationTopicModel
   m_TagString: Untagged
@@ -335,7 +338,7 @@ Transform:
   m_GameObject: {fileID: 248932933912429621}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_Children:
   - {fileID: 258881729020702378}
   - {fileID: 4110291640484519570}
@@ -469,16 +472,100 @@ MonoBehaviour:
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2574399747102135480}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: -316898425320160929}
+        m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
+        m_MethodName: RestorePreviousMaterials
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3060133110693035388}
+        m_TargetAssemblyTypeName: WidgetFactory, Assembly-CSharp
+        m_MethodName: GenerateWidget
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onManipulationEnded:
     m_PersistentCalls:
       m_Calls: []
   onHoverEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -316898425320160929}
+        m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
+        m_MethodName: StorePreviousMaterials
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2574399747102135480}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   onHoverExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2574399747102135480}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: -316898425320160929}
+        m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
+        m_MethodName: RestorePreviousMaterials
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8862991804526116431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -505,10 +592,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3e6359c9750ad4fb8a05c9b8704d7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handType: 3
+  handType: 1
   proximityType: 3
   constraintOnRotation: 5
   useLocalSpaceForConstraint: 0
+--- !u!114 &3060133110693035388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248932933912429621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53f41039bc29c654b9c1f3803e292bff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabToGenerate: {fileID: 248932933912429621}
+  shouldDuplicateOnGrab: 1
+--- !u!114 &-316898425320160929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248932933912429621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea05885103958e84990ab31056f92bc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2574399747102135480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248932933912429621}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa162a1be707e7f4bb2c94f4fd6df84f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMaterial: {fileID: 2100000, guid: 6c66fc1ac164cdf439dc9629a7539fc3, type: 2}
+  outlineWidth: 0.003
 --- !u!1 &258881729020702379
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,6 +1133,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sphere: {fileID: 0}
+--- !u!114 &6368397413333764915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5766073724101807736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073bc5eaf6dc6574c866ab0b02bc43b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointTargetToFace: {fileID: 0}
+  pointRotateSpeed: 2
+  lockX: 0
+  lockY: 0
 --- !u!1 &6123258321495887206
 GameObject:
   m_ObjectHideFlags: 0
@@ -1129,6 +1272,12 @@ PrefabInstance:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 7243324766535440047, guid: dbfb0ee3d6db253499a1ce1379953ed8,
     type: 3}
+--- !u!1 &5766073724101807736 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -3888481672020999207, guid: dbfb0ee3d6db253499a1ce1379953ed8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1876984022100282785}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7160687644239897154 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8742538545776668643, guid: dbfb0ee3d6db253499a1ce1379953ed8,
@@ -1204,12 +1353,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1dceadf22a7db204a9b01bccac47f60e, type: 3}
---- !u!4 &4110291640484519570 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8481557086576763634, guid: 1dceadf22a7db204a9b01bccac47f60e,
-    type: 3}
-  m_PrefabInstance: {fileID: 5529922555261795424}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3073655546058313038 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7357168944433312046, guid: 1dceadf22a7db204a9b01bccac47f60e,
@@ -1222,6 +1365,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5a98ab27e61b64f9314585e418344f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &4110291640484519570 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8481557086576763634, guid: 1dceadf22a7db204a9b01bccac47f60e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5529922555261795424}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5574036834968326430
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1366,6 +1515,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b20ae7c18784859489d557c193214171, type: 3}
+--- !u!4 &6325297521098661995 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1917702679333990773, guid: b20ae7c18784859489d557c193214171,
+    type: 3}
+  m_PrefabInstance: {fileID: 5574036834968326430}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6325297521098661992 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1917702679333990774, guid: b20ae7c18784859489d557c193214171,
@@ -1378,12 +1533,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d19ead3f6d5a34c9f0e03b201d08b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &6325297521098661995 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1917702679333990773, guid: b20ae7c18784859489d557c193214171,
-    type: 3}
-  m_PrefabInstance: {fileID: 5574036834968326430}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6260207741070034106
 PrefabInstance:
   m_ObjectHideFlags: 0
