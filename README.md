@@ -27,7 +27,7 @@ If you want to contribute to the project, this section will introduce you to our
 All DatAR-related assets can be found in the `DatAR` folder; all other code is by third parties. Code is divided by concern rather than by file type. We will go over each top folder in detail. You are advised to keep the complete file structure close to you when going through this guide.
 
 ```markdown
-_Main
+DatAR
 |- Auxiliary
 |      Supporting materials of any kind; mainly shared resources and singletons.
 |- BuildingBlocks
