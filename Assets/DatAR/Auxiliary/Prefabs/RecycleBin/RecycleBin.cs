@@ -12,11 +12,9 @@ public class RecycleBin : MonoBehaviour
 {
     void OnTriggerEnter(Collider collision)
     {
-        //Check for a match with the specified name on any GameObject that collides with your GameObject
-        
-       
-            Debug.Log("Do something here");
+        if (collision.tag.Equals("Deletable"))
+        {
             Destroy(collision.gameObject);
-        
+        }
     }
 }

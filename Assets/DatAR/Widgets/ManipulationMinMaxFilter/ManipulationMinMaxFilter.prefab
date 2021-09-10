@@ -67,12 +67,11 @@ GameObject:
   - component: {fileID: 2651536114469212637}
   - component: {fileID: 6396809277897819820}
   - component: {fileID: -2611660370535680587}
-  - component: {fileID: -2892291914677981827}
   - component: {fileID: 1140971078389125669}
   - component: {fileID: 5084421817601686724}
   m_Layer: 0
   m_Name: ManipulationMinMaxFilter
-  m_TagString: Untagged
+  m_TagString: Deletable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -233,18 +232,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: -2892291914677981827}
-        m_TargetAssemblyTypeName: WidgetFactory, Assembly-CSharp
-        m_MethodName: GenerateWidget
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   onManipulationEnded:
     m_PersistentCalls:
       m_Calls: []
@@ -308,20 +295,6 @@ MonoBehaviour:
   proximityType: 3
   constraintOnRotation: 5
   useLocalSpaceForConstraint: 0
---- !u!114 &-2892291914677981827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3865012444552130730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53f41039bc29c654b9c1f3803e292bff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabToGenerate: {fileID: 3865012444552130730}
-  shouldDuplicateOnGrab: 1
 --- !u!114 &1140971078389125669
 MonoBehaviour:
   m_ObjectHideFlags: 0

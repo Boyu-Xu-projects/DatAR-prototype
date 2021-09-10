@@ -51,10 +51,11 @@ public class ResourceSphereDuplicationBehaviour : MonoBehaviour
             duplicate.transform.position = transform.position;
             duplicate.transform.localScale = transform.localScale;
             duplicate.GetComponent<Renderer>().material = GetComponent<Renderer>().material;
-            
+
             transform.SetParent(GameObject.Find("StandaloneResourceSpherePool").transform, true);
             transform.localScale = new Vector3(_manufacturer.pointScale,_manufacturer.pointScale,_manufacturer.pointScale);
             GetComponent<ResourceSphereDuplicationBehaviour>().shouldDuplicateOnGrab = false;
+            tag = "Deletable";
 
             // Set color to neutral
             if (GetComponent<ResourceComponent>().Resource.Types.Contains("rdf:Class"))

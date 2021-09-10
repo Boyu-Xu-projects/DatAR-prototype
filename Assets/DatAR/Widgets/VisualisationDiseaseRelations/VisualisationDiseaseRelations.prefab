@@ -8455,10 +8455,9 @@ GameObject:
   - component: {fileID: 1796751203}
   - component: {fileID: 2162669194810390890}
   - component: {fileID: 5131528090697520413}
-  - component: {fileID: 8915909833494162238}
   m_Layer: 0
   m_Name: VisualisationDiseaseRelations
-  m_TagString: Untagged
+  m_TagString: Deletable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8621,18 +8620,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 8915909833494162238}
-        m_TargetAssemblyTypeName: WidgetFactory, Assembly-CSharp
-        m_MethodName: GenerateWidget
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   onManipulationEnded:
     m_PersistentCalls:
       m_Calls: []
@@ -8722,20 +8709,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea05885103958e84990ab31056f92bc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8915909833494162238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4918420673200661866}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53f41039bc29c654b9c1f3803e292bff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabToGenerate: {fileID: 4918420673200661866}
-  shouldDuplicateOnGrab: 1
 --- !u!1 &5152321099327435022
 GameObject:
   m_ObjectHideFlags: 0
