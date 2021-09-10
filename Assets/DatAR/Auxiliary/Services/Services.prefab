@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 791509081269979286}
   - component: {fileID: 1169139499856680160}
   - component: {fileID: 545437898791821100}
+  - component: {fileID: 213095795}
   m_Layer: 0
   m_Name: Services
   m_TagString: Untagged
@@ -76,3 +77,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugOn: 0
+--- !u!114 &213095795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5744555611542726777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2894ab15dd4d9994a9ab1699ffeb6f3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentFocusTarget: {fileID: 0}

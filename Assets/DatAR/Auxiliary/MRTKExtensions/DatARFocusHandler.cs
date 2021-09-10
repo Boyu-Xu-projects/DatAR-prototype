@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// Extract the focus handling logic from <see cref="ObjectManipulator"/> into a separate class.
+/// Extract the focus handling logic from <see cref="ObjectManipulator"/> into a separate class. 
+/// Used for generating outlines on objects that should not have a <see cref="ObjectManipulator"/> but are still interactable (e.g. MinMaxFilter handles).
 /// </summary>
 [AddComponentMenu("Scripts/DatAR/FocusHandler")]
 public class DatARFocusHandler : MonoBehaviour, IMixedRealityFocusChangedHandler
