@@ -1,5 +1,6 @@
 ﻿using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.Physics;
 using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using System.Collections;
@@ -9,11 +10,10 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 
-public class WidgetFactory : MonoBehaviour
+public class WidgetFactory : MonoBehaviour,  IMixedRealityFocusHandler
 {
 
     [SerializeField] private GameObject prefabToGenerate;
-    public bool shouldDuplicateOnGrab = true;
 
     private void Awake()
     {
@@ -26,20 +26,46 @@ public class WidgetFactory : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-    public void GenerateWidget()
+    public void GenerateWidget(ManipulationEventData data)
     {
-        if (shouldDuplicateOnGrab)
+        StartCoroutine(SetNewManip(data.Pointer));
+    }
+
+    private IEnumerator SetNewManip(IMixedRealityPointer pointer)
+    {
+        var duplicate = Instantiate(prefabToGenerate, GameObject.Find("StandaloneWidgetPool").transform);
+        duplicate.transform.position = transform.position;
+        var oldPos = transform.position;
+
+        yield return 0;
+
+        GetComponent<ObjectManipulator>().ForceEndManipulation();
+        transform.position = oldPos;
+        CoreServices.FocusProvider.TryGetFocusDetails(pointer, out FocusDetails oldFocusDetails);
+        oldFocusDetails.Object = duplicate.gameObject;
+        CoreServices.FocusProvider.TryOverrideFocusDetails(pointer, oldFocusDetails);
+        CoreServices.InputSystem.RaisePointerDown(pointer, MixedRealityInputAction.None, pointer.Controller.ControllerHandedness);
+    }
+
+    public void OnFocusEnter(FocusEventData eventData)
+    {
+        var collider = GetComponent<BoxCollider>();
+        Vector3 worldCenter = collider.transform.TransformPoint(collider.center);
+        Vector3 worldHalfExtents = collider.transform.TransformVector(collider.size * 0.5f);
+        var overlappingObjectManipulators = Physics
+            .OverlapBox(worldCenter, worldHalfExtents, collider.transform.rotation)
+            .Where(x => x.gameObject != gameObject && x.GetComponent<ObjectManipulator>() != null);
+
+        if(overlappingObjectManipulators.Count() > 0)
         {
-            var duplicate = Instantiate(prefabToGenerate, transform.parent);
-            duplicate.transform.position = transform.position;
-            duplicate.transform.localScale = transform.localScale;
-            duplicate.GetComponent<Renderer>().material = GetComponent<Renderer>().material;
-
-            transform.SetParent(GameObject.Find("StandaloneWidgetPool").transform, true);
-            shouldDuplicateOnGrab = false;
+            var newFocusObj = overlappingObjectManipulators.First();
+            CoreServices.FocusProvider.TryGetFocusDetails(eventData.Pointer, out FocusDetails oldFocusDetails);
+            oldFocusDetails.Object = newFocusObj.gameObject;
+            CoreServices.FocusProvider.TryOverrideFocusDetails(eventData.Pointer, oldFocusDetails);
         }
-        //transform.localScale = new Vector3(_manufacturer.pointScale, _manufacturer.pointScale, _manufacturer.pointScale);
-        //GameObject.Find("StandaloneWidgetPool").transform
+    }
 
+    public void OnFocusExit(FocusEventData eventData)
+    {
     }
 }

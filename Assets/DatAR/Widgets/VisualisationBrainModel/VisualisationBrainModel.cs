@@ -131,7 +131,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
                     .Select(r => r.ClassItem.Id).ToList();
 
                 // Perform parallel query
-                var sbURL = "https://datar.local/ontology/";
+                //var sbURL = "https://datar.local/ontology/";
                 (inFilterItems, outFilterItems) = await UniTask.WhenAll(_sparqlService.GetCloseMatchingIds(inFilterItemsToMatch), _sparqlService.GetCloseMatchingIds(outFilterItemsToMatch));
             }
             catch (Exception e)

@@ -15,7 +15,7 @@ namespace DatAR.Widgets.QueryConceptsOfClass
 
         [SerializeField] private GameObject pool;
 
-        async void Awake()
+        private void Awake()
         {
             var services = GameObject.Find("Services");
             if (!services)
@@ -62,7 +62,7 @@ namespace DatAR.Widgets.QueryConceptsOfClass
             // TODO: handle empty case, and add progress indicator
             var concepts = await _sparqlService.GetAllConceptsOfClass(classItem.Id);
 
-            StartCoroutine(SpawnConcept(concepts, currentBatchId));
+            _ = StartCoroutine(SpawnConcept(concepts, currentBatchId));
         }
 
         // TODO: move to ResourceSphereManufacturer class
