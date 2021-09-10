@@ -35,13 +35,9 @@ public class BrainConceptManager : MonoBehaviour
 
         SetHistogramValues(displayRatio);
 
-        //TODO: Hardcode for now, fix properly later
+        //TODO: Hardcoded position and scale for now, make dynamic based on number of conceps shown
         if (centerAndUpscale)
         {
-            //foreach (var conceptObject in GetComponentsInChildren<BrainConceptSphere>())
-            //{
-            //    conceptObject.transform.position -= new Vector3(0, 0.25f, 0);
-            //}
             transform.localPosition = new Vector3(0, 2.25f, 0);
             transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
         }
@@ -62,11 +58,11 @@ public class BrainConceptManager : MonoBehaviour
         allConcepts.ForEach(concept =>
         {
             var calculatedScaleDisease1 = Util.Map(concept.Disease1AppearTimes, 0, maxDiseaseAppearTimes, 0, MaxHistogramScale);
-            concept.disease1Bar.transform.localScale = new Vector3(calculatedScaleDisease1, 0.25f, 0.01f);
+            concept.disease1Bar.transform.localScale = new Vector3(calculatedScaleDisease1, 0.25f, 0.01f); //TODO: Hardcoded scales, make dynamic
             concept.disease1Bar.transform.localPosition -= new Vector3(calculatedScaleDisease1 / 2, 0, 0);
 
             var calculatedScaleDisease2 = Util.Map(concept.Disease2AppearTimes, 0, maxDiseaseAppearTimes, 0, MaxHistogramScale);
-            concept.disease2Bar.transform.localScale = new Vector3(calculatedScaleDisease2, 0.25f, 0.01f);
+            concept.disease2Bar.transform.localScale = new Vector3(calculatedScaleDisease2, 0.25f, 0.01f); //TODO: Hardcoded scales, make dynamic
             concept.disease2Bar.transform.localPosition += new Vector3(calculatedScaleDisease2 / 2, 0, 0);
         });
     }

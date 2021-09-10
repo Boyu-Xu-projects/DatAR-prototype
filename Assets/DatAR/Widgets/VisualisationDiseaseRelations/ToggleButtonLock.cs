@@ -10,12 +10,10 @@ public class ToggleButtonLock : MonoBehaviour
     public bool SetDisplayRatio;
     public bool toggled;
 
-    // Start is called before the first frame update
     void Start()
     {
         if (toggled)
         {
-            //StartCoroutine(DisableButton());
             GetComponent<Interactable>().enabled = false;
             GetComponent<PressableButtonHoloLens2>().enabled = false;
         }
@@ -28,13 +26,11 @@ public class ToggleButtonLock : MonoBehaviour
         OtherButton.GetComponent<PressableButtonHoloLens2>().enabled = true;
         Visualization.SetDisplayRatio(SetDisplayRatio);
         StartCoroutine(DisableButton());
-        //GetComponent<Interactable>().IsToggled = true;
-        //GetComponent<Interactable>().enabled = false;
-        //GetComponent<PressableButtonHoloLens2>().enabled = false;
     }
 
     private IEnumerator DisableButton()
     {
+        // Need to wait one frame to properly untoggle button
         yield return null;
         GetComponent<Interactable>().IsToggled = true;
         GetComponent<Interactable>().enabled = false;

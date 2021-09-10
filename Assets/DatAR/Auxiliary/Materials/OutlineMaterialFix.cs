@@ -51,32 +51,32 @@ public class OutlineMaterialFix : MonoBehaviour
             return;
         }
 
-        if (DatARUtil.Instance.currentFocusTarget == null)
+        if (DatARService.Instance.currentFocusTarget == null)
         {
             StorePreviousMaterials();
             meshOutline.enabled = true;
-            DatARUtil.Instance.currentFocusTarget = pointer.Result.CurrentPointerTarget;
+            DatARService.Instance.currentFocusTarget = pointer.Result.CurrentPointerTarget;
         }
-        else if (DatARUtil.Instance.currentFocusTarget != gameObject)
+        else if (DatARService.Instance.currentFocusTarget != gameObject)
         {
-            var omf = DatARUtil.Instance.currentFocusTarget.GetComponent<OutlineMaterialFix>();
+            var omf = DatARService.Instance.currentFocusTarget.GetComponent<OutlineMaterialFix>();
             if(omf != null)
             {
                 omf.DisableMeshOutline();
                 StorePreviousMaterials();
                 meshOutline.enabled = true;
-                DatARUtil.Instance.currentFocusTarget = pointer.Result.CurrentPointerTarget;
+                DatARService.Instance.currentFocusTarget = pointer.Result.CurrentPointerTarget;
             }
         }
     }
 
     public void DisableMeshOutline()
     {
-        if (DatARUtil.Instance.currentFocusTarget == gameObject)
+        if (DatARService.Instance.currentFocusTarget == gameObject)
         {
             meshOutline.enabled = false;
             RestorePreviousMaterials();
-            DatARUtil.Instance.currentFocusTarget = null;
+            DatARService.Instance.currentFocusTarget = null;
         }
     }
 }

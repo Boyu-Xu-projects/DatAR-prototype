@@ -11,7 +11,6 @@ using UnityEngine;
 
 public class QueryDiseaseCoocurrences : MonoBehaviour, IQueryState
 {
-
     private SparqlService _sparqlService;
     
     [SerializeField] private Receptacle disease1Receptacle;
@@ -124,8 +123,18 @@ public class QueryDiseaseCoocurrences : MonoBehaviour, IQueryState
                 }
             }
 
-            fixedCooccurrences = fixedCooccurrences.Where(x => new string[] { "lbd:region", "lbd:transmitter", "lbd:gene", "lbd:function", "lbd:protein", "lbd:neuron" }.Contains(x.Concept.Types[0])).ToList();
+            // Only take co-occurrences with concepts form a valid type.
+            fixedCooccurrences = fixedCooccurrences.Where(x => new string[] { 
+                "lbd:region", 
+                "lbd:transmitter", 
+                "lbd:gene", 
+                "lbd:function", 
+                "lbd:protein", 
+                "lbd:neuron" 
+            }.Contains(x.Concept.Types[0])).ToList();
 
+            // Format the co-occurrence data based on concept, and calculate number of co-occurrences the diseases have with that concept.
+            //TODO: Implement a sorting interface. Currently sorts based on total number of co-occurrences for each class.
             Cooccurrences = fixedCooccurrences.GroupBy(x => x.Concept, (key, value) => new FormattedCooccurrence(
                 key.Label,
                 key.Types[0],
@@ -140,36 +149,6 @@ public class QueryDiseaseCoocurrences : MonoBehaviour, IQueryState
             .ToList();
 
             SelectOverview();
-
-            //var cooccurrencesByClass = fixedCooccurrences
-            //    .GroupBy(cooccurrence => cooccurrence.Concept.Types[0], (key, value) => new
-            //        {
-            //            Class = key,
-            //            Cooccurrences = value,
-            //            Disease1AppearTimes = value.Where(x => x.Disease.Id == disease1Id).Sum(x => x.AppearTimes),
-            //            Disease2AppearTimes = value.Where(x => x.Disease.Id == disease2Id).Sum(x => x.AppearTimes)
-            //        })
-            //    .Where(x => new string[]{ "lbd:region", "lbd:transmitter", "lbd:gene", "lbd:function", "lbd:protein", "lbd:neuron"}.Contains(x.Class))
-            //    .OrderByDescending(x => x.Disease1AppearTimes + x.Disease2AppearTimes)
-            //    .ToList();
-
-            //for(var i = 0; i < cooccurrencesByClass.Count(); i++)
-            //{
-            //    //TODO: properly manage irrelevent classes
-            //    if(i > 5)
-            //    {
-            //        break;
-            //    }
-
-            //    classVisualizations[i].PopulateData(
-            //        cooccurrencesByClass[i].Class, 
-            //        cooccurrencesByClass[i].Disease1AppearTimes, 
-            //        cooccurrencesByClass[i].Disease2AppearTimes);
-
-            //    classVisualizations[i].SetCooccurrences(cooccurrencesByClass[i].Cooccurrences, disease1Id, disease2Id);
-
-            //    classVisualizations[i].gameObject.SetActive(true);
-            //}
         }
         catch (Exception e)
         {
@@ -184,14 +163,15 @@ public class QueryDiseaseCoocurrences : MonoBehaviour, IQueryState
         BrainConcepts.GenerateConceptList(
                 Cooccurrences
                     .GroupBy(x => x.Class)
-                    .SelectMany(x => x.OrderByDescending(r => r.Disease1Cooccurences + r.Disease2Cooccurences).Take(3))
+                    .SelectMany(x => x.OrderByDescending(r => r.Disease1Cooccurences + r.Disease2Cooccurences).Take(3)) //TODO: 3 concepts per class in the overview is hardcoded, make configurable.
                     .ToList(),
                 displayRatio,
                 false
             );
     }
 
-    //TODO: CLean this up...
+    // TODO: This code is messy... Clean up. Change into more logical if-statements,
+    // separate out the concept list generation and the conditions, don't rely on checking button == null
     public void SelectFromClass(string brainClass, Interactable thisButton = null)
     {
         if(thisButton == null)
