@@ -1,4 +1,4 @@
-This repository contains the Hololens 2 version of the DatAR project, an experimental virtual environment for the exploration of neuroscientific literature. The code in this project is a ported version of [the original DatAR repository](https://git.science.uu.nl/g.tanhaei/datar) in order to move away from SteamVR and instead support Microsoft Mixed Reality Toolkit. For access and more information, contact [Ghazaleh Tanhei](mailto:g.tanhaei@uu.nl).
+﻿This repository contains the Hololens 2 version of the DatAR project, an experimental virtual environment for the exploration of neuroscientific literature. The code in this project is a ported version of [the original DatAR repository](https://git.science.uu.nl/g.tanhaei/datar) in order to move away from SteamVR and instead support Microsoft Mixed Reality Toolkit. For access and more information, contact [Ghazaleh Tanhei](mailto:g.tanhaei@uu.nl).
 
 *Last updated 10-09-2021*
 
@@ -50,66 +50,133 @@ All widgets are explained in the following sections. An icon is added for the fo
 - If a Widget uses one or more Inlets (🟪) or outlet (🟦), Receptacles (🔵) or RS Manufacturers (🔴).
 - If visual output is generated (🖌️).
 ### Query widgets
+
 Query widgets retrieve primary data from a SPARQL endpoint. The query can be simple in nature, such as retrieving all available classes at a given endpoint, or it can be complex and yield multi-item data structures (such as co-occurrences).
+
+- **QueryAvailableClasses** 🌐→🔴
+
+    ***Input:***
+
+    *none*
+
+    ***Output:***
+
+    RSs: All Classes available. Data retrieved from triple store.
+
 - **QueryConceptsOfClass** 🌐🔵→🔴
- ***Input:***
- Receptacle: RS of type Class
- ***Output:***
- RSs: All Concepts of the given Class. Data retrieved from triple store. 
+
+    ***Input:***
+
+    Receptacle: RS of type Class
+
+    ***Output:***
+
+    RSs: All Concepts of the given Class. Data retrieved from triple store. 
+
 - **QueryCooccurrences** 🌐🔵🔵→🟦
- ***Input:***
- Receptacle: RS of type Class
- Receptacle: RS of type Concept
- ***Output:***
- Outlet: Dataflow of co-occurrences (containing all concepts in the given Class that cooccurred with the given Concept). Data retrieved from triple store. This output also includes co-occurrence counts and two-way probabilities of a co-occurrence in the literature (see Data Models section).
+
+    ***Input:***
+
+    Receptacle: RS of type Class
+
+    Receptacle: RS of type Concept
+
+    ***Output:***
+
+    Outlet: Dataflow of co-occurrences (containing all concepts in the given Class that cooccurred with the given Concept). Data retrieved from triple store. This output also includes co-occurrence counts and two-way probabilities of a co-occurrence in the literature (see Data Models section).
+
 ### Manipulation widgets
+
 Manipulation widgets take in a resource or dataflow and change the data. This can be according to user parameters or fully automatic. An example is the data filter widget.
+
 - **ManipulationMinMaxFilter** 📵🟪→🟦
- ***Input:***
- Inlet: Dataflow of co-occurrences.
- ***Output:***
- Outlet: Dataflow of co-occurrences, where filtered items receive a flag. This flag can be read by other widgets to display three states: not in data set, filtered-in, and filtered-out.
+
+    ***Input:***
+
+    Inlet: Dataflow of co-occurrences.
+
+    ***Output:***
+
+    Outlet: Dataflow of co-occurrences, where filtered items receive a flag. This flag can be read by other widgets to display three states: not in data set, filtered-in, and filtered-out.
+
 ### Visualisation widgets
+
 Visualisation widgets take in a resource or dataflow and show its contents to the user. It can do so through text or by using 2D or 3D visualisations.
+
 - **VisualisationInspectorResourceSphere** 🌐🔵→🔴🖌️
- ***Input:*** 
- Receptacle: RS of any type.
- ***Output:***
- Visualisation: Descriptions pulled from external sources (MESH, WikiData); raw data if in debug mode.
- RSs: All Concepts that closely match the given Concept.
+
+    ***Input:*** 
+
+    Receptacle: RS of any type.
+
+    ***Output:***
+
+    Visualisation: Descriptions pulled from external sources (MESH, WikiData); raw data if in debug mode.
+
+    RSs: All Concepts that closely match the given Concept.
+
 - **VisualisationInspectorDataflow** 📵🟪→🖌️
- ***Input:***
- Inlet: Dataflow of co-occurrences.
- ***Output:***
- Visualisation: Rendered List of co-occurrences, with names of each pair of co-occurring concepts and their absolute count of being mentioned together.
+
+    ***Input:***
+
+    Inlet: Dataflow of co-occurrences.
+
+    ***Output:***
+
+    Visualisation: Rendered List of co-occurrences, with names of each pair of co-occurring concepts and their absolute count of being mentioned together.
+
 - **VisualisationTopicModel** 🌐🔵🟪→🖌️
- ***Input:***
- Receptacle: RS of type Class
- Inlet: Dataflow of co-occurrences. Optional, and used to display filter states.
- ***Output:***
- Visualisation: Topic model of all items in given Class. Data is stored on a triple store (currently only contains Diseases).
+
+    ***Input:***
+
+    Receptacle: RS of type Class
+
+    Inlet: Dataflow of co-occurrences. Optional, and used to display filter states.
+
+    ***Output:***
+
+    Visualisation: Topic model of all items in given Class. Data is stored on a triple store (currently only contains Diseases).
+
 - **VisualisationBrainModel** 🌐🟪→🖌️
- ***Input:***
- Inlet: Dataflow of co-occurrences. Optional, and used to display filter states.
- ***Output:***
- Visualisation: Brain regions' central points displayed as a scatterplot. Data is stored on a triple store.
+
+    ***Input:***
+
+    Inlet: Dataflow of co-occurrences. Optional, and used to display filter states.
+
+    ***Output:***
+
+    Visualisation: Brain regions' central points displayed as a scatterplot. Data is stored on a triple store.
+
  - **VisualisationDiseaseRelations** 🌐🔵🔵→🖌️
- ***Input:***
- Receptacle: RS of type Disease
- Receptacle: RS of type Disease
- ***Output:***
- Visualisation: A visual representation of the co-occurrences between the two diseases and any brain related concept.
+    
+    ***Input:***
+    
+    Receptacle: RS of type Disease
+    
+    Receptacle: RS of type Disease
+    
+    ***Output:***
+    
+    Visualisation: A visual representation of the co-occurrences between the two diseases and any brain related concept.
+
 ### Export widgets
+
+Export widgets move data from the current environment to another environment. In our prototype, it can send concept pairs to DatAR Web for further sentence-level analysis in academic papers.
+
+- **ExportConceptPair** 🔵🔵→🌐
 
 > Note: This currently does not work for the Hololens 2 version. Instead, 5 sentences containing co-occurrences are displayed in the application itself.
 
-Export widgets move data from the current environment to another environment. In our prototype, it can send concept pairs to DatAR Web for further sentence-level analysis in academic papers.
- - **ExportConceptPair** 🔵🔵→🌐
- ***Input:***
- Receptacle: RS of type Region
- Receptacle: RS of type Disease
- ***Output:***
- Export: Data is sent to message broker to be received by any environments on the same channel. In our case, if you have DatAR Web open, it will receive it. No additional data is pulled from external sources within Unity.
+
+    ***Input:***
+
+    Receptacle: RS of type Region
+
+    Receptacle: RS of type Disease
+
+    ***Output:***
+
+    Export: Data is sent to message broker to be received by any environments on the same channel. In our case, if you have DatAR Web open, it will receive it. No additional data is pulled from external sources within Unity.
 ## Data Models
 This `DataModels` folder contains classes that structure all data use in the DatAR environment. Widgets (and their building blocks) use these data structures under the hood. The internal data structure follows the guidelines of the [JSON-LD standard](https://json-ld.org/), and is easily exported as such. This allows interoperability with other (linked data) systems. 
 We distinguish between several data types. At the root of the class hierarchy is the ***Resource*** class. This class only requires an assigned ID. Other data structures inherit from it and expand on required data fields.
@@ -250,3 +317,4 @@ In order to properly port over the web application for Hololens 2 support withou
 Some problems arose during the port from the original DatAR implementation, which was built using the SteamVR framework, to the Hololens 2 version using Microsoft Mixed Reality Toolkit. This is a compiled list of all known issues.
  - Widget Factories do not have an outline while hovering over them. This has purposefully been disabled as the generated widget created outline conflicts with the factory cube itself.
  - The accompanying DatAR web application has not been ported over to run from the Hololens 2, and has temporarily been replaced with an in-app viewer. See [DatAR Web Application - Hololens 2 Edition](#datar-web-application---hololens-2-edition).
+
