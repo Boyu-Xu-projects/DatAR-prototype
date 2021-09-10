@@ -565,7 +565,7 @@ GameObject:
   - component: {fileID: 3059647588458606805}
   - component: {fileID: 3059647588458606804}
   - component: {fileID: 643098878056756429}
-  - component: {fileID: 7729053696600572347}
+  - component: {fileID: 7985310455647206128}
   - component: {fileID: 731710439694336540}
   - component: {fileID: 7234061288595661413}
   m_Layer: 0
@@ -668,7 +668,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTetherWhenManipulating: 0
   IsBoundsHandles: 0
---- !u!114 &7729053696600572347
+--- !u!114 &7985310455647206128
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -677,7 +677,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3059647588458606806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69935ecfe76b9574b8576db8631a802e, type: 3}
+  m_Script: {fileID: 11500000, guid: a5d47c46fc473c142b78b2886a3602af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   markEventsAsUsed: 0
@@ -686,8 +686,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7234061288595661413}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
-        m_MethodName: StorePreviousMaterials
-        m_Mode: 1
+        m_MethodName: EnableMeshOutline
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -695,37 +695,13 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 731710439694336540}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
   onFocusExitEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 731710439694336540}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 7234061288595661413}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
-        m_MethodName: RestorePreviousMaterials
+        m_MethodName: DisableMeshOutline
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -774,7 +750,7 @@ GameObject:
   - component: {fileID: 3059647588512535509}
   - component: {fileID: 3059647588512535510}
   - component: {fileID: 6200639284792962493}
-  - component: {fileID: 6785561823884318411}
+  - component: {fileID: 5778248606603659190}
   - component: {fileID: 8475556244960051541}
   - component: {fileID: 3797238577265111621}
   m_Layer: 0
@@ -877,7 +853,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTetherWhenManipulating: 0
   IsBoundsHandles: 0
---- !u!114 &6785561823884318411
+--- !u!114 &5778248606603659190
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -886,7 +862,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3059647588512535512}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69935ecfe76b9574b8576db8631a802e, type: 3}
+  m_Script: {fileID: 11500000, guid: a5d47c46fc473c142b78b2886a3602af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   markEventsAsUsed: 0
@@ -895,8 +871,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3797238577265111621}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
-        m_MethodName: StorePreviousMaterials
-        m_Mode: 1
+        m_MethodName: EnableMeshOutline
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -904,37 +880,13 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 8475556244960051541}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
   onFocusExitEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8475556244960051541}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 3797238577265111621}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
-        m_MethodName: RestorePreviousMaterials
+        m_MethodName: DisableMeshOutline
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -49,7 +49,7 @@ public class DataflowInlet : MonoBehaviour
             _dataSubscription = inputGameObject.GetComponent<DataflowOutlet>()
                 .data
                 .Sample(TimeSpan.FromMilliseconds(200)) // Don't take in more updates once per time unit
-                .Subscribe(async incomingData =>
+                .Subscribe(incomingData =>
                 {
                     PulseIndicator();
                     data.OnNext(incomingData);

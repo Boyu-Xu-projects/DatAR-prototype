@@ -1,15 +1,20 @@
-﻿using UnityEngine;
+﻿using Microsoft.MixedReality.Toolkit;
+using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.UI;
+using System;
+using System.Collections;
+using System.Linq;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 public class RecycleBin : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider collision)
     {
-        //var interactable = other.gameObject.GetComponent<Interactable>();
-        //if (interactable && interactable.attachedToHand != null)
-        //{
-        //    Debug.Log("destroying " + interactable.gameObject.name);
-        //    interactable.attachedToHand.DetachObject(interactable.gameObject);
-        //    Destroy(interactable.gameObject);
-        //}
+        if (collision.tag.Equals("Deletable"))
+        {
+            Destroy(collision.gameObject);
+        }
     }
 }

@@ -319,12 +319,11 @@ GameObject:
   - component: {fileID: 8390831397312606787}
   - component: {fileID: 8862991804526116431}
   - component: {fileID: 3703577786124690875}
-  - component: {fileID: 3060133110693035388}
   - component: {fileID: -316898425320160929}
   - component: {fileID: 2574399747102135480}
   m_Layer: 0
   m_Name: VisualisationTopicModel
-  m_TagString: Untagged
+  m_TagString: Deletable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -473,33 +472,9 @@ MonoBehaviour:
   onManipulationStarted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2574399747102135480}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: -316898425320160929}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
-        m_MethodName: RestorePreviousMaterials
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 3060133110693035388}
-        m_TargetAssemblyTypeName: WidgetFactory, Assembly-CSharp
-        m_MethodName: GenerateWidget
+        m_MethodName: DisableMeshOutline
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -517,8 +492,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: -316898425320160929}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
-        m_MethodName: StorePreviousMaterials
-        m_Mode: 1
+        m_MethodName: EnableMeshOutline
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -526,37 +501,13 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2574399747102135480}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
   onHoverExited:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2574399747102135480}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: -316898425320160929}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
-        m_MethodName: RestorePreviousMaterials
+        m_MethodName: DisableMeshOutline
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -596,20 +547,6 @@ MonoBehaviour:
   proximityType: 3
   constraintOnRotation: 5
   useLocalSpaceForConstraint: 0
---- !u!114 &3060133110693035388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248932933912429621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53f41039bc29c654b9c1f3803e292bff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabToGenerate: {fileID: 248932933912429621}
-  shouldDuplicateOnGrab: 1
 --- !u!114 &-316898425320160929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1353,6 +1290,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1dceadf22a7db204a9b01bccac47f60e, type: 3}
+--- !u!4 &4110291640484519570 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8481557086576763634, guid: 1dceadf22a7db204a9b01bccac47f60e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5529922555261795424}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3073655546058313038 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7357168944433312046, guid: 1dceadf22a7db204a9b01bccac47f60e,
@@ -1365,12 +1308,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5a98ab27e61b64f9314585e418344f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &4110291640484519570 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8481557086576763634, guid: 1dceadf22a7db204a9b01bccac47f60e,
-    type: 3}
-  m_PrefabInstance: {fileID: 5529922555261795424}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5574036834968326430
 PrefabInstance:
   m_ObjectHideFlags: 0

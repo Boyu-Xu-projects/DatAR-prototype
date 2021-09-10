@@ -41,6 +41,7 @@ public class Receptacle : MonoBehaviour
         {
             return;
         }
+        Debug.Log("OnTriggerExit");
 
         if (GetComponent<SphereCollider>().bounds.Intersects(other.bounds))
         {
@@ -99,7 +100,9 @@ public class Receptacle : MonoBehaviour
         {
             return;
         }
-        
+
+        Debug.Log("OnTriggerEnter");
+
         // Check if not resource sphere should stay fixed.
         if (!otherGameObject.GetComponent<ResourceSphereDuplicationBehaviour>() || otherGameObject.GetComponent<ResourceSphereDuplicationBehaviour>().shouldDuplicateOnGrab)
         {

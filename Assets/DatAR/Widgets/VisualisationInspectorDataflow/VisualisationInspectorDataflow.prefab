@@ -69,10 +69,9 @@ GameObject:
   - component: {fileID: 7354401017462678035}
   - component: {fileID: 4500745257873785349}
   - component: {fileID: 7852521482544945101}
-  - component: {fileID: -6327480359165014862}
   m_Layer: 0
   m_Name: VisualisationInspectorDataflow
-  m_TagString: Untagged
+  m_TagString: Deletable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -237,33 +236,9 @@ MonoBehaviour:
   onManipulationStarted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7852521482544945101}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 4500745257873785349}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
-        m_MethodName: RestorePreviousMaterials
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: -6327480359165014862}
-        m_TargetAssemblyTypeName: WidgetFactory, Assembly-CSharp
-        m_MethodName: GenerateWidget
+        m_MethodName: DisableMeshOutline
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -281,8 +256,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4500745257873785349}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
-        m_MethodName: StorePreviousMaterials
-        m_Mode: 1
+        m_MethodName: EnableMeshOutline
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -290,37 +265,13 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7852521482544945101}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
   onHoverExited:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7852521482544945101}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 4500745257873785349}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
-        m_MethodName: RestorePreviousMaterials
+        m_MethodName: DisableMeshOutline
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -386,20 +337,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMaterial: {fileID: 2100000, guid: 6c66fc1ac164cdf439dc9629a7539fc3, type: 2}
   outlineWidth: 0.003
---- !u!114 &-6327480359165014862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7328621777578735527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53f41039bc29c654b9c1f3803e292bff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabToGenerate: {fileID: 7328621777578735527}
-  shouldDuplicateOnGrab: 1
 --- !u!1 &7328621778343450958
 GameObject:
   m_ObjectHideFlags: 0

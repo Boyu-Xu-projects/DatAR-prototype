@@ -132,7 +132,7 @@ namespace DatAR.Widgets.VisualisationInspectorResourceSphere
 
             IsLoading.OnNext(QueryState.HasLoaded);
 
-            StartCoroutine(SpawnConcept(new ConceptListPassable(concepts), currentBatchId));
+            _ = StartCoroutine(SpawnConcept(new ConceptListPassable(concepts), currentBatchId));
         }
 
         // TODO: move to ResourceSphereManufacturer class
