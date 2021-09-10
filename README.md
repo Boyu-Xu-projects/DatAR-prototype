@@ -200,9 +200,9 @@ Generally, we cannot assume type information from linked data sources (following
 
 ```json
 {
- "@id":  "lbd:amygdala",
- "@type":  ["lbd:region"],
- "rdfs:label":  "amygdala"
+  "@id":  "lbd:amygdala",
+  "@type":  ["lbd:region"],
+  "rdfs:label":  "amygdala"
 }
 ```
 
@@ -224,12 +224,13 @@ A more involved type is `datar:CooccurrenceListPassable`, which contains a custo
 
 ```json
 {
- "@id":  "lbd:amygdala",
- "@type":  ["datar:ConceptPassable"],
- "datar:resource":  {
- "@id":  "lbd:amygdala",
- "@type":  ["lbd:region"],
- "rdfs:label":  "Amygdala"  }
+  "@id": "lbd:amygdala",
+  "@type": ["datar:ConceptPassable"],
+  "datar:resource": {
+    "@id": "lbd:amygdala",
+    "@type": ["lbd:region"],
+	"rdfs:label": "Amygdala"
+  }
 }
 ```
 
@@ -239,66 +240,66 @@ A more involved type is `datar:CooccurrenceListPassable`, which contains a custo
 
 ```json
 {
- "data":  {
- "@id":  "_:155fec387b2589cd0ad262fdcde2b422d5bd1f734712d0b43c149208b585433e",
- "datar:class":  {
- "@id":  "lbd:disease",
- "@type":  ["rdf:Class"],
- "rdfs:label":  "disease"
- },
- "datar:concept":  {
- "@id":  "lbd:amygdala",
- "@type":  ["lbd:region"],
- "rdfs:label":  "amygdala"
- },
- "datar:resourceTypes":  [
- "datar:CooccurrenceStatement"
- ],
- "datar:resources":  [
- {
- "@id":  "lbd:amygdala2alzheimers_disease",
- "@type":  ["datar:CooccurrenceStatement"],
- "datar:classItem":  {
- "@id":  "lbd:alzheimers_disease",
- "@type":  ["lbd:disease"],
- "rdfs:label":  "alzheimers disease"
- },
- "datar:classItemMentionedWhenConceptItemMentioned":  0.058339962874569079,
- "datar:conceptMentionedWhenClassItemMentioned":  0.015423443634324173,
- "datar:cooccurrences":  220,
- "datar:filterSelectionState":  1,
- "rdfs:label":  "amygdala2alzheimers disease"
- },
- {
- "@id":  "lbd:amygdala2anxiety",
- "@type":  ["datar:CooccurrenceStatement"],
- "datar:classItem":  {
- "@id":  "lbd:anxiety",
- "@type":  ["lbd:disease"],
- "rdfs:label":  "anxiety"
- },
- "datar:classItemMentionedWhenConceptItemMentioned":  0.4237602757889154,
- "datar:conceptMentionedWhenClassItemMentioned":  0.23441396508728179,
- "datar:cooccurrences":  1598,
- "datar:filterSelectionState":  1,
- "rdfs:label":  "amygdala2anxiety"
- },
- {
- "@id":  "lbd:amygdala2atherosclerosis",
- "@type":  ["datar:CooccurrenceStatement"],
- "datar:classItem":  {
- "@id":  "lbd:atherosclerosis",
- "@type":  ["lbd:disease"],
- "rdfs:label":  "atherosclerosis"
- },
- "datar:classItemMentionedWhenConceptItemMentioned":  0.00053036329885971893,
- "datar:conceptMentionedWhenClassItemMentioned":  0.0011129660545353367,
- "datar:cooccurrences":  2,
- "datar:filterSelectionState":  1,
- "rdfs:label":  "amygdala2atherosclerosis"
- }
- ]
- }
+  "data": {
+    "@id": "_:155fec387b2589cd0ad262fdcde2b422d5bd1f734712d0b43c149208b585433e",
+    "datar:class": {
+      "@id": "lbd:disease",
+      "@type": ["rdf:Class"],
+      "rdfs:label": "disease"
+    },
+    "datar:concept": {
+      "@id": "lbd:amygdala",
+      "@type": ["lbd:region"],
+      "rdfs:label": "amygdala"
+    },
+    "datar:resourceTypes": [
+      "datar:CooccurrenceStatement"
+    ],
+    "datar:resources": [
+      {
+        "@id": "lbd:amygdala2alzheimers_disease",
+        "@type": ["datar:CooccurrenceStatement"],
+        "datar:classItem": {
+          "@id": "lbd:alzheimers_disease",
+          "@type": ["lbd:disease"],
+          "rdfs:label": "alzheimers disease"
+        },
+        "datar:classItemMentionedWhenConceptItemMentioned": 0.058339962874569079,
+        "datar:conceptMentionedWhenClassItemMentioned": 0.015423443634324173,
+        "datar:cooccurrences": 220,
+        "datar:filterSelectionState": 1,
+        "rdfs:label": "amygdala2alzheimers disease"
+      },
+      {
+        "@id": "lbd:amygdala2anxiety",
+        "@type": ["datar:CooccurrenceStatement"],
+        "datar:classItem": {
+          "@id": "lbd:anxiety",
+          "@type": ["lbd:disease"],
+          "rdfs:label": "anxiety"
+        },
+        "datar:classItemMentionedWhenConceptItemMentioned": 0.4237602757889154,
+        "datar:conceptMentionedWhenClassItemMentioned": 0.23441396508728179,
+        "datar:cooccurrences": 1598,
+        "datar:filterSelectionState": 1,
+        "rdfs:label": "amygdala2anxiety"
+      },
+      {
+        "@id": "lbd:amygdala2atherosclerosis",
+        "@type": ["datar:CooccurrenceStatement"],
+        "datar:classItem": {
+          "@id": "lbd:atherosclerosis",
+          "@type": ["lbd:disease"],
+          "rdfs:label": "atherosclerosis"
+        },
+        "datar:classItemMentionedWhenConceptItemMentioned": 0.00053036329885971893,
+        "datar:conceptMentionedWhenClassItemMentioned": 0.0011129660545353367,
+        "datar:cooccurrences": 2,
+        "datar:filterSelectionState": 1,
+        "rdfs:label": "amygdala2atherosclerosis"
+      }
+    ]
+  }
 }
 ```
 
@@ -308,29 +309,29 @@ The following linked data context is used inside of the application, which allow
 
 ```json
 { 
- "@context":  {
- "xsd":  "http://www.w3.org/2001/XMLSchema#",
- "lbd":  "http://www.linked-neuron-data.org/resource/",
- "lbdo":  "http://www.linked-neuron-data.org/ongoloty/",
- "lbdp":  "http://www.linked-neuron-data.org/property/",
- "lbdg":  "http://www.linked-neuron-data.org/graph/",
- "rdf":  "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
- "rdfs":  "http://www.w3.org/2000/01/rdf-schema#",
- "meshv":  "http://id.nlm.nih.gov/mesh/vocab#",
- "mesh":  "http://id.nlm.nih.gov/mesh/",
- "mesh2020":  "http://id.nlm.nih.gov/mesh/2020/",
- "mesh2019":  "http://id.nlm.nih.gov/mesh/2019/",
- "mesh2018":  "http://id.nlm.nih.gov/mesh/2018/",
- "wd":  "http://www.wikidata.org/entity/",
- "schema":  "http://schema.org/",
- "schema:description":  {  "@language":  "en"  },
- "datar":  "https://datar.local/ontology/",
- "datar:cooccurrences":  {  "@type":  "xsd:int"  },
- "datar:coordX":  {  "@type":  "xsd:float"  },
- "datar:coordY":  {  "@type":  "xsd:float"  },
- "datar:coordZ":  {  "@type":  "xsd:float"  },
- "datar:appearTimes": {  "@type":  "xsd:int"  }
- }
+  "@context": {
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "lbd": "http://www.linked-neuron-data.org/resource/",
+    "lbdo": "http://www.linked-neuron-data.org/ongoloty/",
+    "lbdp": "http://www.linked-neuron-data.org/property/",
+    "lbdg": "http://www.linked-neuron-data.org/graph/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "meshv": "http://id.nlm.nih.gov/mesh/vocab#",
+    "mesh": "http://id.nlm.nih.gov/mesh/",
+    "mesh2020": "http://id.nlm.nih.gov/mesh/2020/",
+    "mesh2019": "http://id.nlm.nih.gov/mesh/2019/",
+    "mesh2018": "http://id.nlm.nih.gov/mesh/2018/",
+    "wd": "http://www.wikidata.org/entity/",
+    "schema": "http://schema.org/",
+    "schema:description": { "@language": "en" },
+    "datar": "https://datar.local/ontology/",
+    "datar:cooccurrences": { "@type": "xsd:int" },
+    "datar:coordX": { "@type": "xsd:float" },
+    "datar:coordY": { "@type": "xsd:float" },
+    "datar:coordZ": { "@type": "xsd:float" },
+    "datar:appearTimes": { "@type": "xsd:int" }
+  }
 }
 ```
 
