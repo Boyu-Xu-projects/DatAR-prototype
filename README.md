@@ -177,8 +177,7 @@ Export widgets move data from the current environment to another environment. In
 
 - **ExportConceptPair** 🔵🔵→🌐
 
-> Note: This currently does not work for the Hololens 2 version. Instead, 5 sentences containing co-occurrences are displayed in the application itself.
-
+    > Note: This currently does not work for the Hololens 2 version. Instead, 5 sentences containing co-occurrences are displayed in the application itself.
 
     ***Input:***
 
