@@ -1,0 +1,1 @@
+C:\Repositry\datar-hololens\Build 2\datar-hololens\datar-hololens.vcxproj;x64

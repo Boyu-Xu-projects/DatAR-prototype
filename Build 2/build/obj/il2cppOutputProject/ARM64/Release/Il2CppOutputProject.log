@@ -1,0 +1,97 @@
+﻿  Building GameAssembly.dll with MsvcWinRtToolChain
+  	Msvc Install Version: 16.0
+  	Msvc Install SDK Directory: C:\Program Files (x86)\Windows Kits\10
+  	Msvc Linker Path: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX64\ARM64\link.exe
+  	Msvc Compiler Path: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX64\ARM64\cl.exe
+  
+  	Output directory: C:\Repositry\datar-hololens\Build 2\build\bin\ARM64\Release
+  	Cache directory: C:\Repositry\datar-hololens\Build 2\build\obj\il2cppOutputProject\ARM64\Release
+  Il2CppInteropDataTable.cpp
+  GenericMethods22.cpp
+  GenericMethods.cpp
+  Il2CppMetadataUsage.c
+  Il2CppCCalculateFieldValues1.cpp
+  Il2CppCCalculateTypeValues1.cpp
+  Generics.cpp
+  Assembly-CSharp2.cpp
+  Microsoft.MixedReality.Toolkit.SDK7.cpp
+  mscorlib9.cpp
+  Assembly-CSharp3.cpp
+  Microsoft.MixedReality.Toolkit.Gltf.cpp
+  Generics13.cpp
+  Il2CppPCCWMethods.cpp
+  Il2CppCCWs119.cpp
+  WindowsRuntimeMetadata.cpp
+  Il2CppCCWs163.cpp
+  Il2CppCCWs.cpp
+  Il2CppCCWs118.cpp
+  Il2CppCCWs94.cpp
+  System.Runtime.WindowsRuntime.cpp
+  Il2CppCCWs142.cpp
+  Il2CppCCWs56.cpp
+  Microsoft.MixedReality.Toolkit.Providers.WindowsMixedReality.Shared.cpp
+  Il2CppCCWs162.cpp
+  Il2CppCCWs152.cpp
+  Il2CppCCWs33.cpp
+  Il2CppCCWs35.cpp
+  Il2CppCCWs37.cpp
+  Il2CppCCWs157.cpp
+  Il2CppCCWs36.cpp
+  Il2CppCCWs46.cpp
+  Il2CppCCWs156.cpp
+  Il2CppCCWs55.cpp
+  Il2CppCCWs34.cpp
+  Il2CppCCWs151.cpp
+  Il2CppCCWs161.cpp
+  Il2CppCCWs144.cpp
+  Il2CppCCWs93.cpp
+  Il2CppCCWs143.cpp
+  Il2CppCCWs43.cpp
+  Il2CppCCWs38.cpp
+  Il2CppCCWs150.cpp
+  Il2CppCCWs44.cpp
+  Generics55.cpp
+  Il2CppCCWs39.cpp
+  Il2CppCCWs41.cpp
+  Il2CppCCWs154.cpp
+  Il2CppCCWs40.cpp
+  Il2CppCCWs148.cpp
+  Il2CppCCWs45.cpp
+  Il2CppCCWs110.cpp
+  Il2CppCCWs42.cpp
+  Il2CppCCWs147.cpp
+  Il2CppCCWs50.cpp
+  Il2CppCCWs1.cpp
+  Il2CppCCWs155.cpp
+  Il2CppCCWs146.cpp
+  Il2CppCCWs153.cpp
+  Il2CppCCWs2.cpp
+  Il2CppCCWs109.cpp
+  Il2CppCCWs112.cpp
+  Il2CppCCWs158.cpp
+  Il2CppCCWs49.cpp
+  Il2CppCCWs159.cpp
+  Il2CppCCWs149.cpp
+  Il2CppCCWs111.cpp
+  WindowsRuntimeMetadata_CodeGen.c
+  Il2CppCCWs145.cpp
+  Il2CppCCWs160.cpp
+  Il2CppCCWs3.cpp
+  Il2CppCCWs164.cpp
+  Il2CppCCWs103.cpp
+  Il2CppCCWs9.cpp
+  ObjectFiles: 1117 of which compiled: 74
+  	Time Compile: 27336 milliseconds Il2CppCCWs9.cpp
+  	Time Compile: 25466 milliseconds Il2CppCCWs103.cpp
+  	Time Compile: 24883 milliseconds Il2CppCCWs49.cpp
+  	Time Compile: 20548 milliseconds Generics55.cpp
+  	Time Compile: 9192 milliseconds Il2CppCCWs142.cpp
+  	Time Compile: 8590 milliseconds Il2CppPCCWMethods.cpp
+  	Time Compile: 5538 milliseconds Assembly-CSharp2.cpp
+  	Time Compile: 5241 milliseconds Assembly-CSharp3.cpp
+  	Time Compile: 5155 milliseconds Il2CppCCWs56.cpp
+  	Time Compile: 5021 milliseconds Generics.cpp
+  Total compilation time: 28610 milliseconds.
+  Creating library C:\Repositry\datar-hololens\Build 2\build\obj\il2cppOutputProject\ARM64\Release\linkresult_B7FEB9F189C0A06AD58B61D3A41E6E86\GameAssembly.lib and object C:\Repositry\datar-hololens\Build 2\build\obj\il2cppOutputProject\ARM64\Release\linkresult_B7FEB9F189C0A06AD58B61D3A41E6E86\GameAssembly.exp
+  Total link time: 23044 milliseconds.
+  Cleaned up 76 object files.
