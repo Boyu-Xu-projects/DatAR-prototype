@@ -98,7 +98,8 @@ public class SparqlService : MonoBehaviour
               }}
             }}";
 
-        var queryResponseRaw = await QueryEndpoint(queryRequest, "http://165.22.192.208:8890/sparql");
+        var queryResponseRaw = await QueryEndpoint(queryRequest, "http://157.245.79.168:8890/sparql");
+        //var queryResponseRaw = await QueryEndpoint(queryRequest, "http://165.22.192.208:8890/sparql");
 
         return await ConvertRdfToResourceList<DescriptionResource>(queryResponseRaw);
     }
@@ -124,7 +125,8 @@ public class SparqlService : MonoBehaviour
                   datar:coordZ ?z .
             }}";
 
-        var queryResponseRaw = await QueryEndpoint(queryRequest, "http://165.22.192.208:8890/sparql");
+        var queryResponseRaw = await QueryEndpoint(queryRequest, "http://157.245.79.168:8890/sparql");
+        //var queryResponseRaw = await QueryEndpoint(queryRequest, "http://165.22.192.208:8890/sparql");
 
         return await ConvertRdfToResourceList<CoordsResource>(queryResponseRaw);
     }
@@ -162,7 +164,8 @@ public class SparqlService : MonoBehaviour
         queryRequest += $"}}";
         // Debug.Log(queryRequest);
 
-        var queryResponseRaw = await QueryEndpoint(queryRequest, "http://165.22.192.208:8890/sparql");
+        var queryResponseRaw = await QueryEndpoint(queryRequest, "http://157.245.79.168:8890/sparql");
+        //var queryResponseRaw = await QueryEndpoint(queryRequest, "http://165.22.192.208:8890/sparql");
         // Debug.Log(queryResponseRaw);
         return await ConvertRdfToResourceList<DynamicResource>(queryResponseRaw);
     }
@@ -207,7 +210,8 @@ public class SparqlService : MonoBehaviour
         queryRequest += $"}}";
         // Debug.Log(queryRequest);
 
-        var queryResponseRaw = await QueryEndpoint(queryRequest, "http://165.22.192.208:8890/sparql");
+        var queryResponseRaw = await QueryEndpoint(queryRequest, "http://157.245.79.168:8890/sparql");
+        //var queryResponseRaw = await QueryEndpoint(queryRequest, "http://165.22.192.208:8890/sparql");
         // Debug.Log(queryResponseRaw);
         return await ConvertRdfToResourceList<DynamicResource>(queryResponseRaw);
     }
