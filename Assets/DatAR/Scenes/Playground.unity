@@ -1107,7 +1107,7 @@ PrefabInstance:
         type: 3}
       propertyPath: prefabToGenerate
       value: 
-      objectReference: {fileID: 4918420673200661866, guid: ad5063419a44fb547b8b1b75205b1f9f,
+      objectReference: {fileID: 4918420673200661866, guid: 5d91eb2eead2b394a862e05b600824c5,
         type: 3}
     - target: {fileID: 5547079621210269411, guid: b25363eeb2b89094a9f26f5d4b3cc9ef,
         type: 3}
