@@ -601,7 +601,7 @@ GameObject:
   - component: {fileID: 4878011347274531811}
   - component: {fileID: 6045576365578962325}
   - component: {fileID: 2765200908682782752}
-  - component: {fileID: 290143579369392500}
+  - component: {fileID: 3122396071855200361}
   m_Layer: 0
   m_Name: BrainGeneToggle
   m_TagString: Untagged
@@ -1102,7 +1102,7 @@ MonoBehaviour:
     type: 2}
   iconSet: {fileID: 11400000, guid: 8b386ef895f7c924f8c4b03d1d3ed683, type: 2}
   defaultIconSet: {fileID: 11400000, guid: 8b386ef895f7c924f8c4b03d1d3ed683, type: 2}
---- !u!114 &290143579369392500
+--- !u!114 &3122396071855200361
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1111,11 +1111,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 579376555265113697}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a725fdd852cd6d8458acb1b4a84be6a8, type: 3}
+  m_Script: {fileID: 11500000, guid: c792491d82592f7429c7f3e53c5a9bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   brainClass: lbd:gene
-  visualization: {fileID: 2070672750774282204}
+  visualization: {fileID: 5835406709925597156}
 --- !u!1 &611108168642917156
 GameObject:
   m_ObjectHideFlags: 0
@@ -2167,7 +2167,7 @@ GameObject:
   - component: {fileID: 6529593983910064241}
   - component: {fileID: 5878896178101738581}
   - component: {fileID: 3114147076955405931}
-  - component: {fileID: 4399951284487807713}
+  - component: {fileID: 5915725102938219459}
   m_Layer: 0
   m_Name: BrainNeuronToggle
   m_TagString: Untagged
@@ -2668,7 +2668,7 @@ MonoBehaviour:
     type: 2}
   iconSet: {fileID: 11400000, guid: 8b386ef895f7c924f8c4b03d1d3ed683, type: 2}
   defaultIconSet: {fileID: 11400000, guid: 8b386ef895f7c924f8c4b03d1d3ed683, type: 2}
---- !u!114 &4399951284487807713
+--- !u!114 &5915725102938219459
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2677,11 +2677,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1232355903399152570}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a725fdd852cd6d8458acb1b4a84be6a8, type: 3}
+  m_Script: {fileID: 11500000, guid: c792491d82592f7429c7f3e53c5a9bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   brainClass: lbd:neuron
-  visualization: {fileID: 2070672750774282204}
+  visualization: {fileID: 5835406709925597156}
 --- !u!1 &1234751144649160680
 GameObject:
   m_ObjectHideFlags: 0
@@ -2850,9 +2850,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7710187294963381664}
-  - component: {fileID: 8605436856270598557}
+  - component: {fileID: 4280294430359568493}
   m_Layer: 0
-  m_Name: BrainConcepts
+  m_Name: BrainTopics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2872,7 +2872,7 @@ Transform:
   m_Father: {fileID: 5800053142834009945}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8605436856270598557
+--- !u!114 &4280294430359568493
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2881,10 +2881,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1431593346843224306}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f080cb5758495ea4b8490f7db28aac07, type: 3}
+  m_Script: {fileID: 11500000, guid: 242c826d45d2e1c44b5a651a441e77df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConceptPrefab: {fileID: 9197765829565393569, guid: 660669dd9292b2342a37da2c018bbb44,
+  TopicPrefab: {fileID: -3477499942274887530, guid: 3885ef1f455492549895c6ad750bbd42,
     type: 3}
   MaxHistogramScale: 3
 --- !u!1 &1443474757014523786
@@ -3220,7 +3220,7 @@ GameObject:
   - component: {fileID: 7058145101886888332}
   - component: {fileID: 3981366773143172069}
   - component: {fileID: 1459034649455857338}
-  - component: {fileID: 4107466997215025510}
+  - component: {fileID: 792498189383368955}
   m_Layer: 0
   m_Name: BrainProteinToggle
   m_TagString: Untagged
@@ -3721,7 +3721,7 @@ MonoBehaviour:
     type: 2}
   iconSet: {fileID: 11400000, guid: 8b386ef895f7c924f8c4b03d1d3ed683, type: 2}
   defaultIconSet: {fileID: 11400000, guid: 8b386ef895f7c924f8c4b03d1d3ed683, type: 2}
---- !u!114 &4107466997215025510
+--- !u!114 &792498189383368955
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3730,11 +3730,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1903011909252960504}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a725fdd852cd6d8458acb1b4a84be6a8, type: 3}
+  m_Script: {fileID: 11500000, guid: c792491d82592f7429c7f3e53c5a9bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   brainClass: lbd:protein
-  visualization: {fileID: 2070672750774282204}
+  visualization: {fileID: 5835406709925597156}
 --- !u!1 &1934938147809216789
 GameObject:
   m_ObjectHideFlags: 0
@@ -7065,7 +7065,7 @@ GameObject:
   - component: {fileID: 4616139684618259559}
   - component: {fileID: 6643487756598858958}
   - component: {fileID: 3043701718722274911}
-  - component: {fileID: 8524107508878782137}
+  - component: {fileID: 6507388811296612722}
   m_Layer: 0
   m_Name: BrainRegionToggle
   m_TagString: Untagged
@@ -7566,7 +7566,7 @@ MonoBehaviour:
     type: 2}
   iconSet: {fileID: 11400000, guid: 8b386ef895f7c924f8c4b03d1d3ed683, type: 2}
   defaultIconSet: {fileID: 11400000, guid: 8b386ef895f7c924f8c4b03d1d3ed683, type: 2}
---- !u!114 &8524107508878782137
+--- !u!114 &6507388811296612722
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7575,11 +7575,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4616139684618259558}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a725fdd852cd6d8458acb1b4a84be6a8, type: 3}
+  m_Script: {fileID: 11500000, guid: c792491d82592f7429c7f3e53c5a9bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   brainClass: lbd:region
-  visualization: {fileID: 2070672750774282204}
+  visualization: {fileID: 5835406709925597156}
 --- !u!1 &4768004459773891986
 GameObject:
   m_ObjectHideFlags: 0
@@ -7708,7 +7708,7 @@ GameObject:
   - component: {fileID: 161215088983767370}
   - component: {fileID: 899409293611662345}
   - component: {fileID: 6427398631109886533}
-  - component: {fileID: 1995508785296689121}
+  - component: {fileID: 818268906332782702}
   m_Layer: 0
   m_Name: BrainNeurotransmitterToggle
   m_TagString: Untagged
@@ -8209,7 +8209,7 @@ MonoBehaviour:
     type: 2}
   iconSet: {fileID: 11400000, guid: 8b386ef895f7c924f8c4b03d1d3ed683, type: 2}
   defaultIconSet: {fileID: 11400000, guid: 8b386ef895f7c924f8c4b03d1d3ed683, type: 2}
---- !u!114 &1995508785296689121
+--- !u!114 &818268906332782702
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8218,11 +8218,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4790881136926237540}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a725fdd852cd6d8458acb1b4a84be6a8, type: 3}
+  m_Script: {fileID: 11500000, guid: c792491d82592f7429c7f3e53c5a9bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   brainClass: lbd:transmitter
-  visualization: {fileID: 2070672750774282204}
+  visualization: {fileID: 5835406709925597156}
 --- !u!1 &4834020708740714152
 GameObject:
   m_ObjectHideFlags: 0
@@ -9514,9 +9514,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2396a15eacc6b34cae1ecd2f05cde20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disease1Receptacle: {fileID: 7297361434534473357}
-  disease1Text: {fileID: 4536818054278485114}
-  BrainConcepts: {fileID: 8605436856270598557}
+  diseaseReceptacle: {fileID: 7297361434534473357}
+  diseaseText: {fileID: 4536818054278485114}
+  BrainTopics: {fileID: 4280294430359568493}
   Buttons: {fileID: 4277369221121701955}
 --- !u!1 &5798831951934735166
 GameObject:
@@ -13593,7 +13593,7 @@ GameObject:
   - component: {fileID: 3133137848644779923}
   - component: {fileID: 4394281252900535617}
   - component: {fileID: 8133562782768963817}
-  - component: {fileID: 697923783852773626}
+  - component: {fileID: 3922457855278058992}
   m_Layer: 0
   m_Name: BrainCognitiveFunctionToggle
   m_TagString: Untagged
@@ -14094,7 +14094,7 @@ MonoBehaviour:
     type: 2}
   iconSet: {fileID: 11400000, guid: 8b386ef895f7c924f8c4b03d1d3ed683, type: 2}
   defaultIconSet: {fileID: 11400000, guid: 8b386ef895f7c924f8c4b03d1d3ed683, type: 2}
---- !u!114 &697923783852773626
+--- !u!114 &3922457855278058992
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14103,11 +14103,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 9081526396853674074}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a725fdd852cd6d8458acb1b4a84be6a8, type: 3}
+  m_Script: {fileID: 11500000, guid: c792491d82592f7429c7f3e53c5a9bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   brainClass: lbd:function
-  visualization: {fileID: 2070672750774282204}
+  visualization: {fileID: 5835406709925597156}
 --- !u!1 &9089930229425029984
 GameObject:
   m_ObjectHideFlags: 0

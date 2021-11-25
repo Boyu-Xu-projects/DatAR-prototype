@@ -12,18 +12,18 @@ using UnityEngine;
 public class QueryRelatedTopics : MonoBehaviour, IQueryState
 {
     private SparqlService _sparqlService;
-    
-    [SerializeField] private Receptacle disease1Receptacle;
 
-    public TMPro.TextMeshPro disease1Text;
-    public BrainConceptManager BrainConcepts;
+    [SerializeField] private Receptacle diseaseReceptacle;
+
+    public TMPro.TextMeshPro diseaseText;
+    public BrainTopicManager BrainTopics;
     public GameObject Buttons;
 
     public BehaviorSubject<QueryState> IsLoading { get; }
 
     public string ErrorMessage { get; private set; }
 
-    private List<FormattedCooccurrence> Cooccurrences;
+    private List<FormattedTopicCooccurrence> Cooccurrences;
     private bool displayRatio = false;
 
     public string CurrentFilter{ get; set; }
@@ -38,7 +38,7 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
         var services = GameObject.Find("Services");
         _sparqlService = services.GetComponent<SparqlService>();
 
-        disease1Receptacle.slottedResourceContainerHasChanged.Subscribe(currentBatchId => GetDiseaseCooccurrences());
+        diseaseReceptacle.slottedResourceContainerHasChanged.Subscribe(currentBatchId => GetRelatedTopics());
     }
 
     public void SetDisplayRatio(bool value)
@@ -60,10 +60,10 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
         }
     }
 
-    async private void GetDiseaseCooccurrences()
+    async private void GetRelatedTopics()
     {
-        if (disease1Receptacle.SlottedResourceContainer == null ||
-            disease1Receptacle.SlottedResourceContainer.Resource == null)
+        if (diseaseReceptacle.SlottedResourceContainer == null ||
+            diseaseReceptacle.SlottedResourceContainer.Resource == null)
         {
             return;
         }
@@ -72,28 +72,28 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
 
         try
         {
-            var disease1Id = disease1Receptacle.SlottedResourceContainer.Resource.Id;
-            var disease1Label = disease1Receptacle.SlottedResourceContainer.Resource.Label;
+            var diseaseId = diseaseReceptacle.SlottedResourceContainer.Resource.Id;
+            var diseaseLabel = diseaseReceptacle.SlottedResourceContainer.Resource.Label;
 
             // TODO: Change later
-            var cooccurrences = await _sparqlService.GetDiseaseRelations(disease1Id, disease1Id);
+            var cooccurrences = await _sparqlService.GetTopicsRelatedToDisease(diseaseId);
 
             if (cooccurrences.Count < 0)
             {
-                ErrorMessage = $"No cooccurrences found for {disease1Id} and {disease1Id}";
+                ErrorMessage = $"No cooccurrences found for {diseaseId} and {diseaseId}";
                 IsLoading.OnNext(QueryState.HasError);
                 return;
             }
 
             IsLoading.OnNext(QueryState.HasLoaded);
 
-            disease1Text.text = disease1Label;
-            disease1Text.gameObject.SetActive(true);
+            diseaseText.text = diseaseLabel;
+            diseaseText.gameObject.SetActive(true);
 
             Buttons.SetActive(true);
 
             // Split concepts that belong to multiple classes into their seperate list items.
-            var fixedCooccurrences = new List<DiseaseRelationResource>();
+            var fixedCooccurrences = new List<DiseaseTopicsResource>();
             foreach(var cooccurrence in cooccurrences)
             {
                 if(cooccurrence.Concept.Types.Count > 1)
@@ -101,7 +101,7 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
                     var concepts = cooccurrence.Concept.SplitTypes();
                     foreach(var concept in concepts)
                     {
-                        fixedCooccurrences.Add(new DiseaseRelationResource(
+                        fixedCooccurrences.Add(new DiseaseTopicsResource(
                             cooccurrence.Types,
                             cooccurrence.AppearTimes,
                             concept,
@@ -126,16 +126,14 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
 
             // Format the co-occurrence data based on concept, and calculate number of co-occurrences the diseases have with that concept.
             //TODO: Implement a sorting interface. Currently sorts based on total number of co-occurrences for each class.
-            Cooccurrences = fixedCooccurrences.GroupBy(x => x.Concept, (key, value) => new FormattedCooccurrence(
+            Cooccurrences = fixedCooccurrences.GroupBy(x => x.Concept, (key, value) => new FormattedTopicCooccurrence(
                 key.Label,
                 key.Types[0],
-                disease1Id,
-                value.Where(x => x.Disease.Id == disease1Id).FirstOrDefault()?.AppearTimes ?? 0,
-                disease1Id,
-                value.Where(x => x.Disease.Id == disease1Id).FirstOrDefault()?.AppearTimes ?? 0
+                diseaseId,
+                value.Where(x => x.Disease.Id == diseaseId).FirstOrDefault()?.AppearTimes ?? 0
                 ))
             .GroupBy(x => x.Class)
-            .OrderByDescending(x => x.Sum(y => y.Disease1Cooccurences + y.Disease1Cooccurences))
+            .OrderByDescending(x => x.Sum(y => y.DiseaseCooccurences + y.DiseaseCooccurences))
             .SelectMany(x => x)
             .ToList();
 
@@ -151,10 +149,10 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
 
     private void SelectOverview()
     {
-        BrainConcepts.GenerateConceptList(
+        BrainTopics.GenerateConceptList(
                 Cooccurrences
                     .GroupBy(x => x.Class)
-                    .SelectMany(x => x.OrderByDescending(r => r.Disease1Cooccurences + r.Disease1Cooccurences).Take(3)) //TODO: 3 concepts per class in the overview is hardcoded, make configurable.
+                    .SelectMany(x => x.OrderByDescending(r => r.DiseaseCooccurences + r.DiseaseCooccurences).Take(3)) //TODO: 3 concepts per class in the overview is hardcoded, make configurable.
                     .ToList(),
                 displayRatio,
                 false
@@ -167,10 +165,10 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
     {
         if(thisButton == null)
         {
-            BrainConcepts.GenerateConceptList(
+            BrainTopics.GenerateConceptList(
                 Cooccurrences
                     .Where(x => x.Class == brainClass)
-                    .OrderByDescending(x => x.Disease1Cooccurences + x.Disease1Cooccurences)
+                    .OrderByDescending(x => x.DiseaseCooccurences + x.DiseaseCooccurences)
                     .Take(5)
                     .ToList(),
                 displayRatio,
@@ -184,10 +182,10 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
 
         if (thisButton.IsToggled)
         {
-            BrainConcepts.GenerateConceptList(
+            BrainTopics.GenerateConceptList(
                 Cooccurrences
                     .Where(x => x.Class == brainClass)
-                    .OrderByDescending(x => x.Disease1Cooccurences + x.Disease1Cooccurences)
+                    .OrderByDescending(x => x.DiseaseCooccurences + x.DiseaseCooccurences)
                     .Take(5)
                     .ToList(),
                 displayRatio,
@@ -216,17 +214,17 @@ public class FormattedTopicCooccurrence
 {
     public string Concept { get; private set; }
     public string Class { get; private set; }
-    public string Disease1Id { get; private set; }
-    public int Disease1Cooccurences { get; private set; }
-    public double Disease1Ratio { get; private set; }
+    public string DiseaseId { get; private set; }
+    public int DiseaseCooccurences { get; private set; }
+    public double DiseaseRatio { get; private set; }
 
-    public FormattedTopicCooccurrence(string _Concept, string _Class, string _Disease1, int _Disease1Cooccurrences)
+    public FormattedTopicCooccurrence(string _Concept, string _Class, string _Disease, int _DiseaseCooccurrences)
     {
         Concept = _Concept;
         Class = _Class;
-        Disease1Id = _Disease1;
-        Disease1Cooccurences = _Disease1Cooccurrences;
+        DiseaseId = _Disease;
+        DiseaseCooccurences = _DiseaseCooccurrences;
 
-        Disease1Ratio = ((double)Disease1Cooccurences / (Disease1Cooccurences + Disease1Cooccurences)) * 100d;
+        DiseaseRatio = ((double)DiseaseCooccurences / (DiseaseCooccurences + DiseaseCooccurences)) * 100d;
     }
 }
