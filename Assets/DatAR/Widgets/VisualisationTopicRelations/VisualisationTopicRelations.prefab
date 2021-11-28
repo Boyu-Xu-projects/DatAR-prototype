@@ -2850,7 +2850,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7710187294963381664}
-  - component: {fileID: 4280294430359568493}
+  - component: {fileID: 3186602512625939710}
   m_Layer: 0
   m_Name: BrainTopics
   m_TagString: Untagged
@@ -2872,7 +2872,7 @@ Transform:
   m_Father: {fileID: 5800053142834009945}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4280294430359568493
+--- !u!114 &3186602512625939710
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2881,10 +2881,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1431593346843224306}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 242c826d45d2e1c44b5a651a441e77df, type: 3}
+  m_Script: {fileID: 11500000, guid: 5511b5b70ea6ea84496c97a1dfa820ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TopicPrefab: {fileID: -3477499942274887530, guid: 3885ef1f455492549895c6ad750bbd42,
+  TopicPrefab: {fileID: 8310210230232367819, guid: c4372c1301b63c74b8d6b867862cc206,
     type: 3}
   MaxHistogramScale: 3
 --- !u!1 &1443474757014523786
@@ -9516,7 +9516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   diseaseReceptacle: {fileID: 7297361434534473357}
   diseaseText: {fileID: 4536818054278485114}
-  BrainTopics: {fileID: 4280294430359568493}
+  BrainTopics: {fileID: 3186602512625939710}
   Buttons: {fileID: 4277369221121701955}
 --- !u!1 &5798831951934735166
 GameObject:

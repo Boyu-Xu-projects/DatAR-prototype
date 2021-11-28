@@ -1,4 +1,4 @@
-using DatAR.Auxiliary.SharedScripts;
+﻿using DatAR.Auxiliary.SharedScripts;
 using DatAR.DataModels.Resources;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,16 +20,16 @@ public class BrainTopicManager : MonoBehaviour
 
         foreach (var cooccurrence in cooccurrences)
         {
-            var topicObject = Instantiate(TopicPrefab, transform);
-            topicObject.transform.localPosition = new Vector3(0, -0.6f * transform.childCount, 0);
+            var conceptObject = Instantiate(TopicPrefab, transform);
+            conceptObject.transform.localPosition = new Vector3(0, -0.6f * transform.childCount, 0);
 
             if (!displayRatio)
             {
-                topicObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, cooccurrence.DiseaseCooccurences);
+                conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, cooccurrence.DiseaseCooccurences);
             }
             else
             {
-                topicObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, (int) cooccurrence.DiseaseRatio);
+                conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, (int) cooccurrence.DiseaseRatio);
             }
         }
 
@@ -53,13 +53,17 @@ public class BrainTopicManager : MonoBehaviour
         var allConcepts = GetComponentsInChildren<BrainTopicSphere>();
         var maxDiseaseAppearTimes = (displayRatio) ? 
             100 :
-            allConcepts.SelectMany(x => new[] { x.DiseaseAppearTimes, x.DiseaseAppearTimes }).Max();
+            allConcepts.SelectMany(x => new[] { x.DiseaseAppearTimes }).Max();
 
         allConcepts.ForEach(concept =>
         {
+            // var calculatedScaleDisease1 = Util.Map(concept.Disease1AppearTimes, 0, maxDiseaseAppearTimes, 0, MaxHistogramScale);
+            // concept.disease1Bar.transform.localScale = new Vector3(calculatedScaleDisease1, 0.25f, 0.01f); //TODO: Hardcoded scales, make dynamic
+            // concept.disease1Bar.transform.localPosition -= new Vector3(calculatedScaleDisease1 / 2, 0, 0);
+
             var calculatedScaleDisease = Util.Map(concept.DiseaseAppearTimes, 0, maxDiseaseAppearTimes, 0, MaxHistogramScale);
             concept.diseaseBar.transform.localScale = new Vector3(calculatedScaleDisease, 0.25f, 0.01f); //TODO: Hardcoded scales, make dynamic
-            concept.diseaseBar.transform.localPosition -= new Vector3(calculatedScaleDisease / 2, 0, 0);
+            concept.diseaseBar.transform.localPosition += new Vector3(calculatedScaleDisease / 2, 0, 0);
         });
     }
 }

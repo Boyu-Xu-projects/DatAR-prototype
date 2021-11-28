@@ -448,7 +448,7 @@ GameObject:
   - component: {fileID: 2322371889519638351}
   - component: {fileID: 4386115788782221797}
   - component: {fileID: 8394186624245013663}
-  - component: {fileID: -3477499942274887530}
+  - component: {fileID: 8310210230232367819}
   m_Layer: 0
   m_Name: TopicPrefab
   m_TagString: Untagged
@@ -551,7 +551,7 @@ MonoBehaviour:
   pointRotateSpeed: 2
   lockX: 0
   lockY: 0
---- !u!114 &-3477499942274887530
+--- !u!114 &8310210230232367819
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

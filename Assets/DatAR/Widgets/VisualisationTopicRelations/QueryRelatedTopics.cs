@@ -80,7 +80,7 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
 
             if (cooccurrences.Count < 0)
             {
-                ErrorMessage = $"No cooccurrences found for {diseaseId} and {diseaseId}";
+                ErrorMessage = $"No cooccurrences found for {diseaseId}.";
                 IsLoading.OnNext(QueryState.HasError);
                 return;
             }
