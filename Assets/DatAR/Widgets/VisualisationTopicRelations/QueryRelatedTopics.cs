@@ -77,6 +77,7 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
 
             // TODO: Change later
             var cooccurrences = await _sparqlService.GetTopicsRelatedToDisease(diseaseId);
+            //var cooccurrences = await _sparqlService.GetTopicsRelatedToDisease("lbd:adrenaline");
 
             if (cooccurrences.Count < 0)
             {

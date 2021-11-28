@@ -398,13 +398,60 @@ public class SparqlService : MonoBehaviour
                 	    UNION
                 	    {{
                     		?statement      rdf:subject 		?disease .
-                    		FILTER 	(?disease = {disease}) .
+                    		FILTER 	        (?disease = {disease}) .
                     		?statement 	    rdf:object 		    ?concept .
                     		?statement 	    lbdp:appearTimes 	?appearTimes .
-                    		FILTER 	(?appearTimes > 10) .
+                    		FILTER 	        (?appearTimes > 10) .
                     		?concept 	    a 			        ?conceptClass .
                 	    }}
             }}";
+
+
+        // Need this to properly frame the data structure in ConvertRdfToResourceList. Not sure why...
+        JObject frame = (JObject)_context.DeepClone();
+        JToken frame2 = JToken.Parse($@"{{
+            ""datar:disease"": {{
+                ""@type"": ""lbd:disease""
+            }}
+        }}");
+        frame.Add(frame2.First);
+
+        var queryResponseRaw = await QueryEndpoint(queryRequest);
+
+        return await ConvertRdfToResourceList<DiseaseTopicsResource>(queryResponseRaw, frame);
+    }
+
+    public async UniTask<List<DiseaseTopicsResource>> GetTopicsRelatedToTopic(string topic)
+    {
+        var queryRequest = $@"
+            CONSTRUCT {{
+                	?statement 		a 			        datar:cooccurrenceStatement .
+                	?statement 		datar:disease 		?topic .
+                	?topic 			a 			        lbd:topic .
+                	?statement 		datar:appearTimes 	?appearTimes .
+                	?statement 		datar:concept 		?concept .
+                	?concept 		a 			        ?conceptClass .
+            }}  
+            WHERE {{
+                        {{
+                    		?statement	    rdf:object	        ?topic .
+                    		FILTER 	        (?topic = {topic}) .
+                            ?statement 	    rdf:subject 	    ?concept .
+                   		    ?statement 	    lbdp:appearTimes 	?appearTimes .
+                    		FILTER 	        (?appearTimes > 10) .
+                    		?concept 	    a 		            ?conceptClass .
+              	        }}
+                	    UNION
+                	    {{
+                    		?statement 	    rdf:subject 		?topic .
+                    		FILTER 	        ?topic = {topic}) .
+                    		?statement 	    rdf:object 		    ?concept .
+                    		?statement 	    lbdp:appearTimes 	?appearTimes .
+                    		FILTER 	        (?appearTimes > 10) .
+                    		?concept 	    a 			        ?conceptClass .
+                	    }}
+            }}
+";
 
 
         // Need this to properly frame the data structure in ConvertRdfToResourceList. Not sure why...
