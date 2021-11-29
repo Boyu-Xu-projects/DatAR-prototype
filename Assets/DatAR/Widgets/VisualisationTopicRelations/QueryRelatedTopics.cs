@@ -131,7 +131,7 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
                 key.Label,
                 key.Types[0],
                 diseaseId,
-                value.Where(x => x.Disease.Id == diseaseId).FirstOrDefault()?.AppearTimes ?? 0
+                value.Where(x => x.Disease.Id == /*"lbd:adrenaline"*/diseaseId).FirstOrDefault()?.AppearTimes ?? 0
                 ))
             .GroupBy(x => x.Class)
             .OrderByDescending(x => x.Sum(y => y.DiseaseCooccurences + y.DiseaseCooccurences))
