@@ -499,7 +499,7 @@ GameObject:
   - component: {fileID: 3520177670647480384}
   - component: {fileID: 2815538667761578161}
   - component: {fileID: 8705915228446271410}
-  - component: {fileID: 5517619038182341609}
+  - component: {fileID: 4186001468135735768}
   m_Layer: 0
   m_Name: TopicPrefab
   m_TagString: Untagged
@@ -696,8 +696,8 @@ MonoBehaviour:
   onManipulationStarted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5517619038182341609}
-        m_TargetAssemblyTypeName: ResourceSphereDuplicationBehaviour, Assembly-CSharp
+      - m_Target: {fileID: 4186001468135735768}
+        m_TargetAssemblyTypeName: TopicDuplicationBehaviour, Assembly-CSharp
         m_MethodName: DuplicateIfFixed
         m_Mode: 1
         m_Arguments:
@@ -717,7 +717,7 @@ MonoBehaviour:
   onHoverExited:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5517619038182341609
+--- !u!114 &4186001468135735768
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -726,7 +726,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5292740826904149620}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab2beb80fc087e648a17fcea78618f3a, type: 3}
+  m_Script: {fileID: 11500000, guid: e2e48f73f2625234c851f9a79c568d23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   shouldDuplicateOnGrab: 1
