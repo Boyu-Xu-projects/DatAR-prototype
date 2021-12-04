@@ -421,21 +421,22 @@ public class SparqlService : MonoBehaviour
         return await ConvertRdfToResourceList<DiseaseTopicsResource>(queryResponseRaw, frame);
     }
 
+    // The query defines topic as a disease so related classes can be re-used. 
     public async UniTask<List<DiseaseTopicsResource>> GetTopicsRelatedToTopic(string topic)
     {
         var queryRequest = $@"
             CONSTRUCT {{
                 	?statement 		a 			        datar:cooccurrenceStatement .
-                	?statement 		datar:disease 		?topic .
-                	?topic 			a 			        lbd:topic .
+                	?statement 		datar:disease 		?disease .
+                	?disease 		a 			        lbd:disease .
                 	?statement 		datar:appearTimes 	?appearTimes .
                 	?statement 		datar:concept 		?concept .
                 	?concept 		a 			        ?conceptClass .
             }}  
             WHERE {{
                         {{
-                    		?statement	    rdf:object	        ?topic .
-                    		FILTER 	        (?topic = {topic}) .
+                    		?statement	    rdf:object	        ?disease .
+                    		FILTER 	        (?disease = {topic}) .
                             ?statement 	    rdf:subject 	    ?concept .
                    		    ?statement 	    lbdp:appearTimes 	?appearTimes .
                     		FILTER 	        (?appearTimes > 10) .
@@ -443,8 +444,8 @@ public class SparqlService : MonoBehaviour
               	        }}
                 	    UNION
                 	    {{
-                    		?statement 	    rdf:subject 		?topic .
-                    		FILTER 	        ?topic = {topic}) .
+                    		?statement 	    rdf:subject 		?disease .
+                    		FILTER 	        (?disease = {topic}) .
                     		?statement 	    rdf:object 		    ?concept .
                     		?statement 	    lbdp:appearTimes 	?appearTimes .
                     		FILTER 	        (?appearTimes > 10) .

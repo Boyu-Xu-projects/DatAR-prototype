@@ -134,7 +134,7 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
                 value.Where(x => x.Disease.Id == /*"lbd:adrenaline"*/diseaseId).FirstOrDefault()?.AppearTimes ?? 0
                 ))
             .GroupBy(x => x.Class)
-            .OrderByDescending(x => x.Sum(y => y.DiseaseCooccurences + y.DiseaseCooccurences))
+            .OrderByDescending(x => x.Sum(y => y.TopicCooccurrences + y.TopicCooccurrences))
             .SelectMany(x => x)
             .ToList();
 
@@ -153,7 +153,7 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
         BrainTopics.GenerateConceptList(
                 Cooccurrences
                     .GroupBy(x => x.Class)
-                    .SelectMany(x => x.OrderByDescending(r => r.DiseaseCooccurences + r.DiseaseCooccurences).Take(3)) //TODO: 3 concepts per class in the overview is hardcoded, make configurable.
+                    .SelectMany(x => x.OrderByDescending(r => r.TopicCooccurrences + r.TopicCooccurrences).Take(3)) //TODO: 3 concepts per class in the overview is hardcoded, make configurable.
                     .ToList(),
                 displayRatio,
                 false
@@ -169,7 +169,7 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
             BrainTopics.GenerateConceptList(
                 Cooccurrences
                     .Where(x => x.Class == brainClass)
-                    .OrderByDescending(x => x.DiseaseCooccurences + x.DiseaseCooccurences)
+                    .OrderByDescending(x => x.TopicCooccurrences + x.TopicCooccurrences)
                     .Take(5)
                     .ToList(),
                 displayRatio,
@@ -186,7 +186,7 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
             BrainTopics.GenerateConceptList(
                 Cooccurrences
                     .Where(x => x.Class == brainClass)
-                    .OrderByDescending(x => x.DiseaseCooccurences + x.DiseaseCooccurences)
+                    .OrderByDescending(x => x.TopicCooccurrences + x.TopicCooccurrences)
                     .Take(5)
                     .ToList(),
                 displayRatio,
@@ -215,17 +215,17 @@ public class FormattedTopicCooccurrence
 {
     public string Concept { get; private set; }
     public string Class { get; private set; }
-    public string DiseaseId { get; private set; }
-    public int DiseaseCooccurences { get; private set; }
-    public double DiseaseRatio { get; private set; }
+    public string TopicId { get; private set; }
+    public int TopicCooccurrences { get; private set; }
+    public double TopicRatio { get; private set; }
 
-    public FormattedTopicCooccurrence(string _Concept, string _Class, string _Disease, int _DiseaseCooccurrences)
+    public FormattedTopicCooccurrence(string _Concept, string _Class, string _Topic, int _TopicCooccurrences)
     {
         Concept = _Concept;
         Class = _Class;
-        DiseaseId = _Disease;
-        DiseaseCooccurences = _DiseaseCooccurrences;
+        TopicId = _Topic;
+        TopicCooccurrences = _TopicCooccurrences;
 
-        DiseaseRatio = ((double)DiseaseCooccurences / (DiseaseCooccurences + DiseaseCooccurences)) * 100d;
+        TopicRatio = ((double)TopicCooccurrences / (TopicCooccurrences + TopicCooccurrences)) * 100d;
     }
 }
