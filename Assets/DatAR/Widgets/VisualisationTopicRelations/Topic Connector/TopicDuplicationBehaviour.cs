@@ -64,17 +64,16 @@ public class TopicDuplicationBehaviour : MonoBehaviour
             brainTopics.transform.SetParent(transform, true);
             BrainTopics = brainTopics.GetComponent<BrainTopicManager>();
 
-            QuerySelectedTopic(transform.name);
+            QuerySelectedTopic(transform.name, transform.GetChild(3).GetComponent<TextMeshPro>().text);
         }
     }
 
-    async private void QuerySelectedTopic(string topic)
+    async private void QuerySelectedTopic(string topic, string topicLabel)
     {
         try
         {
             var topicName = topic; //adrenaline
-            // To
-            var topicObject = $"lbd:{topicName}"; //lbd:adrenaline
+            var topicObject = topicLabel; //lbd:adrenaline
 
             var cooccurrences = await _sparqlService.GetTopicsRelatedToTopic(topicObject);
 
@@ -100,7 +99,7 @@ public class TopicDuplicationBehaviour : MonoBehaviour
                     var concepts = cooccurrence.Concept.SplitTypes();
                     foreach(var concept in concepts)
                     {
-                        switch(cooccurrence.Concept.Types[0]) {
+                        switch(concept.Types[0]) {
                             case "lbd:region": {
                                 fixedCooccurrences[0].Add(new DiseaseTopicsResource(
                                     cooccurrence.Types,
@@ -203,6 +202,7 @@ public class TopicDuplicationBehaviour : MonoBehaviour
                         category[i].Concept.Label,
                         category[i].Concept.Types[0],
                         topicName,
+                        category[i].Concept.Id,
                         category[i].AppearTimes
                     ));
             }

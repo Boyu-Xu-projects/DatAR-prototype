@@ -44,30 +44,22 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
     public void SetDisplayRatio(bool value)
     {
         if(value == displayRatio)
-        {
             return;
-        }
 
         displayRatio = value;
 
         if (CurrentFilter == null)
-        {
             SelectOverview();
-        }
         else
-        {
             SelectFromClass(CurrentFilter);
-        }
     }
 
     async private void GetRelatedTopics()
     {
         if (diseaseReceptacle.SlottedResourceContainer == null ||
             diseaseReceptacle.SlottedResourceContainer.Resource == null)
-        {
             return;
-        }
-
+        
         IsLoading.OnNext(QueryState.IsLoading);
 
         try
@@ -75,9 +67,7 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
             var diseaseId = diseaseReceptacle.SlottedResourceContainer.Resource.Id;
             var diseaseLabel = diseaseReceptacle.SlottedResourceContainer.Resource.Label;
 
-            // TODO: Change later
             var cooccurrences = await _sparqlService.GetTopicsRelatedToDisease(diseaseId);
-            //var cooccurrences = await _sparqlService.GetTopicsRelatedToDisease("lbd:adrenaline");
 
             if (cooccurrences.Count < 0)
             {
@@ -94,7 +84,11 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
             Buttons.SetActive(true);
 
             // Split concepts that belong to multiple classes into their seperate list items.
-            var fixedCooccurrences = new List<DiseaseTopicsResource>();
+            List<DiseaseTopicsResource>[] fixedCooccurrences = new List<DiseaseTopicsResource>[6];
+            for(int i = 0; i < 6; i++)
+                fixedCooccurrences[i] = new List<DiseaseTopicsResource>();
+
+            // Sort the different category of topics in different lists
             foreach(var cooccurrence in cooccurrences)
             {
                 if(cooccurrence.Concept.Types.Count > 1)
@@ -102,41 +96,113 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
                     var concepts = cooccurrence.Concept.SplitTypes();
                     foreach(var concept in concepts)
                     {
-                        fixedCooccurrences.Add(new DiseaseTopicsResource(
-                            cooccurrence.Types,
-                            cooccurrence.AppearTimes,
-                            concept,
-                            cooccurrence.Disease));
+                        switch(concept.Types[0]) {
+                            case "lbd:region": {
+                                fixedCooccurrences[0].Add(new DiseaseTopicsResource(
+                                    cooccurrence.Types,
+                                    cooccurrence.AppearTimes,
+                                    concept,
+                                    cooccurrence.Disease));
+                                break;
+                            }
+                            case "lbd:transmitter": {
+                                fixedCooccurrences[1].Add(new DiseaseTopicsResource(
+                                    cooccurrence.Types,
+                                    cooccurrence.AppearTimes,
+                                    concept,
+                                    cooccurrence.Disease));
+                                break;
+                            }
+                            case "lbd:gene": {
+                                fixedCooccurrences[2].Add(new DiseaseTopicsResource(
+                                    cooccurrence.Types,
+                                    cooccurrence.AppearTimes,
+                                    concept,
+                                    cooccurrence.Disease));
+                                break;
+                            }
+                            case "lbd:function": {
+                                fixedCooccurrences[3].Add(new DiseaseTopicsResource(
+                                    cooccurrence.Types,
+                                    cooccurrence.AppearTimes,
+                                    concept,
+                                    cooccurrence.Disease));
+                                break;
+                            }
+                            case "lbd:protein": {
+                                fixedCooccurrences[4].Add(new DiseaseTopicsResource(
+                                    cooccurrence.Types,
+                                    cooccurrence.AppearTimes,
+                                    concept,
+                                    cooccurrence.Disease));
+                                break;
+                            }
+                            case "lbd:neuron": {
+                                fixedCooccurrences[5].Add(new DiseaseTopicsResource(
+                                    cooccurrence.Types,
+                                    cooccurrence.AppearTimes,
+                                    concept,
+                                    cooccurrence.Disease));
+                                break;
+                            }
+                            default:
+                                break;
+                        }
                     }
                 }
                 else
                 {
-                    fixedCooccurrences.Add(cooccurrence);
+                    switch(cooccurrence.Concept.Types[0]) {
+                        case "lbd:region": {
+                            fixedCooccurrences[0].Add(cooccurrence);
+                            break;
+                        }
+                        case "lbd:transmitter": {
+                            fixedCooccurrences[1].Add(cooccurrence);
+                            break;
+                        }
+                        case "lbd:gene": {
+                            fixedCooccurrences[2].Add(cooccurrence);
+                            break;
+                        }
+                        case "lbd:function": {
+                            fixedCooccurrences[3].Add(cooccurrence);
+                            break;
+                        }
+                        case "lbd:protein": {
+                            fixedCooccurrences[4].Add(cooccurrence);
+                            break;
+                        }
+                        case "lbd:neuron": {
+                            fixedCooccurrences[5].Add(cooccurrence);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
                 }
             }
 
-            // Only take co-occurrences with concepts form a valid type.
-            fixedCooccurrences = fixedCooccurrences.Where(x => new string[] { 
-                "lbd:region", 
-                "lbd:transmitter", 
-                "lbd:gene", 
-                "lbd:function", 
-                "lbd:protein", 
-                "lbd:neuron" 
-            }.Contains(x.Concept.Types[0])).ToList();
+            // Within each category, sort on cooccurrences on descending order
+            foreach(List<DiseaseTopicsResource> category in fixedCooccurrences)
+                category.Sort((y,x) => x.AppearTimes.CompareTo(y.AppearTimes));
+        
+            // Within each category, take only the top 6
+            Cooccurrences = new List<FormattedTopicCooccurrence>();
+            foreach(List<DiseaseTopicsResource> category in fixedCooccurrences) {
+                int numberOfTopics = 5;
+                if(category.Count < numberOfTopics)
+                    numberOfTopics = category.Count;
 
-            // Format the co-occurrence data based on concept, and calculate number of co-occurrences the diseases have with that concept.
-            //TODO: Implement a sorting interface. Currently sorts based on total number of co-occurrences for each class.
-            Cooccurrences = fixedCooccurrences.GroupBy(x => x.Concept, (key, value) => new FormattedTopicCooccurrence(
-                key.Label,
-                key.Types[0],
-                diseaseId,
-                value.Where(x => x.Disease.Id == /*"lbd:adrenaline"*/diseaseId).FirstOrDefault()?.AppearTimes ?? 0
-                ))
-            .GroupBy(x => x.Class)
-            .OrderByDescending(x => x.Sum(y => y.TopicCooccurrences + y.TopicCooccurrences))
-            .SelectMany(x => x)
-            .ToList();
+                for(int i = 0; i < numberOfTopics; i++)
+                    Cooccurrences.Add(new FormattedTopicCooccurrence(
+                        category[i].Concept.Label,
+                        category[i].Concept.Types[0],
+                        diseaseLabel,
+                        category[i].Concept.Id,
+                        category[i].AppearTimes
+                    ));
+            }
 
             SelectOverview();
         }
@@ -198,9 +264,7 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
             thisButton.transform.parent.GetComponentsInChildren<Interactable>().ForEach(siblingButton =>
             {
                 if (siblingButton != thisButton)
-                {
                     siblingButton.IsToggled = false;
-                }
             });
         }
         else
@@ -215,16 +279,18 @@ public class FormattedTopicCooccurrence
 {
     public string Concept { get; private set; }
     public string Class { get; private set; }
-    public string TopicId { get; private set; }
+    public string TopicName { get; private set; }
+    public string TopicLabel { get; private set; }
     public int TopicCooccurrences { get; private set; }
     public double TopicRatio { get; private set; }
 
-    public FormattedTopicCooccurrence(string _Concept, string _Class, string _Topic, int _TopicCooccurrences)
+    public FormattedTopicCooccurrence(string _Concept, string _Class, string _TopicName, string _TopicLabel, int _TopicCooccurrences)
     {
-        Concept = _Concept;
-        Class = _Class;
-        TopicId = _Topic;
-        TopicCooccurrences = _TopicCooccurrences;
+        Concept = _Concept; // Found topic
+        Class = _Class; // Topic class
+        TopicLabel = _TopicName; // Topic or Disease name associated with found topic above
+        TopicLabel = _TopicLabel; // Topic object in LBD
+        TopicCooccurrences = _TopicCooccurrences; // Number of cooccurrences found
 
         TopicRatio = ((double)TopicCooccurrences / (TopicCooccurrences + TopicCooccurrences)) * 100d;
     }

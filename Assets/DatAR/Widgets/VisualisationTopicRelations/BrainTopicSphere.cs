@@ -7,18 +7,22 @@ using UnityEngine;
 public class BrainTopicSphere : MonoBehaviour
 {
     public TMPro.TextMeshPro conceptText;
+    public TMPro.TextMeshPro topicLabel;
     public TMPro.TextMeshPro diseaseAppearTimesText;
     public GameObject diseaseBar;
 
+    [HideInInspector] public string BrainTopicName { get; private set; }
     [HideInInspector] public string BrainTopicLabel { get; private set; }
     [HideInInspector] public int DiseaseAppearTimes { get; private set; }
 
-    public void PopulateData(string brainTopic, string brainClass, int diseaseAppearTimes)
+    public void PopulateData(string brainTopic, string brainClass, int diseaseAppearTimes, string brainTopicLabel)
     {
-        BrainTopicLabel = brainTopic;
+        BrainTopicName = brainTopic;
+        BrainTopicLabel = brainTopicLabel;
         DiseaseAppearTimes = diseaseAppearTimes;
 
-        conceptText.text = BrainTopicLabel;
+        conceptText.text = BrainTopicName;
+        topicLabel.text = BrainTopicLabel;
         diseaseAppearTimesText.text = DiseaseAppearTimes.ToString();
 
         switch (brainClass)
