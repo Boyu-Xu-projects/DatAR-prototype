@@ -375,7 +375,7 @@ public class SparqlService : MonoBehaviour
         return await ConvertRdfToResourceList<DiseaseRelationResource>(queryResponseRaw, frame);
     }
 
-    public async UniTask<List<DiseaseTopicsResource>> GetTopicsRelatedToDisease(string disease)
+    public async UniTask<List<DiseaseTopicsResource>> GetTopicsRelatedToDisease(string disease, int appearTimes = 10)
     {
         var queryRequest = $@"
             CONSTRUCT {{
@@ -392,7 +392,7 @@ public class SparqlService : MonoBehaviour
                     		FILTER 	(?disease = {disease}) .
                             ?statement 	    rdf:subject 	    ?concept .
                    		    ?statement 	    lbdp:appearTimes 	?appearTimes .
-                    		FILTER 	(?appearTimes > 10) .
+                            FILTER 	        (?appearTimes > {appearTimes}) .
                     		?concept 	    a 		            ?conceptClass .
               	        }}
                 	    UNION
@@ -401,7 +401,7 @@ public class SparqlService : MonoBehaviour
                     		FILTER 	        (?disease = {disease}) .
                     		?statement 	    rdf:object 		    ?concept .
                     		?statement 	    lbdp:appearTimes 	?appearTimes .
-                    		FILTER 	        (?appearTimes > 10) .
+                            FILTER 	        (?appearTimes > {appearTimes}) .
                     		?concept 	    a 			        ?conceptClass .
                 	    }}
             }}";
@@ -422,7 +422,7 @@ public class SparqlService : MonoBehaviour
     }
 
     // The query defines topic as a disease so related classes can be re-used. 
-    public async UniTask<List<DiseaseTopicsResource>> GetTopicsRelatedToTopic(string topic)
+    public async UniTask<List<DiseaseTopicsResource>> GetTopicsRelatedToTopic(string topic, int appearTimes = 10)
     {
         var queryRequest = $@"
             CONSTRUCT {{
@@ -439,7 +439,7 @@ public class SparqlService : MonoBehaviour
                     		FILTER 	        (?disease = {topic}) .
                             ?statement 	    rdf:subject 	    ?concept .
                    		    ?statement 	    lbdp:appearTimes 	?appearTimes .
-                    		FILTER 	        (?appearTimes > 10) .
+                    		FILTER 	        (?appearTimes > {appearTimes}) .
                     		?concept 	    a 		            ?conceptClass .
               	        }}
                 	    UNION
@@ -448,7 +448,7 @@ public class SparqlService : MonoBehaviour
                     		FILTER 	        (?disease = {topic}) .
                     		?statement 	    rdf:object 		    ?concept .
                     		?statement 	    lbdp:appearTimes 	?appearTimes .
-                    		FILTER 	        (?appearTimes > 10) .
+                    		FILTER 	        (?appearTimes > {appearTimes}) .
                     		?concept 	    a 			        ?conceptClass .
                 	    }}
             }}
@@ -527,12 +527,30 @@ public class SparqlService : MonoBehaviour
         List<T> resources = new List<T>();
         compactQueryResponse["@graph"].ToList().ForEach((resource) =>
         {
+            // A few resources have multiple disease appeartimes.
+            // Before catching an error, we should check this
+            if(resource.SelectToken("datar:appearTimes") != null && 
+                resource.SelectToken("datar:appearTimes").Count<object>() > 1)
+            {
+                // Take the highest appeartime in this resource
+                int maxAppeartime = 0;
+                foreach(int appearTime in resource.SelectToken("datar:appearTimes"))
+                {
+                    if(maxAppeartime < appearTime)
+                        maxAppeartime = appearTime;
+                }
+                resource.SelectToken("datar:appearTimes").Replace(maxAppeartime);
+            }
+
             try
             {
                 resources.Add(resource.ToObject<T>());
             }
             catch (Exception e)
             {
+                JToken jToken = resource.SelectToken("datar:appearTimes");
+                Debug.Log(jToken.Count<object>());
+
                 Debug.LogError($"{e.Message} {JsonConvert.SerializeObject(resource)}");
             }
         });

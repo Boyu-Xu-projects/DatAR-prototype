@@ -72,8 +72,8 @@ public class TopicDuplicationBehaviour : MonoBehaviour
     {
         try
         {
-            var topicName = topic; //adrenaline
-            var topicObject = topicLabel; //lbd:adrenaline
+            var topicName = topic; // adrenaline
+            var topicObject = topicLabel; // lbd:adrenaline
 
             var cooccurrences = await _sparqlService.GetTopicsRelatedToTopic(topicObject);
 
@@ -82,9 +82,6 @@ public class TopicDuplicationBehaviour : MonoBehaviour
                 ErrorMessage = $"No cooccurrences found for {topicName}.";
                 return;
             }
-
-            // diseaseText.text = topicObject;
-            // diseaseText.gameObject.SetActive(true);
 
             // Split concepts that belong to multiple classes into their seperate list items.
             List<DiseaseTopicsResource>[] fixedCooccurrences = new List<DiseaseTopicsResource>[6];
