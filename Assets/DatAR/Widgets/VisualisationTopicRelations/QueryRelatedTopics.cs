@@ -91,6 +91,10 @@ public class QueryRelatedTopics : MonoBehaviour, IQueryState
             // Sort the different category of topics in different lists
             foreach(var cooccurrence in cooccurrences)
             {
+                // Ignore cooccurrences that have unknown sources.
+                if(!cooccurrence.Id.Contains("lbd"))
+                    continue;
+
                 if(cooccurrence.Concept.Types.Count > 1)
                 {
                     var concepts = cooccurrence.Concept.SplitTypes();
