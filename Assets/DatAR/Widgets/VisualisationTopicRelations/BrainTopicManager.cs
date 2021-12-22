@@ -25,9 +25,9 @@ public class BrainTopicManager : MonoBehaviour
             conceptObject.name = cooccurrence.Concept;
 
             if (!displayRatio)
-                conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, cooccurrence.TopicCooccurrences, cooccurrence.TopicLabel);
+                conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, cooccurrence.TopicCooccurrences, cooccurrence.TopicLabel, cooccurrence.Class);
             else
-                conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, (int) cooccurrence.TopicRatio, cooccurrence.TopicLabel);
+                conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, (int) cooccurrence.TopicRatio, cooccurrence.TopicLabel, cooccurrence.Class);
         }
 
         SetHistogramValues(displayRatio);
@@ -55,10 +55,10 @@ public class BrainTopicManager : MonoBehaviour
             conceptObject.name = cooccurrence.Concept;
 
             if (!displayRatio)
-                conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, cooccurrence.TopicCooccurrences, cooccurrence.TopicLabel);
+                conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, cooccurrence.TopicCooccurrences, cooccurrence.TopicLabel, cooccurrence.Class);
             
             else
-                conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, (int) cooccurrence.TopicRatio, cooccurrence.TopicLabel);
+                conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, (int) cooccurrence.TopicRatio, cooccurrence.TopicLabel, cooccurrence.Class);
         }
 
         SetHistogramValues(displayRatio);

@@ -26,7 +26,7 @@ public class TopicDuplicationBehaviour : MonoBehaviour
 
         if (!topicPool)
         {
-            Debug.LogError("No `StandaloneTopicePool` Prefab was not found in the scene. "
+            Debug.LogError("No `StandaloneTopicPool` was found in the scene. "
                            + "This GameObject is required to allow topic expansion.");
             gameObject.SetActive(false);
             return;
@@ -39,6 +39,36 @@ public class TopicDuplicationBehaviour : MonoBehaviour
     // If not fixed, simply move when picked up.
     public void DuplicateIfFixed()
     {
+        // Sorted list
+        // if (shouldDuplicateOnGrab)
+        // {
+        //     // Leave a duplicate behind in the same place, since we grabbed the original topic sphere
+        //     var duplicate = Instantiate(gameObject, transform.parent);
+        //     duplicate.transform.position = transform.position;
+        //     duplicate.GetComponent<Renderer>().material = GetComponent<Renderer>().material;
+
+        //     // Assign topic to topic pool
+        //     transform.SetParent(GameObject.Find("StandaloneTopicPool").transform, true);
+        //     GetComponent<TopicDuplicationBehaviour>().shouldDuplicateOnGrab = false;
+        //     tag = "Deletable";
+
+        //     // Make Appeartimes and bar invisible
+        //     transform.GetChild(1).gameObject.SetActive(false);
+        //     transform.GetChild(2).gameObject.SetActive(false);
+
+        //     // Add topic manager via script to topic sphere
+        //     GameObject brainTopics = new GameObject();
+        //     brainTopics.name = "BrainTopics";
+        //     brainTopics.AddComponent<BrainTopicManager>();
+        //     brainTopics.GetComponent<BrainTopicManager>().MaxHistogramScale = 3;
+        //     brainTopics.GetComponent<BrainTopicManager>().TopicPrefab = Resources.Load<BrainTopicSphere>("TopicPrefab");
+        //     brainTopics.transform.SetParent(transform, true);
+        //     BrainTopics = brainTopics.GetComponent<BrainTopicManager>();
+
+        //     QuerySelectedTopic(transform.name, transform.GetChild(3).GetComponent<TextMeshPro>().text, transform.GetComponent<BrainTopicSphere>().TopicClass);
+        // }
+
+        // Bubble graph
         if (shouldDuplicateOnGrab)
         {
             // Leave a duplicate behind in the same place, since we grabbed the original topic sphere
@@ -47,7 +77,7 @@ public class TopicDuplicationBehaviour : MonoBehaviour
             duplicate.GetComponent<Renderer>().material = GetComponent<Renderer>().material;
 
             // Assign topic to topic pool
-            transform.SetParent(GameObject.Find("StandaloneTopicPool").transform, true);
+            transform.SetParent(GameObject.Find("StandaloneGraphPool").transform, true);
             GetComponent<TopicDuplicationBehaviour>().shouldDuplicateOnGrab = false;
             tag = "Deletable";
 
@@ -55,27 +85,26 @@ public class TopicDuplicationBehaviour : MonoBehaviour
             transform.GetChild(1).gameObject.SetActive(false);
             transform.GetChild(2).gameObject.SetActive(false);
 
-            // Add topic manager via script to topic sphere
-            GameObject brainTopics = new GameObject();
-            brainTopics.name = "BrainTopics";
-            brainTopics.AddComponent<BrainTopicManager>();
-            brainTopics.GetComponent<BrainTopicManager>().MaxHistogramScale = 3;
-            brainTopics.GetComponent<BrainTopicManager>().TopicPrefab = Resources.Load<BrainTopicSphere>("TopicPrefab");
-            brainTopics.transform.SetParent(transform, true);
-            BrainTopics = brainTopics.GetComponent<BrainTopicManager>();
-
-            QuerySelectedTopic(transform.name, transform.GetChild(3).GetComponent<TextMeshPro>().text);
+            // Make this a root node and add a graphmanager
+            transform.gameObject.AddComponent<Node>();
+            transform.gameObject.AddComponent<Rigidbody>();
+            transform.gameObject.GetComponent<Rigidbody>().useGravity = false;
+            transform.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+            transform.gameObject.AddComponent<GraphManager>();
+            transform.gameObject.GetComponent<GraphManager>().nodepf = Resources.Load<Node>("NodePrefab");
+            transform.gameObject.GetComponent<GraphManager>().CreateGraph(transform.name, transform.GetChild(3).GetComponent<TextMeshPro>().text, transform.GetComponent<BrainTopicSphere>().TopicClass, "");
         }
     }
 
-    async private void QuerySelectedTopic(string topic, string topicLabel)
+    async private void QuerySelectedTopic(string topic, string topicLabel, string topicClass)
     {
         try
         {
             var topicName = topic; // adrenaline
             var topicObject = topicLabel; // lbd:adrenaline
 
-            var cooccurrences = await _sparqlService.GetTopicsRelatedToTopic(topicObject);
+            // Same query as disease
+            var cooccurrences = await _sparqlService.GetTopicsRelatedToDisease(topicObject);
 
             if (cooccurrences.Count < 0)
             {
@@ -91,62 +120,71 @@ public class TopicDuplicationBehaviour : MonoBehaviour
             // Sort the different category of topics in different lists
             foreach(var cooccurrence in cooccurrences)
             {
+                // Ignore cooccurrences that have unknown sources.
+                if(!cooccurrence.Id.Contains("lbd"))
+                    continue;
+
                 if(cooccurrence.Concept.Types.Count > 1)
                 {
                     var concepts = cooccurrence.Concept.SplitTypes();
                     foreach(var concept in concepts)
                     {
-                        switch(concept.Types[0]) {
-                            case "lbd:region": {
-                                fixedCooccurrences[0].Add(new DiseaseTopicsResource(
-                                    cooccurrence.Types,
-                                    cooccurrence.AppearTimes,
-                                    concept,
-                                    cooccurrence.Disease));
-                                break;
+                        // Topics with multiple categories are sometimes misclassified. Ignore topics that have the same category as the queried topic.
+                        if(concept.Types[0] == topicClass)
+                            continue;
+                        else {
+                            switch(concept.Types[0]) {
+                                case "lbd:region": {
+                                    fixedCooccurrences[0].Add(new DiseaseTopicsResource(
+                                        cooccurrence.Types,
+                                        cooccurrence.AppearTimes,
+                                        concept,
+                                        cooccurrence.Disease));
+                                    break;
+                                }
+                                case "lbd:transmitter": {
+                                    fixedCooccurrences[1].Add(new DiseaseTopicsResource(
+                                        cooccurrence.Types,
+                                        cooccurrence.AppearTimes,
+                                        concept,
+                                        cooccurrence.Disease));
+                                    break;
+                                }
+                                case "lbd:gene": {
+                                    fixedCooccurrences[2].Add(new DiseaseTopicsResource(
+                                        cooccurrence.Types,
+                                        cooccurrence.AppearTimes,
+                                        concept,
+                                        cooccurrence.Disease));
+                                    break;
+                                }
+                                case "lbd:function": {
+                                    fixedCooccurrences[3].Add(new DiseaseTopicsResource(
+                                        cooccurrence.Types,
+                                        cooccurrence.AppearTimes,
+                                        concept,
+                                        cooccurrence.Disease));
+                                    break;
+                                }
+                                case "lbd:protein": {
+                                    fixedCooccurrences[4].Add(new DiseaseTopicsResource(
+                                        cooccurrence.Types,
+                                        cooccurrence.AppearTimes,
+                                        concept,
+                                        cooccurrence.Disease));
+                                    break;
+                                }
+                                case "lbd:neuron": {
+                                    fixedCooccurrences[5].Add(new DiseaseTopicsResource(
+                                        cooccurrence.Types,
+                                        cooccurrence.AppearTimes,
+                                        concept,
+                                        cooccurrence.Disease));
+                                    break;
+                                }
+                                default:
+                                    break;
                             }
-                            case "lbd:transmitter": {
-                                fixedCooccurrences[1].Add(new DiseaseTopicsResource(
-                                    cooccurrence.Types,
-                                    cooccurrence.AppearTimes,
-                                    concept,
-                                    cooccurrence.Disease));
-                                break;
-                            }
-                            case "lbd:gene": {
-                                fixedCooccurrences[2].Add(new DiseaseTopicsResource(
-                                    cooccurrence.Types,
-                                    cooccurrence.AppearTimes,
-                                    concept,
-                                    cooccurrence.Disease));
-                                break;
-                            }
-                            case "lbd:function": {
-                                fixedCooccurrences[3].Add(new DiseaseTopicsResource(
-                                    cooccurrence.Types,
-                                    cooccurrence.AppearTimes,
-                                    concept,
-                                    cooccurrence.Disease));
-                                break;
-                            }
-                            case "lbd:protein": {
-                                fixedCooccurrences[4].Add(new DiseaseTopicsResource(
-                                    cooccurrence.Types,
-                                    cooccurrence.AppearTimes,
-                                    concept,
-                                    cooccurrence.Disease));
-                                break;
-                            }
-                            case "lbd:neuron": {
-                                fixedCooccurrences[5].Add(new DiseaseTopicsResource(
-                                    cooccurrence.Types,
-                                    cooccurrence.AppearTimes,
-                                    concept,
-                                    cooccurrence.Disease));
-                                break;
-                            }
-                            default:
-                                break;
                         }
                     }
                 }

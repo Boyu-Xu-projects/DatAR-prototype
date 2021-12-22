@@ -14,16 +14,19 @@ public class BrainTopicSphere : MonoBehaviour
     [HideInInspector] public string BrainTopicName { get; private set; }
     [HideInInspector] public string BrainTopicLabel { get; private set; }
     [HideInInspector] public int DiseaseAppearTimes { get; private set; }
+    [HideInInspector] public string TopicClass { get; private set; }
 
-    public void PopulateData(string brainTopic, string brainClass, int diseaseAppearTimes, string brainTopicLabel)
+    public void PopulateData(string brainTopic, string brainClass, int diseaseAppearTimes, string brainTopicLabel, string topicClass)
     {
         BrainTopicName = brainTopic;
         BrainTopicLabel = brainTopicLabel;
         DiseaseAppearTimes = diseaseAppearTimes;
+        TopicClass = topicClass;
 
         conceptText.text = BrainTopicName;
         topicLabel.text = BrainTopicLabel;
         diseaseAppearTimesText.text = DiseaseAppearTimes.ToString();
+
 
         switch (brainClass)
         {
