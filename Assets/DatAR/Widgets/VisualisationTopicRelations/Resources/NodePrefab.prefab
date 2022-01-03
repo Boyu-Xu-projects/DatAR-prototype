@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2866510893402847164}
   - component: {fileID: 7160191132865802824}
   - component: {fileID: 7776723509217317756}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 6772190502366096327}
   - component: {fileID: 2981302308179763636}
   - component: {fileID: -795354388768353122}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: NodePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

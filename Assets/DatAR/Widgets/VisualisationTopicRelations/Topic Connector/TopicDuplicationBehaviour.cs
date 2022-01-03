@@ -92,6 +92,7 @@ public class TopicDuplicationBehaviour : MonoBehaviour
             transform.gameObject.GetComponent<Rigidbody>().isKinematic = true;
             transform.gameObject.AddComponent<GraphManager>();
             transform.gameObject.GetComponent<GraphManager>().nodepf = Resources.Load<Node>("NodePrefab");
+            transform.gameObject.GetComponent<GraphManager>().edgepf = Resources.Load<GameObject>("EdgePrefab");
             transform.gameObject.GetComponent<GraphManager>().CreateGraph(transform.name, transform.GetChild(3).GetComponent<TextMeshPro>().text, transform.GetComponent<BrainTopicSphere>().TopicClass, "");
         }
     }

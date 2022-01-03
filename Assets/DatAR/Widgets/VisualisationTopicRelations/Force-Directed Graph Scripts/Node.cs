@@ -25,6 +25,39 @@ public class Node : MonoBehaviour
     }
   }
 
+  // TODO: Tune the parameters
+  // 1. Collider radius
+  // 2. Stop radius
+  // 3. Force
+  private void FixedUpdate(){
+    /*
+    // The last parameter is the mask. 6 is the layer for all nodes
+    Collider[] colliders = Physics.OverlapSphere(transform.position, 0.05f, 1 << 6);
+    foreach (var collider in colliders)
+    {
+        Rigidbody body = collider.GetComponent<Rigidbody>();
+        if (body == null) 
+            continue;
+
+        Vector3 direction = transform.position - body.position;
+
+        float distance = direction.magnitude;
+
+        direction = direction.normalized;
+
+        float stopRadius = 0.01f;
+        if (distance < stopRadius) 
+            continue;
+
+        float force = 1;
+        float forceRate = (force / distance);
+
+        // -1 = Repulsion, 0 = Nothing, 1 = Attraction
+        body.AddForce(direction * (forceRate / body.mass) * -1);
+    }
+    */
+  }
+
   public void SetEdgePrefab(GameObject epf){
     this.epf = epf;
   }
@@ -36,8 +69,8 @@ public class Node : MonoBehaviour
     sj.connectedAnchor = new Vector3(0,0,0);    
     sj.enableCollision = true;
     sj.connectedBody = n.GetComponent<Rigidbody>();
-    //GameObject edge = Instantiate(this.epf, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
-    //edges.Add(edge);
+    GameObject edge = Instantiate(this.epf, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+    edges.Add(edge);
     joints.Add(sj);
   }
 

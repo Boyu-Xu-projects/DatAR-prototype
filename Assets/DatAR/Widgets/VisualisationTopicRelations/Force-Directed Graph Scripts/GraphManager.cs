@@ -14,9 +14,11 @@ public class GraphManager : MonoBehaviour
     private Node rootNode;
 
     public GameObject edgepf; 
-    public float width = 50;
-    public float length = 50;
-    public float height = 50;
+    public float width = 100;
+    public float length = 100;
+    public float height = 100;
+
+    private int numberOfTopicsToPick = 3;
   
     private void Awake()
     {
@@ -163,61 +165,79 @@ public class GraphManager : MonoBehaviour
             }
         }
 
-        // TODO: Not sure if I want to keep this format. Maybe change the whole structure of the query so I don't have to sort here as well.
-        /*
-        // Within each category, sort on cooccurrences on descending order
-        foreach(List<DiseaseTopicsResource> category in fixedCooccurrences)
-            category.Sort((y,x) => x.AppearTimes.CompareTo(y.AppearTimes));
+        // Sort on most occurrences
+        foreach(List<DiseaseTopicsResource> topicCategory in fixedCooccurrences)
+            topicCategory.Sort((y,x) => x.AppearTimes.CompareTo(y.AppearTimes));
 
-        // Within each category, take only the top 6
-        
-        Cooccurrences = new List<FormattedTopicCooccurrence>();
-        foreach(List<DiseaseTopicsResource> category in fixedCooccurrences) {
-            int numberOfTopics = 3;
-            if(category.Count < numberOfTopics)
-                numberOfTopics = category.Count;
+        List<DiseaseTopicsResource> finalList = new List<DiseaseTopicsResource>();
 
-            for(int i = 0; i < numberOfTopics; i++)
-                Cooccurrences.Add(new FormattedTopicCooccurrence(
-                    category[i].Concept.Label,
-                    category[i].Concept.Types[0],
-                    topicName,
-                    category[i].Concept.Id,
-                    category[i].AppearTimes
-                ));
-        }*/
-
-
-        GenerateNodes(topic, topicLabel, fixedCooccurrences);
-    }
-
-    async private void GenerateNodes(string topic, string topicLabel, List<DiseaseTopicsResource>[] topicNodes)
-    {
-        Node n = null;
-        Dictionary<string,Node> nodes = new Dictionary<string,Node>();
-
-        //nodes.Add(word, n);
-        
-        foreach (var topicList in topicNodes) {
+        // Take the top X topics from the list and put them in 1 list
+        foreach(List<DiseaseTopicsResource> topicCategory in fixedCooccurrences)
+        {
             int start = 0;
-            foreach (var topicNode in topicList) {
-                if (start > 3)
+            foreach(DiseaseTopicsResource topicResource in topicCategory) 
+            {
+                if (start > numberOfTopicsToPick || topicResource.Concept.Id == null)
                     break;
 
-                //Node go = Instantiate(nodepf, new Vector3(Random.Range(-width/2, width/2), Random.Range(-length/2, length/2), Random.Range(-height/2, height/2)), Quaternion.identity);
-                Node go = Instantiate(nodepf, transform);
-                go.transform.localPosition = new Vector3(Random.Range(-width/2, width/2), Random.Range(-length/2, length/2), Random.Range(-height/2, height/2));
-                n = go.GetComponent<Node>();
-                n.name = topicNode.Concept.Label;
-                n.SetClass(topicNode.Concept.Types[0]);
-                n.transform.GetChild(0).GetComponent<TextMeshPro>().text = topicNode.Concept.Label;
-                n.AddEdge(rootNode);
-                // n.SetEdgePrefab(edgepf);
-
+                finalList.Add(topicResource);
                 start++;
             }
         }
 
+        GenerateNodes(topic, topicLabel, finalList);
+    }
+
+    async private void GenerateNodes(string topic, string topicLabel, List<DiseaseTopicsResource> topicList)
+    {
+        Node n = null;
+        Dictionary<string,Node> nodes = new Dictionary<string,Node>();
+
+        // Query for edges
+        string filter = GenerateTopicEdgesFilter(topicList);
+        var edges = await _sparqlService.GetTopicEdges(filter);
+
+        foreach (var topicNode in topicList) {
+            //Node go = Instantiate(nodepf, new Vector3(Random.Range(-width/2, width/2), Random.Range(-length/2, length/2), Random.Range(-height/2, height/2)), Quaternion.identity);
+            Node go = Instantiate(nodepf, transform);
+            go.transform.localPosition = new Vector3(Random.Range(-width/2, width/2), Random.Range(-length/2, length/2), Random.Range(-height/2, height/2));
+            n = go.GetComponent<Node>();
+            n.name = topicNode.Concept.Label;
+            n.SetClass(topicNode.Concept.Types[0]);
+            n.transform.GetChild(0).GetComponent<TextMeshPro>().text = topicNode.Concept.Label;
+            n.SetEdgePrefab(edgepf);
+            n.AddEdge(rootNode);
+            nodes.Add(topicNode.Concept.Label, n);
+        }
+
+        foreach (var edge in edges)
+        {
+            Node node = nodes[edge.Concept.Label];
+            
+            if(edge.Concept.Label == edge.Disease.Label)
+                continue;
+            
+            node.AddEdge(nodes[edge.Disease.Label]);
+        }
+
         //TODO: Query the relations of topics above in a specific category
+    }
+
+    private string GenerateTopicEdgesFilter(List<DiseaseTopicsResource> topicList)
+    {
+        string query = "";
+        foreach(var topic in topicList)
+        {
+            string id = topic.Concept.Id;
+            foreach(var topic2 in topicList)
+            {
+                // Remove "lbd:"
+                string secondId = topic2.Concept.Id.Remove(0, 4);
+                query+= $@"?statement = {id}2{secondId} || ";
+            }
+        }
+
+        query = query.Remove(query.Length - 4, 4);
+        return query;
     }
 }
