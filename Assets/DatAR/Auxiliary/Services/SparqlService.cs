@@ -407,6 +407,42 @@ public class SparqlService : MonoBehaviour
                 	    }}
             }}";
 
+        // Need this to properly frame the data structure in ConvertRdfToResourceList. Not sure why...
+        JObject frame = (JObject)_context.DeepClone();
+        JToken frame2 = JToken.Parse($@"{{
+            ""datar:disease"": {{
+                ""@type"": ""lbd:disease""
+            }}
+        }}");
+        frame.Add(frame2.First);
+
+        var queryResponseRaw = await QueryEndpoint(queryRequest);
+
+        return await ConvertRdfToResourceList<DiseaseTopicsResource>(queryResponseRaw, frame);
+    }
+
+    public async UniTask<List<DiseaseTopicsResource>> GetTopicEdges(string filter, int appearTimes = 10)
+    {
+        var queryRequest = $@"
+            CONSTRUCT {{
+                	?statement 		a 			        datar:cooccurrenceStatement .
+                	?statement 		datar:disease       ?disease .
+                	?disease 		a 			        lbd:disease .
+                	?statement 		datar:appearTimes 	?appearTimes .
+                	?statement 		datar:concept 		?concept .
+                	?concept 		a 			        ?conceptClass .
+            }}
+            WHERE {{
+                        {{
+                    		?statement	    rdf:object	        ?disease .
+                    		FILTER 	({filter}) .
+                            ?statement 	    rdf:subject 	    ?concept .
+                   		    ?statement 	    lbdp:appearTimes 	?appearTimes .
+                            FILTER 	        (?appearTimes > {appearTimes}) .
+                    		?concept 	    a 		            ?conceptClass .
+              	        }}
+            }}";
+
 
         // Need this to properly frame the data structure in ConvertRdfToResourceList. Not sure why...
         JObject frame = (JObject)_context.DeepClone();
