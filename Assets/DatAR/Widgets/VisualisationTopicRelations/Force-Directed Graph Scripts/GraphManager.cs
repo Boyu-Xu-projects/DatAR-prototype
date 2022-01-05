@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Linq;
 
 public class GraphManager : MonoBehaviour
 {
@@ -192,10 +193,14 @@ public class GraphManager : MonoBehaviour
     {
         Node n = null;
         Dictionary<string,Node> nodes = new Dictionary<string,Node>();
+        List<Node> allNodes = new List<Node>();
 
         // Query for edges
         string filter = GenerateTopicEdgesFilter(topicList);
         var edges = await _sparqlService.GetTopicEdges(filter);
+
+        // Root connections have transparent edges for more clarity
+        edgepf.GetComponent<Renderer>().material = Resources.Load<Material>("TopicMaterials/RootEdge");
 
         foreach (var topicNode in topicList) {
             //Node go = Instantiate(nodepf, new Vector3(Random.Range(-width/2, width/2), Random.Range(-length/2, length/2), Random.Range(-height/2, height/2)), Quaternion.identity);
@@ -208,7 +213,11 @@ public class GraphManager : MonoBehaviour
             n.SetEdgePrefab(edgepf);
             n.AddEdge(rootNode);
             nodes.Add(topicNode.Concept.Label, n);
+
+            allNodes.Add(n);
         }
+
+        edgepf.GetComponent<Renderer>().material = Resources.Load<Material>("TopicMaterials/Edge");
 
         foreach (var edge in edges)
         {
@@ -218,7 +227,12 @@ public class GraphManager : MonoBehaviour
                 continue;
             
             node.AddEdge(nodes[edge.Disease.Label]);
+            nodes[edge.Disease.Label].AddConnectedNode(node);
         }
+
+        // Assign for each node the connected and unconnected nodes
+        foreach (var node in nodes)
+            node.Value.SetUnconnectedNodes(allNodes);
 
         //TODO: Query the relations of topics above in a specific category
     }

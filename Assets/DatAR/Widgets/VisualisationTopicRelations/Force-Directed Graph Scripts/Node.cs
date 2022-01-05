@@ -6,7 +6,10 @@ public class Node : MonoBehaviour
   GameObject epf;
 
   List<GameObject> edges = new List<GameObject>();
-  List<SpringJoint> joints = new List<SpringJoint>();  
+  List<SpringJoint> joints = new List<SpringJoint>(); 
+
+  List<Node> connectedNodes = new List<Node>();
+  List<Node> unconnectedNodes = new List<Node>(); 
 
   void Update(){    
     int i = 0;
@@ -29,7 +32,8 @@ public class Node : MonoBehaviour
   // 1. Collider radius
   // 2. Stop radius
   // 3. Force
-  private void FixedUpdate(){
+  private void FixedUpdate()
+  {
     /*
     // The last parameter is the mask. 6 is the layer for all nodes
     Collider[] colliders = Physics.OverlapSphere(transform.position, 0.05f, 1 << 6);
@@ -56,6 +60,54 @@ public class Node : MonoBehaviour
         body.AddForce(direction * (forceRate / body.mass) * -1);
     }
     */
+
+    // Attract connected nodes
+    foreach (Node connectedNode in connectedNodes)
+    {
+        Rigidbody body = connectedNode.GetComponent<Rigidbody>();
+        if (body == null) 
+            continue;
+
+        Vector3 direction = transform.position - body.position;
+
+        float distance = direction.magnitude;
+
+        direction = direction.normalized;
+
+        float stopRadius = 0.01f;
+        if (distance < stopRadius) 
+            continue;
+
+        float force = 0.1f;
+        float forceRate = (force / distance);
+
+        // -1 = Repulsion, 0 = Nothing, 1 = Attraction
+        body.AddForce(direction * (forceRate / body.mass) * 1);
+    }
+
+    // Repel unconnected nodes
+    foreach (Node unconnectedNode in unconnectedNodes)
+    {
+        Rigidbody body = GetComponent<Collider>().GetComponent<Rigidbody>();
+        if (body == null) 
+            continue;
+
+        Vector3 direction = transform.position - body.position;
+
+        float distance = direction.magnitude;
+
+        direction = direction.normalized;
+
+        float stopRadius = 0.01f;
+        if (distance < stopRadius) 
+            continue;
+
+        float force = 0.1f;
+        float forceRate = (force / distance);
+
+        // -1 = Repulsion, 0 = Nothing, 1 = Attraction
+        body.AddForce(direction * (forceRate / body.mass) * -1);
+    }
   }
 
   public void SetEdgePrefab(GameObject epf){
@@ -70,8 +122,25 @@ public class Node : MonoBehaviour
     sj.enableCollision = true;
     sj.connectedBody = n.GetComponent<Rigidbody>();
     GameObject edge = Instantiate(this.epf, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+    //edge.transform.SetParent(transform.parent.gameObject.transform, false);
     edges.Add(edge);
     joints.Add(sj);
+
+    connectedNodes.Add(n);
+  }
+
+  public void AddConnectedNode(Node n)
+  {
+    connectedNodes.Add(n);
+  }
+
+  public void SetUnconnectedNodes(List<Node> listOfNodes)
+  {
+    foreach(var node in listOfNodes)
+    {
+      if(!connectedNodes.Contains(node))
+        unconnectedNodes.Add(node);
+    }
   }
 
   public void SetClass(string brainClass)
