@@ -14,6 +14,7 @@ public class SpawnConnection : MonoBehaviour
     [SerializeField] private GameObject brainModelWidget;
     [SerializeField] private GameObject coocurrenceWidget;
     [SerializeField] private GameObject topicModelWidget;
+    [SerializeField] private GameObject minMaxWidget;
 
     Dictionary<string, WidgetConnectionInfo> widgetInformationDict;
     private List<GameObject> listOfChildren;
@@ -25,6 +26,7 @@ public class SpawnConnection : MonoBehaviour
     // O = brain model
     // P = co-occurences
     // L = topic model
+    // M = min max filter
     string widgetName = "";
     bool isPressed = false;
 
@@ -44,6 +46,11 @@ public class SpawnConnection : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.L))
         {
             currentWidget = topicModelWidget;
+            isPressed = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.M))
+        {
+            currentWidget = minMaxWidget;
             isPressed = true;
         }
 
@@ -145,6 +152,8 @@ public class SpawnConnection : MonoBehaviour
                     //====================================================================================================================
                     //See if the newly loaded widget can be connected to any of the already loaded widgets
                     bool connectionFound = false;
+                    bool connectedToInlet = false;
+                    bool connectedToOutlet = false;
                     foreach (Transform connectWidget in widgetPool.transform)
                     {
                         for (int y = 0; y < scriptInfo.connectionWidgets.Count; y++)
@@ -165,16 +174,28 @@ public class SpawnConnection : MonoBehaviour
                                 }
                                 else if (scriptInfo.outletType == OutletType.OutletAndInlet)
                                 {
-
+                                    //one inlet connectionWidget to outlet(coocurrence) and one outlet connection to connectionWidget inlet(brain model)
+                                    if (connectWidget.gameObject.GetComponent<WidgetConnectionInfo>().outletType == OutletType.Inlet && !connectedToInlet)
+                                    {
+                                        dataflowinlet = connectWidget.transform.Find("DataflowInlet").gameObject.GetComponent<DataflowInlet>();
+                                        dataflowoutlet = spawnedWidget.transform.Find("DataflowOutlet").gameObject.GetComponent<DataflowOutlet>();
+                                        connectedToInlet = true;
+                                    }
+                                    else if (connectWidget.gameObject.GetComponent<WidgetConnectionInfo>().outletType == OutletType.Outlet && !connectedToOutlet)
+                                    {
+                                        dataflowinlet = spawnedWidget.transform.Find("DataflowInlet").gameObject.GetComponent<DataflowInlet>();
+                                        dataflowoutlet = connectWidget.transform.Find("DataflowOutlet").gameObject.GetComponent<DataflowOutlet>();
+                                        connectedToOutlet = true;
+                                    }
                                 }
                                 dataflowinlet.SetInputGameObject(dataflowoutlet);
                             }
-                            if (connectionFound)
+                            if (connectionFound || (connectedToInlet && connectedToOutlet))
                             {
                                 break;
                             }
                         }
-                        if (connectionFound)
+                        if (connectionFound || (connectedToInlet && connectedToOutlet))
                         {
                             break;
                         }

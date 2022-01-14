@@ -1442,6 +1442,8 @@ MonoBehaviour:
     type: 3}
   topicModelWidget: {fileID: 248932933912429621, guid: efdeef5414f20b44f9b3c2afc8e3029d,
     type: 3}
+  minMaxWidget: {fileID: 3865012444552130730, guid: 4ded081cd703a4549bf2da41bbc03ec2,
+    type: 3}
 --- !u!1001 &1234336323
 PrefabInstance:
   m_ObjectHideFlags: 0

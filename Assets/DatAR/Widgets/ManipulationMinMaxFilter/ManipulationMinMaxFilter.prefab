@@ -69,6 +69,7 @@ GameObject:
   - component: {fileID: -2611660370535680587}
   - component: {fileID: 1140971078389125669}
   - component: {fileID: 5084421817601686724}
+  - component: {fileID: 5912128119504391638}
   m_Layer: 0
   m_Name: ManipulationMinMaxFilter
   m_TagString: Deletable
@@ -321,6 +322,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMaterial: {fileID: 2100000, guid: 6c66fc1ac164cdf439dc9629a7539fc3, type: 2}
   outlineWidth: 0.003
+--- !u!114 &5912128119504391638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3865012444552130730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a45203b2efa8f40aef145d3477af5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  classSphereAmount: 0
+  topicSphereAmount: 0
+  outletType: 2
+  connectionWidgets: 000000000100000003000000
+  topicOrDiseaseSocketName: 
+  classOrRegionSocketName: 
 --- !u!1 &8660084161039169742
 GameObject:
   m_ObjectHideFlags: 0
