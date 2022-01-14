@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DatAR.DataModels.Passables;
 using TMPro;
 using UniRx;
@@ -17,7 +18,7 @@ namespace DatAR.Widgets.QueryCooccurrences
         [SerializeField] private Receptacle classReceptacle;
 
         [SerializeField] private Receptacle conceptReceptacle;
-        
+
         private QueryCooccurrences()
         {
             IsLoading = new BehaviorSubject<QueryState>(QueryState.IsEmpty);

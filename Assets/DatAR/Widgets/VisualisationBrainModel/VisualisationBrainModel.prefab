@@ -316,6 +316,7 @@ GameObject:
   - component: {fileID: 7356422066474819101}
   - component: {fileID: -2906502381574687965}
   - component: {fileID: -6210088630762707366}
+  - component: {fileID: 1866372789680008171}
   m_Layer: 0
   m_Name: VisualisationBrainModel
   m_TagString: Deletable
@@ -568,6 +569,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMaterial: {fileID: 2100000, guid: 6c66fc1ac164cdf439dc9629a7539fc3, type: 2}
   outlineWidth: 0.003
+--- !u!114 &1866372789680008171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6587184061863166887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a45203b2efa8f40aef145d3477af5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  classSphereAmount: 0
+  topicSphereAmount: 0
+  outletType: 1
+  connectionWidgets: 0300000002000000
+  topicOrDiseaseSocketName: 
+  classOrRegionSocketName: 
 --- !u!1 &6596007226300208118
 GameObject:
   m_ObjectHideFlags: 0

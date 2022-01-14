@@ -1,3 +1,5 @@
+using DatAR.Widgets.VisualisationBrainModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -31,6 +33,10 @@ public class SpawningTest : MonoBehaviour
         //    print("Foreach loop: " + child);
         //}
         listOfChildren = new List<GameObject>();
+
+        string test = "VisualisationBrainModel";
+        Type type = Type.GetType("VisualisationBrainModel");
+        VisualisationBrainModel testScript = brainModelWidget.GetComponent("VisualisationBrainModel") as VisualisationBrainModel;
     }
 
 

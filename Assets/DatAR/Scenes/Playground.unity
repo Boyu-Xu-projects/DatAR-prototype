@@ -1364,6 +1364,7 @@ GameObject:
   - component: {fileID: 1160236526}
   - component: {fileID: 1160236525}
   - component: {fileID: 1160236527}
+  - component: {fileID: 1160236528}
   m_Layer: 0
   m_Name: SwipePieManager
   m_TagString: Untagged
@@ -1420,6 +1421,26 @@ MonoBehaviour:
   conceptsOfClassWidget: {fileID: 9145786511224493727, guid: 8077e2de00a14ee4e9780eb7cfd9eda6,
     type: 3}
   sentenceExtractorWidget: {fileID: 5841399885836442697, guid: 7569f83de9bab6b418ee34a7e340f816,
+    type: 3}
+--- !u!114 &1160236528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160236524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51d2a82c7727b9242833c05d1cd9a9c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spherePool: {fileID: 1090714736}
+  widgetPool: {fileID: 161557657}
+  brainModelWidget: {fileID: 6587184061863166887, guid: 2534e325cdab3ee469fd65d2c3e270d8,
+    type: 3}
+  coocurrenceWidget: {fileID: 3618927719759872380, guid: f4b56fcc83efc8e48ba56a20913f1a04,
+    type: 3}
+  topicModelWidget: {fileID: 248932933912429621, guid: efdeef5414f20b44f9b3c2afc8e3029d,
     type: 3}
 --- !u!1001 &1234336323
 PrefabInstance:

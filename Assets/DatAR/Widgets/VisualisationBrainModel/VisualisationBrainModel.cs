@@ -41,6 +41,13 @@ namespace DatAR.Widgets.VisualisationBrainModel
         private Tuple<float, Passable> _awaitingPassable;
         private float _lastRunTime = 0;
 
+        //SwipePie information
+        //public int classSphereAmount { get; set; }
+        //public int topicSphereAmount { get; set; }
+        //public string isOutlet { get; set; }
+        //public List<string> connectionWidgets { get; set; }
+
+
         public VisualisationBrainModel()
         {
             IsLoading = new BehaviorSubject<QueryState>(QueryState.IsEmpty);
@@ -61,6 +68,12 @@ namespace DatAR.Widgets.VisualisationBrainModel
             {
                 if (isRunning != QueryState.IsLoading) CheckStackForLatest();
             });
+
+            //classSphereAmount = 0;
+            //topicSphereAmount = 0;
+            //isOutlet = "inlet";
+            //connectionWidgets.Add("QueryCooccurrences");
+            //connectionWidgets.Add("ManipulationMinMaxFilter");
         }
 
         /**
