@@ -41,14 +41,15 @@ public class SpawningTest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G))
         {
             spawnedWidget = Instantiate(brainModelWidget, GameObject.Find("StandaloneWidgetPool").transform);
+            spawnedWidget.transform.position = new Vector3(0.5f, 0, 0.5f);
         }
 
         //spawn second widget only if sockets are filled
         if (Input.GetKeyDown(KeyCode.F))
         {
             //Instantiate the widget
-            //spawnedWidget = Instantiate(coocurrenceWidget, GameObject.Find("StandaloneWidgetPool").transform);
-            spawnedWidget = Instantiate(conceptsOfClassWidget, GameObject.Find("StandaloneWidgetPool").transform);
+            spawnedWidget = Instantiate(coocurrenceWidget, GameObject.Find("StandaloneWidgetPool").transform);
+            //spawnedWidget = Instantiate(conceptsOfClassWidget, GameObject.Find("StandaloneWidgetPool").transform);
             spawnedWidget.transform.position = new Vector3(0, 0, 0.5f);
 
             //See if widget has no spheres, one class sphere, topic and class sphere or two topic spheres

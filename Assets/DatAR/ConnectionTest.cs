@@ -7,12 +7,6 @@ public class ConnectionTest : MonoBehaviour
     [SerializeField] private GameObject brainmodelWidget;
     [SerializeField] private GameObject coocurrenceWidget;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     private Vector3 inletWidgetAbsolutePosition;
     private Vector3 outletWidgetAbsolutePositionOld;
@@ -22,18 +16,16 @@ public class ConnectionTest : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.P))
             {
-                Debug.Log("Key Pressed");
-                inletWidgetAbsolutePosition = brainmodelWidget.gameObject.transform.Find("DataflowInlet").transform.position;
-                outletWidgetAbsolutePositionOld = coocurrenceWidget.gameObject.transform.Find("DataflowOutlet").transform.position;
+                print("Key Pressed");
 
-                coocurrenceWidget.gameObject.transform.Find("DataflowOutlet").transform.position = inletWidgetAbsolutePosition;
-                Invoke("ReturnConnection", 0.01f);
+                //Get the dataflowinlet gameobject
+                DataflowInlet dataflowinlet = brainmodelWidget.transform.Find("DataflowInlet").gameObject.GetComponent<DataflowInlet>();
+                //Get the dataflowoutlet gameobject
+                DataflowOutlet dataflowoutlet = coocurrenceWidget.transform.Find("DataflowOutlet").gameObject.GetComponent<DataflowOutlet>();
+
+                //Add outlet to input game object and start connection
+                dataflowinlet.SetInputGameObject(dataflowoutlet);
             }
         }
-    }
-
-    void ReturnConnection()
-    {
-        coocurrenceWidget.gameObject.transform.Find("DataflowOutlet").transform.position = outletWidgetAbsolutePositionOld;
     }
 }
