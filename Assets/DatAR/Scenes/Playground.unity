@@ -1362,8 +1362,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1160236526}
-  - component: {fileID: 1160236525}
-  - component: {fileID: 1160236527}
   - component: {fileID: 1160236528}
   m_Layer: 0
   m_Name: SwipePieManager
@@ -1372,20 +1370,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1160236525
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1160236524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fd8bda55f6cc61489f38d867fa817d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  brainmodelWidget: {fileID: 0}
-  coocurrenceWidget: {fileID: 0}
 --- !u!4 &1160236526
 Transform:
   m_ObjectHideFlags: 0
@@ -1400,28 +1384,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1160236527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1160236524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 711079d83956c06458cef29d1a6437eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spherePool: {fileID: 1090714736}
-  widgetPool: {fileID: 161557657}
-  brainModelWidget: {fileID: 6587184061863166887, guid: 2534e325cdab3ee469fd65d2c3e270d8,
-    type: 3}
-  coocurrenceWidget: {fileID: 3618927719759872380, guid: f4b56fcc83efc8e48ba56a20913f1a04,
-    type: 3}
-  conceptsOfClassWidget: {fileID: 9145786511224493727, guid: 8077e2de00a14ee4e9780eb7cfd9eda6,
-    type: 3}
-  sentenceExtractorWidget: {fileID: 5841399885836442697, guid: 7569f83de9bab6b418ee34a7e340f816,
-    type: 3}
 --- !u!114 &1160236528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1443,6 +1405,14 @@ MonoBehaviour:
   topicModelWidget: {fileID: 248932933912429621, guid: efdeef5414f20b44f9b3c2afc8e3029d,
     type: 3}
   minMaxWidget: {fileID: 3865012444552130730, guid: 4ded081cd703a4549bf2da41bbc03ec2,
+    type: 3}
+  classRetrieverWidget: {fileID: 9145786511224493727, guid: 8077e2de00a14ee4e9780eb7cfd9eda6,
+    type: 3}
+  dataFlowWidget: {fileID: 7328621777578735527, guid: b83b3c899b3aa134d9746407f2874cbe,
+    type: 3}
+  resourceSphereWidget: {fileID: 7328621777578735527, guid: 27962b8e66f617d4fbd3103256f0d7fb,
+    type: 3}
+  sentenceExtractorWidget: {fileID: 5841399885836442697, guid: 7569f83de9bab6b418ee34a7e340f816,
     type: 3}
 --- !u!1001 &1234336323
 PrefabInstance:

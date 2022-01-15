@@ -15,6 +15,10 @@ public class SpawnConnection : MonoBehaviour
     [SerializeField] private GameObject coocurrenceWidget;
     [SerializeField] private GameObject topicModelWidget;
     [SerializeField] private GameObject minMaxWidget;
+    [SerializeField] private GameObject classRetrieverWidget;
+    [SerializeField] private GameObject dataFlowWidget;
+    [SerializeField] private GameObject resourceSphereWidget;
+    [SerializeField] private GameObject sentenceExtractorWidget;
 
     Dictionary<string, WidgetConnectionInfo> widgetInformationDict;
     private List<GameObject> listOfChildren;
@@ -23,34 +27,65 @@ public class SpawnConnection : MonoBehaviour
         listOfChildren = new List<GameObject>();
     }
 
-    // O = brain model
-    // P = co-occurences
-    // L = topic model
-    // M = min max filter
+    // U = brain model
+    // I = co-occurences
+    // O = topic model
+    // P = min max filter
+    // J = class retriever
+    // K = result viewer
+    // L = resource sphere
+
+    // N = sentence extractor
+    // M = disease relations
     string widgetName = "";
     bool isPressed = false;
 
     void Update()
     {
         GameObject currentWidget = null;
-        if (Input.GetKeyDown(KeyCode.O))
+        if (Input.GetKeyDown(KeyCode.U))
         {
             currentWidget = brainModelWidget;
             isPressed = true;
         }
-        else if (Input.GetKeyDown(KeyCode.P))
+        else if (Input.GetKeyDown(KeyCode.I))
         {
             currentWidget = coocurrenceWidget;
             isPressed = true;
         }
-        else if (Input.GetKeyDown(KeyCode.L))
+        else if (Input.GetKeyDown(KeyCode.O))
         {
             currentWidget = topicModelWidget;
             isPressed = true;
         }
-        else if (Input.GetKeyDown(KeyCode.M))
+        else if (Input.GetKeyDown(KeyCode.P))
         {
             currentWidget = minMaxWidget;
+            isPressed = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.J))
+        {
+            currentWidget = classRetrieverWidget;
+            isPressed = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.K))
+        {
+            currentWidget = dataFlowWidget;
+            isPressed = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.L))
+        {
+            currentWidget = resourceSphereWidget;
+            isPressed = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.N))
+        {
+            currentWidget = resourceSphereWidget;
+            isPressed = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.M))
+        {
+            currentWidget = sentenceExtractorWidget;
             isPressed = true;
         }
 
@@ -85,7 +120,7 @@ public class SpawnConnection : MonoBehaviour
                     spawnedWidget.transform.position = new Vector3(0f, 0, 0.6f);
                     //==================================================================================================
 
-                    if ((scriptInfo.classSphereAmount != 0 && scriptInfo.topicSphereAmount != 0) || scriptInfo.classSphereAmount != 0)
+                    if ((scriptInfo.classSphereAmount != 0 && scriptInfo.topicSphereAmount != 0) || scriptInfo.classSphereAmount != 0 || scriptInfo.topicSphereAmount != 0)
                     {
                         //Get the most recent class and topic sphere depending on the widget info
                         int childrenAmount = spherePool.transform.childCount;
@@ -125,6 +160,7 @@ public class SpawnConnection : MonoBehaviour
                         GetChildRecursive(createdWidget);
                         GameObject topicDiseaseObject = null;
                         GameObject classRegionObject = null;
+                        GameObject sentenceObject = null;
                         foreach (GameObject child in listOfChildren)
                         {
                             if (child.name == scriptInfo.topicOrDiseaseSocketName)
@@ -134,6 +170,10 @@ public class SpawnConnection : MonoBehaviour
                             else if (child.name == scriptInfo.classOrRegionSocketName)
                             {
                                 classRegionObject = child;
+                            }
+                            else if(child.name == scriptInfo.sentenceSocketName)
+                            {
+                                sentenceObject = child;
                             }
                         }
                         //add spheres to the socket
@@ -145,8 +185,16 @@ public class SpawnConnection : MonoBehaviour
 
                         for (int x = 0; x < recentTopicSpheres.Count; x++)
                         {
-                            recentTopicSpheres[x].transform.SetParent(topicDiseaseObject.transform.Find("Socket").gameObject.transform);
-                            recentTopicSpheres[x].transform.localPosition = new Vector3(0, 0, 0);
+                            if (x == 0)
+                            {
+                                recentTopicSpheres[x].transform.SetParent(topicDiseaseObject.transform.Find("Socket").gameObject.transform);
+                                recentTopicSpheres[x].transform.localPosition = new Vector3(0, 0, 0);
+                            }
+                            else
+                            {
+                                recentTopicSpheres[x].transform.SetParent(sentenceObject.transform.Find("Socket").gameObject.transform);
+                                recentTopicSpheres[x].transform.localPosition = new Vector3(0, 0, 0);
+                            }
                         }
                     }
                     //====================================================================================================================

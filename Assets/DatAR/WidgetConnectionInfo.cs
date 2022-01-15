@@ -6,7 +6,8 @@ public enum OutletType
 {
     Outlet,
     Inlet,
-    OutletAndInlet
+    OutletAndInlet,
+    None
 }
 
 public enum WidgetName
@@ -15,7 +16,11 @@ public enum WidgetName
     VisualisationTopicModel,
     ManipulationMinMaxFilter,
     QueryCooccurrences,
-    QueryConceptsOfClass
+    QueryConceptsOfClass,
+    VisualisationInspectorDataflow,
+    VisualisationInspectorResourceSphere,
+    ExportConceptPair,
+    VisualisationDiseaseRelations
 }
 
 public class WidgetConnectionInfo : MonoBehaviour
@@ -26,4 +31,5 @@ public class WidgetConnectionInfo : MonoBehaviour
     [SerializeField] public List<WidgetName> connectionWidgets;
     [SerializeField] public string topicOrDiseaseSocketName;
     [SerializeField] public string classOrRegionSocketName;
+    [SerializeField] public string sentenceSocketName;
 }

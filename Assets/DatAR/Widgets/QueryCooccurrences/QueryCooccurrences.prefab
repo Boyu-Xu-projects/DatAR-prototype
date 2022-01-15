@@ -537,7 +537,7 @@ MonoBehaviour:
   classSphereAmount: 1
   topicSphereAmount: 1
   outletType: 0
-  connectionWidgets: 00000000010000000200000004000000
+  connectionWidgets: 00000000010000000200000005000000
   topicOrDiseaseSocketName: Receptacle::Concept
   classOrRegionSocketName: Receptacle::Class
 --- !u!1 &5325152153644006590

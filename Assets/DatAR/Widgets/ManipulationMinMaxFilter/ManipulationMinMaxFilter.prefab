@@ -337,7 +337,7 @@ MonoBehaviour:
   classSphereAmount: 0
   topicSphereAmount: 0
   outletType: 2
-  connectionWidgets: 000000000100000003000000
+  connectionWidgets: 00000000010000000300000005000000
   topicOrDiseaseSocketName: 
   classOrRegionSocketName: 
 --- !u!1 &8660084161039169742
