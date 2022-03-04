@@ -304,6 +304,12 @@ PrefabInstance:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 7243324766535440047, guid: abd94aa82e8251148b429ed0cdd9a4f8,
     type: 3}
+--- !u!1 &161557657 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5878412080085983939, guid: 22975e12438f823458cc65db53554d0e,
+    type: 3}
+  m_PrefabInstance: {fileID: 236325351}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &236325351
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1341,6 +1347,73 @@ PrefabInstance:
     - {fileID: 3430041099001180660, guid: b25363eeb2b89094a9f26f5d4b3cc9ef, type: 3}
     - {fileID: 5547079621210269413, guid: b25363eeb2b89094a9f26f5d4b3cc9ef, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b25363eeb2b89094a9f26f5d4b3cc9ef, type: 3}
+--- !u!1 &1090714736 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5567782727560595453, guid: 9642b5980e4e88a4a979f81491f3c926,
+    type: 3}
+  m_PrefabInstance: {fileID: 1932586044}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1160236524
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1160236526}
+  - component: {fileID: 1160236528}
+  m_Layer: 0
+  m_Name: SwipePieManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1160236526
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160236524}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.33304286, y: -0.37193865, z: 1.6365675}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 21
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1160236528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160236524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51d2a82c7727b9242833c05d1cd9a9c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spherePool: {fileID: 1090714736}
+  widgetPool: {fileID: 161557657}
+  brainModelWidget: {fileID: 6587184061863166887, guid: 2534e325cdab3ee469fd65d2c3e270d8,
+    type: 3}
+  coocurrenceWidget: {fileID: 3618927719759872380, guid: f4b56fcc83efc8e48ba56a20913f1a04,
+    type: 3}
+  topicModelWidget: {fileID: 248932933912429621, guid: efdeef5414f20b44f9b3c2afc8e3029d,
+    type: 3}
+  minMaxWidget: {fileID: 3865012444552130730, guid: 4ded081cd703a4549bf2da41bbc03ec2,
+    type: 3}
+  classRetrieverWidget: {fileID: 9145786511224493727, guid: 8077e2de00a14ee4e9780eb7cfd9eda6,
+    type: 3}
+  dataFlowWidget: {fileID: 7328621777578735527, guid: b83b3c899b3aa134d9746407f2874cbe,
+    type: 3}
+  resourceSphereWidget: {fileID: 7328621777578735527, guid: 27962b8e66f617d4fbd3103256f0d7fb,
+    type: 3}
+  sentenceExtractorWidget: {fileID: 5841399885836442697, guid: 7569f83de9bab6b418ee34a7e340f816,
+    type: 3}
 --- !u!1001 &1234336323
 PrefabInstance:
   m_ObjectHideFlags: 0
