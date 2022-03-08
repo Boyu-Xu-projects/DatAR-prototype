@@ -6,6 +6,7 @@ TagManager:
   tags:
   - spotlight
   - Deletable
+  - SwipePie_Middle
   layers:
   - Default
   - TransparentFX

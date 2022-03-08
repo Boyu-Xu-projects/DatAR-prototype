@@ -19,8 +19,12 @@ public class TapInput : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
-                // Check if hit.transform is door, 
-                Debug.Log(hit.transform.gameObject.tag.ToString());
+                // Check if hit.transform is middle collision trigger box
+                if (hit.transform.gameObject.tag.ToString() == "SwipePie_Middle")
+                {
+                    //get the current icon
+                    //spawn the correct widget
+                }
             }
         }
     }
