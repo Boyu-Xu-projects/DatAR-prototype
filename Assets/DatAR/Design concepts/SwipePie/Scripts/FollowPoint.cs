@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Microsoft;
+using Microsoft.MixedReality.Toolkit.Utilities;
+using Microsoft.MixedReality.Toolkit.Input;
 
 public class FollowPoint : MonoBehaviour
 {
-    public Camera camToUse;
-    public Transform CubeToTransform;
+    public GameObject cubeFollowPoint;
+    private MixedRealityPose pose;
+
+    private void Start()
+    {
+        
+    }
+
     void Update()
     {
-        Ray ray = camToUse.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        cubeFollowPoint.GetComponent<Renderer>().enabled = false;
+        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.Palm, Handedness.Right, out pose))
         {
-            Debug.Log(hit.point);
-            CubeToTransform.transform.position = new Vector3(hit.point.x, hit.point.y, CubeToTransform.transform.position.z);
+            cubeFollowPoint.GetComponent<Renderer>().enabled = true;
+            cubeFollowPoint.transform.position = pose.Position;
         }
     }
 }

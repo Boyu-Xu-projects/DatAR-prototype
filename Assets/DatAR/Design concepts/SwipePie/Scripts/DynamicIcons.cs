@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DynamicIcons : MonoBehaviour
@@ -25,9 +26,9 @@ public class DynamicIcons : MonoBehaviour
     void Start()
     {
         //init the row index numbers
-        topRowIndex.Add(3);
-        topRowIndex.Add(4);
-        topRowIndex.Add(5);
+        topRowIndex.Add(0);
+        topRowIndex.Add(1);
+        topRowIndex.Add(2);
 
         //split list into a 2d array with rows of 3 sprites
         //Round up to the nearest three to keep consistent rows
@@ -121,6 +122,28 @@ public class DynamicIcons : MonoBehaviour
             }
 
             ShowButtonRowIcons();
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
+            {
+                // Check if hit.transform is middle collision trigger box
+                if (hit.transform.gameObject.tag.ToString() == "SwipePie_Middle" || hit.transform.gameObject.tag.ToString() == "SwipePie_Left"
+                    || hit.transform.gameObject.tag.ToString() == "SwipePie_Right")
+                {
+                    //get the current icon
+                    GameObject iconButton = hit.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
+                    SpriteRenderer renderer = iconButton.GetComponent<SpriteRenderer>();
+                    string iconName = renderer.sprite.name;
+                    if (iconName != null)
+                    {
+                        SpawnConnection.Instance.ChosenWidget(iconName);
+                    }
+                }
+            }
         }
     }
 

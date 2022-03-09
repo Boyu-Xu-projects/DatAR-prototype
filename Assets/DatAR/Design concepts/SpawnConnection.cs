@@ -27,6 +27,28 @@ public class SpawnConnection : MonoBehaviour
         listOfChildren = new List<GameObject>();
     }
 
+    #region SINGLETON PATTERN
+    private static SpawnConnection _instance;
+    public static SpawnConnection Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = GameObject.FindObjectOfType<SpawnConnection>();
+
+                if (_instance == null)
+                {
+                    GameObject container = new GameObject("SpawnConnection");
+                    _instance = container.AddComponent<SpawnConnection>();
+                }
+            }
+
+            return _instance;
+        }
+    }
+    #endregion
+
     // U = brain model
     // I = co-occurences
     // O = topic model
@@ -42,224 +64,242 @@ public class SpawnConnection : MonoBehaviour
 
     void Update()
     {
+        //GameObject currentWidget = null;
+        //if (Input.GetKeyDown(KeyCode.U))
+        //{
+        //    currentWidget = brainModelWidget;
+        //    isPressed = true;
+        //}
+        //else if (Input.GetKeyDown(KeyCode.I))
+        //{
+        //    currentWidget = coocurrenceWidget;
+        //    isPressed = true;
+        //}
+        //else if (Input.GetKeyDown(KeyCode.O))
+        //{
+        //    currentWidget = topicModelWidget;
+        //    isPressed = true;
+        //}
+        //else if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    currentWidget = minMaxWidget;
+        //    isPressed = true;
+        //}
+        //else if (Input.GetKeyDown(KeyCode.J))
+        //{
+        //    currentWidget = classRetrieverWidget;
+        //    isPressed = true;
+        //}
+        //else if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    currentWidget = dataFlowWidget;
+        //    isPressed = true;
+        //}
+        //else if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    currentWidget = resourceSphereWidget;
+        //    isPressed = true;
+        //}
+        //else if (Input.GetKeyDown(KeyCode.N))
+        //{
+        //    currentWidget = resourceSphereWidget;
+        //    isPressed = true;
+        //}
+        //else if (Input.GetKeyDown(KeyCode.M))
+        //{
+        //    currentWidget = sentenceExtractorWidget;
+        //    isPressed = true;
+        //}
+    }
+
+    public void ChosenWidget(string iconName)
+    {
         GameObject currentWidget = null;
-        if (Input.GetKeyDown(KeyCode.U))
+        switch (iconName)
         {
-            currentWidget = brainModelWidget;
-            isPressed = true;
+            case "Brain_IconSprite":
+                currentWidget = brainModelWidget;
+                break;
+            case "Circles_IconSprite":
+                currentWidget = classRetrieverWidget;
+                break;
+            case "Coocurrence_IconSprite":
+                currentWidget = coocurrenceWidget;
+                break;
+            default:
+                break;
         }
-        else if (Input.GetKeyDown(KeyCode.I))
-        {
-            currentWidget = coocurrenceWidget;
-            isPressed = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.O))
-        {
-            currentWidget = topicModelWidget;
-            isPressed = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.P))
-        {
-            currentWidget = minMaxWidget;
-            isPressed = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.J))
-        {
-            currentWidget = classRetrieverWidget;
-            isPressed = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.K))
-        {
-            currentWidget = dataFlowWidget;
-            isPressed = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.L))
-        {
-            currentWidget = resourceSphereWidget;
-            isPressed = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.N))
-        {
-            currentWidget = resourceSphereWidget;
-            isPressed = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.M))
-        {
-            currentWidget = sentenceExtractorWidget;
-            isPressed = true;
-        }
+        WidgetConnection(currentWidget);
+    }
 
-        if (isPressed)
-        {
-            WidgetConnectionInfo scriptInfo = currentWidget.GetComponent<WidgetConnectionInfo>();
+    private void WidgetConnection(GameObject currentWidget)
+    {
+        WidgetConnectionInfo scriptInfo = currentWidget.GetComponent<WidgetConnectionInfo>();
 
-            //Always try to grab one class sphere and two topic spheres
-            //Check if there is enough available otherwise give error message
-            int children = spherePool.transform.childCount;
-            int classSphereCount = 0;
-            int topicSphereCount = 0;
-            for (int i = 0; i < children; ++i)
+        //Always try to grab one class sphere and two topic spheres
+        //Check if there is enough available otherwise give error message
+        int children = spherePool.transform.childCount;
+        int classSphereCount = 0;
+        int topicSphereCount = 0;
+        for (int i = 0; i < children; ++i)
+        {
+            GameObject child = spherePool.transform.GetChild(i).gameObject;
+            if (child.name.Contains("datar"))
             {
-                GameObject child = spherePool.transform.GetChild(i).gameObject;
-                if (child.name.Contains("datar"))
-                {
-                    topicSphereCount++;
-                }
-                else if (child.name.Contains("ResourceSphere"))
-                {
-                    classSphereCount++;
-                }
+                topicSphereCount++;
             }
-
-            if (classSphereCount >= scriptInfo.classSphereAmount)
+            else if (child.name.Contains("ResourceSphere"))
             {
-                if (topicSphereCount >= scriptInfo.topicSphereAmount)
+                classSphereCount++;
+            }
+        }
+
+        if (classSphereCount >= scriptInfo.classSphereAmount)
+        {
+            if (topicSphereCount >= scriptInfo.topicSphereAmount)
+            {
+                //spawn widget
+                GameObject spawnedWidget = Instantiate(currentWidget, GameObject.Find("StandaloneWidgetPool").transform);
+                spawnedWidget.transform.position = new Vector3(0f, 0, 0.6f);
+                //==================================================================================================
+
+                if ((scriptInfo.classSphereAmount != 0 && scriptInfo.topicSphereAmount != 0) || scriptInfo.classSphereAmount != 0 || scriptInfo.topicSphereAmount != 0)
                 {
-                    //spawn widget
-                    GameObject spawnedWidget = Instantiate(currentWidget, GameObject.Find("StandaloneWidgetPool").transform);
-                    spawnedWidget.transform.position = new Vector3(0f, 0, 0.6f);
-                    //==================================================================================================
-
-                    if ((scriptInfo.classSphereAmount != 0 && scriptInfo.topicSphereAmount != 0) || scriptInfo.classSphereAmount != 0 || scriptInfo.topicSphereAmount != 0)
+                    //Get the most recent class and topic sphere depending on the widget info
+                    int childrenAmount = spherePool.transform.childCount;
+                    int classCount = 0;
+                    GameObject recentClassSphere = null;
+                    List<GameObject> recentTopicSpheres = new List<GameObject>();
+                    //Doing it in reverse gives the most recent object
+                    for (int i = children; i > 0; --i)
                     {
-                        //Get the most recent class and topic sphere depending on the widget info
-                        int childrenAmount = spherePool.transform.childCount;
-                        int classCount = 0;
-                        GameObject recentClassSphere = null;
-                        List<GameObject> recentTopicSpheres = new List<GameObject>();
-                        //Doing it in reverse gives the most recent object
-                        for (int i = children; i > 0; --i)
+                        if (classCount == scriptInfo.classSphereAmount && recentTopicSpheres.Count == scriptInfo.topicSphereAmount)
                         {
-                            if (classCount == scriptInfo.classSphereAmount && recentTopicSpheres.Count == scriptInfo.topicSphereAmount)
-                            {
-                                break;
-                            }
-
-                            GameObject child = spherePool.transform.GetChild(i - 1).gameObject;
-                            if (child.name.Contains("datar"))
-                            {
-                                if (recentTopicSpheres.Count != scriptInfo.topicSphereAmount)
-                                {
-                                    recentTopicSpheres.Add(child);
-                                }
-                            }
-                            else if (child.name.Contains("ResourceSphere"))
-                            {
-                                if (!recentClassSphere)
-                                {
-                                    recentClassSphere = child;
-                                    classCount++;
-                                }
-                            }
-                        }
-                        //==================================================================================================
-                        //Get the objects where spheres need to be placed in
-                        int count = widgetPool.transform.childCount - 1;
-                        GameObject createdWidget = widgetPool.transform.GetChild(count).gameObject;
-                        listOfChildren.Clear();
-                        GetChildRecursive(createdWidget);
-                        GameObject topicDiseaseObject = null;
-                        GameObject classRegionObject = null;
-                        GameObject sentenceObject = null;
-                        foreach (GameObject child in listOfChildren)
-                        {
-                            if (child.name == scriptInfo.topicOrDiseaseSocketName)
-                            {
-                                topicDiseaseObject = child;
-                            }
-                            else if (child.name == scriptInfo.classOrRegionSocketName)
-                            {
-                                classRegionObject = child;
-                            }
-                            else if(child.name == scriptInfo.sentenceSocketName)
-                            {
-                                sentenceObject = child;
-                            }
-                        }
-                        //add spheres to the socket
-                        if (recentClassSphere)
-                        {
-                            recentClassSphere.transform.SetParent(classRegionObject.transform.Find("Socket").gameObject.transform);
-                            recentClassSphere.transform.localPosition = new Vector3(0, 0, 0);
+                            break;
                         }
 
-                        for (int x = 0; x < recentTopicSpheres.Count; x++)
+                        GameObject child = spherePool.transform.GetChild(i - 1).gameObject;
+                        if (child.name.Contains("datar"))
                         {
-                            if (x == 0)
+                            if (recentTopicSpheres.Count != scriptInfo.topicSphereAmount)
                             {
-                                recentTopicSpheres[x].transform.SetParent(topicDiseaseObject.transform.Find("Socket").gameObject.transform);
-                                recentTopicSpheres[x].transform.localPosition = new Vector3(0, 0, 0);
+                                recentTopicSpheres.Add(child);
                             }
-                            else
+                        }
+                        else if (child.name.Contains("ResourceSphere"))
+                        {
+                            if (!recentClassSphere)
                             {
-                                recentTopicSpheres[x].transform.SetParent(sentenceObject.transform.Find("Socket").gameObject.transform);
-                                recentTopicSpheres[x].transform.localPosition = new Vector3(0, 0, 0);
+                                recentClassSphere = child;
+                                classCount++;
                             }
                         }
                     }
-                    //====================================================================================================================
-                    //See if the newly loaded widget can be connected to any of the already loaded widgets
-                    bool connectionFound = false;
-                    bool connectedToInlet = false;
-                    bool connectedToOutlet = false;
-                    foreach (Transform connectWidget in widgetPool.transform)
+                    //==================================================================================================
+                    //Get the objects where spheres need to be placed in
+                    int count = widgetPool.transform.childCount - 1;
+                    GameObject createdWidget = widgetPool.transform.GetChild(count).gameObject;
+                    listOfChildren.Clear();
+                    GetChildRecursive(createdWidget);
+                    GameObject topicDiseaseObject = null;
+                    GameObject classRegionObject = null;
+                    GameObject sentenceObject = null;
+                    foreach (GameObject child in listOfChildren)
                     {
-                        for (int y = 0; y < scriptInfo.connectionWidgets.Count; y++)
+                        if (child.name == scriptInfo.topicOrDiseaseSocketName)
                         {
-                            if (connectWidget.name.Contains(scriptInfo.connectionWidgets[y].ToString()))
+                            topicDiseaseObject = child;
+                        }
+                        else if (child.name == scriptInfo.classOrRegionSocketName)
+                        {
+                            classRegionObject = child;
+                        }
+                        else if (child.name == scriptInfo.sentenceSocketName)
+                        {
+                            sentenceObject = child;
+                        }
+                    }
+                    //add spheres to the socket
+                    if (recentClassSphere)
+                    {
+                        recentClassSphere.transform.SetParent(classRegionObject.transform.Find("Socket").gameObject.transform);
+                        recentClassSphere.transform.localPosition = new Vector3(0, 0, 0);
+                    }
+
+                    for (int x = 0; x < recentTopicSpheres.Count; x++)
+                    {
+                        if (x == 0)
+                        {
+                            recentTopicSpheres[x].transform.SetParent(topicDiseaseObject.transform.Find("Socket").gameObject.transform);
+                            recentTopicSpheres[x].transform.localPosition = new Vector3(0, 0, 0);
+                        }
+                        else
+                        {
+                            recentTopicSpheres[x].transform.SetParent(sentenceObject.transform.Find("Socket").gameObject.transform);
+                            recentTopicSpheres[x].transform.localPosition = new Vector3(0, 0, 0);
+                        }
+                    }
+                }
+                //====================================================================================================================
+                //See if the newly loaded widget can be connected to any of the already loaded widgets
+                bool connectionFound = false;
+                bool connectedToInlet = false;
+                bool connectedToOutlet = false;
+                foreach (Transform connectWidget in widgetPool.transform)
+                {
+                    for (int y = 0; y < scriptInfo.connectionWidgets.Count; y++)
+                    {
+                        if (connectWidget.name.Contains(scriptInfo.connectionWidgets[y].ToString()))
+                        {
+                            DataflowInlet dataflowinlet = null;
+                            DataflowOutlet dataflowoutlet = null;
+                            if (scriptInfo.outletType == OutletType.Inlet)
                             {
-                                DataflowInlet dataflowinlet = null;            
-                                DataflowOutlet dataflowoutlet = null;
-                                if (scriptInfo.outletType == OutletType.Inlet)
-                                {
-                                    dataflowinlet = spawnedWidget.transform.Find("DataflowInlet").gameObject.GetComponent<DataflowInlet>();
-                                    dataflowoutlet = connectWidget.transform.Find("DataflowOutlet").gameObject.GetComponent<DataflowOutlet>();
-                                }
-                                else if (scriptInfo.outletType == OutletType.Outlet)
+                                dataflowinlet = spawnedWidget.transform.Find("DataflowInlet").gameObject.GetComponent<DataflowInlet>();
+                                dataflowoutlet = connectWidget.transform.Find("DataflowOutlet").gameObject.GetComponent<DataflowOutlet>();
+                            }
+                            else if (scriptInfo.outletType == OutletType.Outlet)
+                            {
+                                dataflowinlet = connectWidget.transform.Find("DataflowInlet").gameObject.GetComponent<DataflowInlet>();
+                                dataflowoutlet = spawnedWidget.transform.Find("DataflowOutlet").gameObject.GetComponent<DataflowOutlet>();
+                            }
+                            else if (scriptInfo.outletType == OutletType.OutletAndInlet)
+                            {
+                                //one inlet connectionWidget to outlet(coocurrence) and one outlet connection to connectionWidget inlet(brain model)
+                                if (connectWidget.gameObject.GetComponent<WidgetConnectionInfo>().outletType == OutletType.Inlet && !connectedToInlet)
                                 {
                                     dataflowinlet = connectWidget.transform.Find("DataflowInlet").gameObject.GetComponent<DataflowInlet>();
                                     dataflowoutlet = spawnedWidget.transform.Find("DataflowOutlet").gameObject.GetComponent<DataflowOutlet>();
+                                    connectedToInlet = true;
                                 }
-                                else if (scriptInfo.outletType == OutletType.OutletAndInlet)
+                                else if (connectWidget.gameObject.GetComponent<WidgetConnectionInfo>().outletType == OutletType.Outlet && !connectedToOutlet)
                                 {
-                                    //one inlet connectionWidget to outlet(coocurrence) and one outlet connection to connectionWidget inlet(brain model)
-                                    if (connectWidget.gameObject.GetComponent<WidgetConnectionInfo>().outletType == OutletType.Inlet && !connectedToInlet)
-                                    {
-                                        dataflowinlet = connectWidget.transform.Find("DataflowInlet").gameObject.GetComponent<DataflowInlet>();
-                                        dataflowoutlet = spawnedWidget.transform.Find("DataflowOutlet").gameObject.GetComponent<DataflowOutlet>();
-                                        connectedToInlet = true;
-                                    }
-                                    else if (connectWidget.gameObject.GetComponent<WidgetConnectionInfo>().outletType == OutletType.Outlet && !connectedToOutlet)
-                                    {
-                                        dataflowinlet = spawnedWidget.transform.Find("DataflowInlet").gameObject.GetComponent<DataflowInlet>();
-                                        dataflowoutlet = connectWidget.transform.Find("DataflowOutlet").gameObject.GetComponent<DataflowOutlet>();
-                                        connectedToOutlet = true;
-                                    }
+                                    dataflowinlet = spawnedWidget.transform.Find("DataflowInlet").gameObject.GetComponent<DataflowInlet>();
+                                    dataflowoutlet = connectWidget.transform.Find("DataflowOutlet").gameObject.GetComponent<DataflowOutlet>();
+                                    connectedToOutlet = true;
                                 }
-                                dataflowinlet.SetInputGameObject(dataflowoutlet);
                             }
-                            if (connectionFound || (connectedToInlet && connectedToOutlet))
-                            {
-                                break;
-                            }
+                            dataflowinlet.SetInputGameObject(dataflowoutlet);
                         }
                         if (connectionFound || (connectedToInlet && connectedToOutlet))
                         {
                             break;
                         }
                     }
-                }
-                else
-                {
-                    print("This widget requires at least " + scriptInfo.topicSphereAmount + " topic sphere(s) be present");
+                    if (connectionFound || (connectedToInlet && connectedToOutlet))
+                    {
+                        break;
+                    }
                 }
             }
             else
             {
-                print("This widget requires at least " + scriptInfo.classSphereAmount + " class sphere be present");
+                print("This widget requires at least " + scriptInfo.topicSphereAmount + " topic sphere(s) be present");
             }
-
-            isPressed = false;
+        }
+        else
+        {
+            print("This widget requires at least " + scriptInfo.classSphereAmount + " class sphere be present");
         }
     }
 
