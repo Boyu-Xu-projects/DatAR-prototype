@@ -158,7 +158,7 @@ public class SwitchGesture : MonoBehaviour
                 float swipeDifference = endLocation.y - startLocation.y;
                 double velocity = swipeDifference / time.Milliseconds;
                 Debug.Log(velocity);
-                if (velocity < 0.0004)
+                if (velocity < 0.0004 && velocity > -0.0004)
                 {
                     //Is y axis difference positive?(up swipe) or negative(down swipe)
                     if (swipeDifference > 0)
