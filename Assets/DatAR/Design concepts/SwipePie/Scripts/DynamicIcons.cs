@@ -6,6 +6,28 @@ using UnityEngine;
 
 public class DynamicIcons : MonoBehaviour
 {
+    #region SINGLETON PATTERN
+    private static DynamicIcons _instance;
+    public static DynamicIcons Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = GameObject.FindObjectOfType<DynamicIcons>();
+
+                if (_instance == null)
+                {
+                    GameObject container = new GameObject("DynamicIcons");
+                    _instance = container.AddComponent<DynamicIcons>();
+                }
+            }
+
+            return _instance;
+        }
+    }
+    #endregion
+
     //Widget icons
     public List<Sprite> iconSprites = new List<Sprite>();
 
@@ -81,10 +103,38 @@ public class DynamicIcons : MonoBehaviour
                 else
                 {
                     rowIcons.Add(iconSprites[index]);
-                }   
+                }
             }
             buttonRows.Add(rowIcons);
             indexAddition += 2;
+        }
+
+        ShowButtonRowIcons();
+    }
+
+    public void SwipeMenu(bool isUp)
+    {
+        for (int i = 0; i < topRowIndex.Count; i++)
+        {
+            int newIndex = 0;
+            if (isUp)
+            {
+                newIndex = topRowIndex[i] + 1;
+                if (newIndex == buttonRows.Count)
+                {
+                    newIndex = 0;
+                }
+            }
+            else
+            {
+                newIndex = topRowIndex[i] - 1;
+                if (newIndex == -1)
+                {
+                    newIndex = buttonRows.Count - 1;
+                }
+            }
+            
+            topRowIndex[i] = newIndex;
         }
 
         ShowButtonRowIcons();
@@ -96,32 +146,12 @@ public class DynamicIcons : MonoBehaviour
         //TODO: after that can try to switch rows based on arrow keys
         if (Input.GetKeyDown(KeyCode.LeftBracket))
         {
-            for (int i = 0; i < topRowIndex.Count; i++)
-            {
-                int newIndex = topRowIndex[i] + 1;
-                if (newIndex == buttonRows.Count)
-                {
-                    newIndex = 0;
-                }
-                topRowIndex[i] = newIndex;
-            }
-
-            ShowButtonRowIcons();
+            SwipeMenu(true);
         }
 
         if (Input.GetKeyDown(KeyCode.RightBracket))
         {
-            for (int i = 0; i < topRowIndex.Count; i++)
-            {
-                int newIndex = topRowIndex[i] - 1;
-                if (newIndex == -1)
-                {
-                    newIndex = buttonRows.Count - 1;
-                }
-                topRowIndex[i] = newIndex;
-            }
-
-            ShowButtonRowIcons();
+            SwipeMenu(false);
         }
 
         if (Input.GetMouseButtonDown(0))
