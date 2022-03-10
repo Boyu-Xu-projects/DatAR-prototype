@@ -9,6 +9,9 @@ TagManager:
   - SwipePie_Middle
   - SwipePie_Left
   - SwipePie_Right
+  - PalletIcon
+  - UpArrow
+  - DownArrow
   layers:
   - Default
   - TransparentFX
