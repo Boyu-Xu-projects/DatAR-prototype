@@ -173,14 +173,34 @@ public class DynamicIcons : MonoBehaviour
                         SpawnConnection.Instance.ChosenWidget(iconName);
                     }
                 }
+
+                if (hit.transform.gameObject.tag.ToString() == "UpArrow")
+                {
+                    SwipeMenu(true);
+                }
+                else if(hit.transform.gameObject.tag.ToString() == "DownArrow")
+                {
+                    SwipeMenu(false);
+                }
             }
         }
     }
 
     private void ShowButtonRowIcons()
     {
+        SpriteRenderer renderer = null;
         for (int y = 0; y < topRowIndex.Count; y++)
         {
+            //Find out if there are one, two or three not null sprites
+            int spriteCount = 0;
+            foreach (var item in buttonRows[topRowIndex[y]])
+            {
+                if (item != null)
+                {
+                    spriteCount++;
+                }
+            }
+
             string location = "";
             if (y == 0)
             {
@@ -194,56 +214,162 @@ public class DynamicIcons : MonoBehaviour
             {
                 location = "bottom";
             }
-            for (int z = 0; z < 3; z++)
+            if (spriteCount == 1)
             {
-                SpriteRenderer renderer;
-                if (z == 0)
+                for (int z = 0; z < 3; z++)
                 {
-                    if (location == "top")
+                    if (z == 0)
                     {
-                        renderer = topLeftIcon.GetComponent<SpriteRenderer>();
+                        if (location == "top")
+                        {
+                            renderer = topMiddleIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else if (location == "middle")
+                        {
+                            renderer = middleMiddleIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else
+                        {
+                            renderer = bottomMiddleIcon.GetComponent<SpriteRenderer>();
+                        }
                     }
-                    else if (location == "middle")
+                    else if (z == 1)
                     {
-                        renderer = middleLeftIcon.GetComponent<SpriteRenderer>();
+                        if (location == "top")
+                        {
+                            renderer = topLeftIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else if (location == "middle")
+                        {
+                            renderer = middleLeftIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else
+                        {
+                            renderer = bottomLeftIcon.GetComponent<SpriteRenderer>();
+                        }
                     }
                     else
                     {
-                        renderer = bottomLeftIcon.GetComponent<SpriteRenderer>();
+                        if (location == "top")
+                        {
+                            renderer = topRightIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else if (location == "middle")
+                        {
+                            renderer = middleRightIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else
+                        {
+                            renderer = bottomRightIcon.GetComponent<SpriteRenderer>();
+                        }
                     }
+                    renderer.sprite = buttonRows[topRowIndex[y]][z];
                 }
-                else if (z == 1)
+            }
+            else if (spriteCount == 2)
+            {
+                for (int z = 0; z < 3; z++)
                 {
-                    if (location == "top")
+                    if (z == 0)
                     {
-                        renderer = topMiddleIcon.GetComponent<SpriteRenderer>();
+                        if (location == "top")
+                        {
+                            renderer = topLeftIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else if (location == "middle")
+                        {
+                            renderer = middleLeftIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else
+                        {
+                            renderer = bottomLeftIcon.GetComponent<SpriteRenderer>();
+                        }
                     }
-                    else if (location == "middle")
+                    else if (z == 1)
                     {
-                        renderer = middleMiddleIcon.GetComponent<SpriteRenderer>();
+                        if (location == "top")
+                        {
+                            renderer = topRightIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else if (location == "middle")
+                        {
+                            renderer = middleRightIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else
+                        {
+                            renderer = bottomRightIcon.GetComponent<SpriteRenderer>();
+                        }
                     }
                     else
                     {
-                        renderer = bottomMiddleIcon.GetComponent<SpriteRenderer>();
+                        if (location == "top")
+                        {
+                            renderer = topMiddleIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else if (location == "middle")
+                        {
+                            renderer = middleMiddleIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else
+                        {
+                            renderer = bottomMiddleIcon.GetComponent<SpriteRenderer>();
+                        }
                     }
+                    renderer.sprite = buttonRows[topRowIndex[y]][z];
                 }
-                else
+            }
+            else
+            {
+                for (int z = 0; z < 3; z++)
                 {
-                    if (location == "top")
+                    if (z == 0)
                     {
-                        renderer = topRightIcon.GetComponent<SpriteRenderer>();
+                        if (location == "top")
+                        {
+                            renderer = topLeftIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else if (location == "middle")
+                        {
+                            renderer = middleLeftIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else
+                        {
+                            renderer = bottomLeftIcon.GetComponent<SpriteRenderer>();
+                        }
                     }
-                    else if (location == "middle")
+                    else if (z == 1)
                     {
-                        renderer = middleRightIcon.GetComponent<SpriteRenderer>();
+                        if (location == "top")
+                        {
+                            renderer = topMiddleIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else if (location == "middle")
+                        {
+                            renderer = middleMiddleIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else
+                        {
+                            renderer = bottomMiddleIcon.GetComponent<SpriteRenderer>();
+                        }
                     }
                     else
                     {
-                        renderer = bottomRightIcon.GetComponent<SpriteRenderer>();
+                        if (location == "top")
+                        {
+                            renderer = topRightIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else if (location == "middle")
+                        {
+                            renderer = middleRightIcon.GetComponent<SpriteRenderer>();
+                        }
+                        else
+                        {
+                            renderer = bottomRightIcon.GetComponent<SpriteRenderer>();
+                        }
                     }
-                }
 
-                renderer.sprite = buttonRows[topRowIndex[y]][z];
+                    renderer.sprite = buttonRows[topRowIndex[y]][z];
+                }
             }
         }
     }
