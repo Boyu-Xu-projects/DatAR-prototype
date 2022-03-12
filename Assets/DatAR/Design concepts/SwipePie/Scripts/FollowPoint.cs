@@ -18,7 +18,7 @@ public class FollowPoint : MonoBehaviour
     void Update()
     {
         cubeFollowPoint.GetComponent<Renderer>().enabled = false;
-        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.Palm, Handedness.Right, out pose))
+        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.Palm, HandSettings.Instance.dominantHand, out pose))
         {
             cubeFollowPoint.GetComponent<Renderer>().enabled = true;
             cubeFollowPoint.transform.position = pose.Position;

@@ -2187,6 +2187,7 @@ GameObject:
   - component: {fileID: 1160236527}
   - component: {fileID: 1160236529}
   - component: {fileID: 1160236525}
+  - component: {fileID: 1160236530}
   m_Layer: 0
   m_Name: SwipePieManager
   m_TagString: Untagged
@@ -2298,6 +2299,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubeFollowPoint: {fileID: 1634659483}
+--- !u!114 &1160236530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160236524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11044e3090198b442a1df66879d92b0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dominantHand: 2
+  nonDominantHand: 1
 --- !u!1001 &1234336323
 PrefabInstance:
   m_ObjectHideFlags: 0

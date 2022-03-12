@@ -76,7 +76,7 @@ public class SwitchGesture : MonoBehaviour
 
     private void Update()
     {
-        if (GestureUtils.isThumbsUp(Handedness.Left))
+        if (GestureUtils.isThumbsUp(HandSettings.Instance.nonDominantHand))
         {
             if (!thumbGestureInnit)
             {
@@ -91,7 +91,7 @@ public class SwitchGesture : MonoBehaviour
                 thumbGestureInnit = true;
             }
         }
-        else if(!GestureUtils.isThumbsUp(Handedness.Left))
+        else if(!GestureUtils.isThumbsUp(HandSettings.Instance.nonDominantHand))
         {
             if (thumbGestureInnit)
             {
@@ -100,7 +100,7 @@ public class SwitchGesture : MonoBehaviour
         }
 
         //===========================================================================================
-        if (GestureUtils.IsGrabbing(Handedness.Left))
+        if (GestureUtils.IsGrabbing(HandSettings.Instance.nonDominantHand))
         {
             if (!gestureInstantiated)
             {
@@ -115,7 +115,7 @@ public class SwitchGesture : MonoBehaviour
                 gestureInstantiated = true;
             }
         }
-        else if(!GestureUtils.IsGrabbing(Handedness.Left))
+        else if(!GestureUtils.IsGrabbing(HandSettings.Instance.nonDominantHand))
         {
             if (gestureInstantiated)
             {
@@ -128,7 +128,7 @@ public class SwitchGesture : MonoBehaviour
             currentTime = currentTime + Time.deltaTime;
         }
 
-        if (GestureUtils.isSwipe(Handedness.Left))
+        if (GestureUtils.isSwipe(HandSettings.Instance.nonDominantHand))
         {
             if (!swipeInnit)
             {
@@ -140,7 +140,7 @@ public class SwitchGesture : MonoBehaviour
                 swipeInnit = true;
             }
         }
-        else if (!GestureUtils.isSwipe(Handedness.Left))
+        else if (!GestureUtils.isSwipe(HandSettings.Instance.nonDominantHand))
         {
             if (swipeInnit)
             {

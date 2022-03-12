@@ -13,7 +13,7 @@ public class Pallettracking : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.Wrist, Handedness.Left, out pose))
+        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.Wrist, HandSettings.Instance.nonDominantHand, out pose))
         {
             cubeFollowPoint.transform.position = pose.Position;
         }
