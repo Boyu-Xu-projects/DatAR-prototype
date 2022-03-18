@@ -11,6 +11,7 @@ public class TurnTowardsUser : MonoBehaviour
 
     public bool lockX;
     public bool lockY;
+    public bool lockZ;
     
     void Awake()
     {
@@ -29,6 +30,8 @@ public class TurnTowardsUser : MonoBehaviour
             lookDir.x = 0;
         if (lockY)
             lookDir.y = 0;
+        if (lockZ)
+            lookDir.z = 22;
         var targetRotation = Quaternion.LookRotation(lookDir);
         var str = Mathf.Min (pointRotateSpeed * Time.deltaTime, 5);
         transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, str);

@@ -2244,8 +2244,8 @@ MonoBehaviour:
   - {fileID: 3286163911610860551, guid: 08ceaf42c36c8fa43ac84f917f8fe450, type: 3}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 3286163911610860551, guid: 08ceaf42c36c8fa43ac84f917f8fe450, type: 3}
-  - {fileID: 3286163911610860551, guid: 08ceaf42c36c8fa43ac84f917f8fe450, type: 3}
+  - {fileID: 3286163911610860551, guid: efc4e8bbf3db1d244856185a6e4d9372, type: 3}
+  - {fileID: 3286163911610860551, guid: 4399a87aa2bbe9d419049854185a047f, type: 3}
   - {fileID: 3286163911610860551, guid: 08ceaf42c36c8fa43ac84f917f8fe450, type: 3}
   topMiddleIcon: {fileID: 1766956908}
   topLeftIcon: {fileID: 1870945608}

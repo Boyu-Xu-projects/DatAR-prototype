@@ -107,6 +107,26 @@ public class DynamicPalletIcons : MonoBehaviour
         UpdateIcons();
     }
 
+    public void UpArrow()
+    {
+        rowIndex++;
+        if (rowIndex == totalRowAmount)
+        {
+            rowIndex = 0;
+        }
+        UpdateIcons();
+    }
+
+    public void DownArrow()
+    {
+        rowIndex++;
+        if (rowIndex == totalRowAmount)
+        {
+            rowIndex = 0;
+        }
+        UpdateIcons();
+    }
+
     private void UpdateIcons()
     {
         SpriteRenderer renderer = null;
