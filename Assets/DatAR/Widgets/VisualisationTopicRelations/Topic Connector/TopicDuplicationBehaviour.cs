@@ -15,8 +15,6 @@ public class TopicDuplicationBehaviour : MonoBehaviour
     [FormerlySerializedAs("isFixed")] public bool shouldDuplicateOnGrab = true;
     private BrainTopicManager BrainTopics;
 
-
-    private SparqlService _sparqlService;
     public string ErrorMessage { get; private set; }
     private List<FormattedTopicCooccurrence> Cooccurrences;
 
@@ -31,13 +29,10 @@ public class TopicDuplicationBehaviour : MonoBehaviour
             gameObject.SetActive(false);
             return;
         }
-
-        var services = GameObject.Find("Services");
-        _sparqlService = services.GetComponent<SparqlService>();
     }
 
     // If not fixed, simply move when picked up.
-    public void DuplicateIfFixed()
+    async public void DuplicateIfFixed()
     {
         // Sorted list
         // if (shouldDuplicateOnGrab)
@@ -65,7 +60,8 @@ public class TopicDuplicationBehaviour : MonoBehaviour
         //     brainTopics.transform.SetParent(transform, true);
         //     BrainTopics = brainTopics.GetComponent<BrainTopicManager>();
 
-        //     QuerySelectedTopic(transform.name, transform.GetChild(3).GetComponent<TextMeshPro>().text, transform.GetComponent<BrainTopicSphere>().TopicClass);
+        //     Cooccurrences = await QueryTopicManager.QTM.QueryTopic(transform.GetChild(3).GetComponent<TextMeshPro>().text, transform.name, transform.GetComponent<BrainTopicSphere>().TopicClass);
+        //     SelectOverview();
         // }
 
         // Bubble graph
@@ -93,162 +89,7 @@ public class TopicDuplicationBehaviour : MonoBehaviour
             transform.gameObject.AddComponent<GraphManager>();
             transform.gameObject.GetComponent<GraphManager>().nodepf = Resources.Load<Node>("NodePrefab");
             transform.gameObject.GetComponent<GraphManager>().edgepf = Resources.Load<GameObject>("EdgePrefab");
-            transform.gameObject.GetComponent<GraphManager>().CreateGraph(transform.name, transform.GetChild(3).GetComponent<TextMeshPro>().text, transform.GetComponent<BrainTopicSphere>().TopicClass, "");
-        }
-    }
-
-    async private void QuerySelectedTopic(string topic, string topicLabel, string topicClass)
-    {
-        try
-        {
-            var topicName = topic; // adrenaline
-            var topicObject = topicLabel; // lbd:adrenaline
-
-            // Same query as disease
-            var cooccurrences = await _sparqlService.GetTopicsRelatedToDisease(topicObject);
-
-            if (cooccurrences.Count < 0)
-            {
-                ErrorMessage = $"No cooccurrences found for {topicName}.";
-                return;
-            }
-
-            // Split concepts that belong to multiple classes into their seperate list items.
-            List<DiseaseTopicsResource>[] fixedCooccurrences = new List<DiseaseTopicsResource>[6];
-            for(int i = 0; i < 6; i++)
-                fixedCooccurrences[i] = new List<DiseaseTopicsResource>();
-
-            // Sort the different category of topics in different lists
-            foreach(var cooccurrence in cooccurrences)
-            {
-                // Ignore cooccurrences that have unknown sources.
-                if(!cooccurrence.Id.Contains("lbd"))
-                    continue;
-
-                if(cooccurrence.Concept.Types.Count > 1)
-                {
-                    var concepts = cooccurrence.Concept.SplitTypes();
-                    foreach(var concept in concepts)
-                    {
-                        // Topics with multiple categories are sometimes misclassified. Ignore topics that have the same category as the queried topic.
-                        if(concept.Types[0] == topicClass)
-                            continue;
-                        else {
-                            switch(concept.Types[0]) {
-                                case "lbd:region": {
-                                    fixedCooccurrences[0].Add(new DiseaseTopicsResource(
-                                        cooccurrence.Types,
-                                        cooccurrence.AppearTimes,
-                                        concept,
-                                        cooccurrence.Disease));
-                                    break;
-                                }
-                                case "lbd:transmitter": {
-                                    fixedCooccurrences[1].Add(new DiseaseTopicsResource(
-                                        cooccurrence.Types,
-                                        cooccurrence.AppearTimes,
-                                        concept,
-                                        cooccurrence.Disease));
-                                    break;
-                                }
-                                case "lbd:gene": {
-                                    fixedCooccurrences[2].Add(new DiseaseTopicsResource(
-                                        cooccurrence.Types,
-                                        cooccurrence.AppearTimes,
-                                        concept,
-                                        cooccurrence.Disease));
-                                    break;
-                                }
-                                case "lbd:function": {
-                                    fixedCooccurrences[3].Add(new DiseaseTopicsResource(
-                                        cooccurrence.Types,
-                                        cooccurrence.AppearTimes,
-                                        concept,
-                                        cooccurrence.Disease));
-                                    break;
-                                }
-                                case "lbd:protein": {
-                                    fixedCooccurrences[4].Add(new DiseaseTopicsResource(
-                                        cooccurrence.Types,
-                                        cooccurrence.AppearTimes,
-                                        concept,
-                                        cooccurrence.Disease));
-                                    break;
-                                }
-                                case "lbd:neuron": {
-                                    fixedCooccurrences[5].Add(new DiseaseTopicsResource(
-                                        cooccurrence.Types,
-                                        cooccurrence.AppearTimes,
-                                        concept,
-                                        cooccurrence.Disease));
-                                    break;
-                                }
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    switch(cooccurrence.Concept.Types[0]) {
-                        case "lbd:region": {
-                            fixedCooccurrences[0].Add(cooccurrence);
-                            break;
-                        }
-                        case "lbd:transmitter": {
-                            fixedCooccurrences[1].Add(cooccurrence);
-                            break;
-                        }
-                        case "lbd:gene": {
-                            fixedCooccurrences[2].Add(cooccurrence);
-                            break;
-                        }
-                        case "lbd:function": {
-                            fixedCooccurrences[3].Add(cooccurrence);
-                            break;
-                        }
-                        case "lbd:protein": {
-                            fixedCooccurrences[4].Add(cooccurrence);
-                            break;
-                        }
-                        case "lbd:neuron": {
-                            fixedCooccurrences[5].Add(cooccurrence);
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                }
-            }
-
-            // Within each category, sort on cooccurrences on descending order
-            foreach(List<DiseaseTopicsResource> category in fixedCooccurrences)
-                category.Sort((y,x) => x.AppearTimes.CompareTo(y.AppearTimes));
-        
-            // Within each category, take only the top 6
-            Cooccurrences = new List<FormattedTopicCooccurrence>();
-            foreach(List<DiseaseTopicsResource> category in fixedCooccurrences) {
-                int numberOfTopics = 3;
-                if(category.Count < numberOfTopics)
-                    numberOfTopics = category.Count;
-
-                for(int i = 0; i < numberOfTopics; i++)
-                    Cooccurrences.Add(new FormattedTopicCooccurrence(
-                        category[i].Concept.Label,
-                        category[i].Concept.Types[0],
-                        topicName,
-                        category[i].Concept.Id,
-                        category[i].AppearTimes
-                    ));
-            }
-
-            SelectOverview();
-        }
-        catch (Exception e)
-        {
-            ErrorMessage = e.Message;
-            Debug.LogError(e);
+            transform.gameObject.GetComponent<GraphManager>().CreateGraph(transform.GetChild(3).GetComponent<TextMeshPro>().text, transform.name, transform.GetComponent<BrainTopicSphere>().TopicClass, "");
         }
     }
 

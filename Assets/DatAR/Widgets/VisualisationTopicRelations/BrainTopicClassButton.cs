@@ -6,7 +6,7 @@ using UnityEngine;
 public class BrainTopicClassButton : MonoBehaviour
 {
     public string brainClass;
-    public QueryRelatedTopics visualization;
+    public TopicRelationManager visualization;
     // Start is called before the first frame update
     void Awake()
     {
