@@ -11,6 +11,8 @@ namespace DatAR.DataModels.Resources
      */
     public interface ICoordsResource : IDynamicResource
     {
+        string Id { get; set; }
+        List<string> Types { get; set; }
         float CoordX { get; set; }
         float CoordY { get; set; }
         float CoordZ { get; set; }
@@ -27,7 +29,7 @@ namespace DatAR.DataModels.Resources
             CoordZ = z;
         }
 
-        protected CoordsResource()
+        public CoordsResource()
         {
             // Doesn't do anything.
             // Required to exist for derivative classes and their constructor.

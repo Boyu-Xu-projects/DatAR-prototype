@@ -26,6 +26,7 @@ namespace DatAR.Widgets.VisualisationTopicModel
         public float pointScale = 0.02f;
 
         public bool showLabels = true;
+        private bool failedDataRetrieval = false;
 
         // The prefab for the data points that will be instantiated
         public GameObject pointPrefab;
@@ -165,11 +166,28 @@ namespace DatAR.Widgets.VisualisationTopicModel
                     return false;
                 }
             }
-            catch (Exception e)
-            {
-                ErrorMessage = e.Message;
-                IsLoading.OnNext(QueryState.HasError);
-                return false;
+            catch (Exception e) // Failed to retrieve coordinates from data source. Load back-up data instead.
+            {   
+                // Show error message
+                // ErrorMessage = e.Message;
+                // IsLoading.OnNext(QueryState.HasError);
+
+                List<Dictionary<string,object>> data = CSVReader.Read("DiseaseCoords");
+                List<string> data_type = new List<string>() {"disease"};
+                coords = new List<CoordsResource>();
+
+                for(var i=0; i < data.Count; i++) {
+                    CoordsResource coord = new CoordsResource(
+                        data[i]["Disease Names"].ToString(),
+                        data_type,
+                        Convert.ToSingle(data[i][" X"].ToString().Replace(".", ",")),
+                        Convert.ToSingle(data[i][" Y"].ToString().Replace(".", ",")),
+                        Convert.ToSingle(data[i][" Z"].ToString().Replace(".", ",")));
+
+                    coords.Add(coord);
+                }
+
+                failedDataRetrieval = true;
             }
             IsLoading.OnNext(QueryState.HasLoaded);
             
@@ -219,10 +237,8 @@ namespace DatAR.Widgets.VisualisationTopicModel
                 var resourceComponent = dataPoint.GetComponent<ResourceComponent>();
                 resourceComponent.Resource = resource;
 
-                if (!showLabels)
-                {
-                    resourceComponent.transform.GetChild(0).gameObject.SetActive(false);
-                }
+                if (failedDataRetrieval) resourceComponent.transform.GetChild(0).GetComponent<TextMeshPro>().text = resource.Id;
+                if (!showLabels) resourceComponent.transform.GetChild(0).gameObject.SetActive(false);
 
                 dataPoint.transform.name = resourceComponent.Resource.Id;
                 dataPoint.transform.localScale = new Vector3(pointScale, pointScale, pointScale);
