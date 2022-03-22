@@ -62,6 +62,7 @@ public class SwitchGesture : MonoBehaviour
     private void Start()
     {
         currentTime = 0;
+        SwipePie.SetActive(false);
     }
 
     public void PalmShowing()
@@ -111,6 +112,7 @@ public class SwitchGesture : MonoBehaviour
                 else if(!SwipePie.activeSelf)
                 {
                     SwipePie.SetActive(true);
+                    StartCoroutine(WaitToUse());
                 }
                 gestureInstantiated = true;
             }
@@ -192,5 +194,12 @@ public class SwitchGesture : MonoBehaviour
         stopWatchActive = false;
     }
 
-    
+    private IEnumerator WaitToUse()
+    {
+        SwipePieTap.Instance.CanInteract(false);
+        Debug.Log("Can't use yet");
+        yield return new WaitForSeconds(0.7f);
+        Debug.Log("Can use");
+        SwipePieTap.Instance.CanInteract(true);
+    }
 }

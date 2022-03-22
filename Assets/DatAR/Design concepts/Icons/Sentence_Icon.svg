@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   sodipodi:docname="Sentence_Icon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.733172"
+     inkscape:cx="396.22353"
+     inkscape:cy="561.94181"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Laag 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       style="fill:#ffffff"
+       id="g23"
+       transform="matrix(-1.1824162,0,0,1.1824162,137.52864,165.61668)">
+      <path
+         d="M 47,42.5 A 10.94,10.94 0 0 1 42.4,50.7 1.52,1.52 0 0 1 41.5,51 1.5,1.5 0 0 1 40.6,48.3 8.54,8.54 0 0 0 43.72,44 H 40.5 a 1.5,1.5 0 0 1 0,-3 h 5 A 1.5,1.5 0 0 1 47,42.5 Z M 55.5,41 h -5 a 1.5,1.5 0 0 0 0,3 h 3.22 A 8.54,8.54 0 0 1 50.6,48.3 1.5,1.5 0 0 0 51.5,51 1.52,1.52 0 0 0 52.4,50.7 10.94,10.94 0 0 0 57,42.5 1.5,1.5 0 0 0 55.5,41 Z m -37,-18 h 5 a 1.5,1.5 0 0 0 0,-3 H 20.28 A 8.54,8.54 0 0 1 23.4,15.7 1.5,1.5 0 0 0 21.6,13.3 10.94,10.94 0 0 0 17,21.5 1.5,1.5 0 0 0 18.5,23 Z m -10,0 h 5 a 1.5,1.5 0 0 0 0,-3 H 10.28 A 8.54,8.54 0 0 1 13.4,15.7 1.5,1.5 0 0 0 11.6,13.3 10.94,10.94 0 0 0 7,21.5 1.5,1.5 0 0 0 8.5,23 Z m 22,0 h 25 a 1.5,1.5 0 0 0 0,-3 h -25 a 1.5,1.5 0 0 0 0,3 z m 25,4 h -47 a 1.5,1.5 0 0 0 0,3 h 47 a 1.5,1.5 0 0 0 0,-3 z m 0,7 h -47 a 1.5,1.5 0 0 0 0,3 h 47 a 1.5,1.5 0 0 0 0,-3 z m -22,7 h -25 a 1.5,1.5 0 0 0 0,3 h 25 a 1.5,1.5 0 0 0 0,-3 z"
+         id="path11" />
+    </g>
+  </g>
+</svg>

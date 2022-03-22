@@ -8,6 +8,7 @@ using Microsoft.MixedReality.Toolkit.Input;
 public class FollowPoint : MonoBehaviour
 {
     public GameObject cubeFollowPoint;
+    public float offset = 208.07f;
     private MixedRealityPose pose;
 
     private void Start()
@@ -22,6 +23,7 @@ public class FollowPoint : MonoBehaviour
         {
             cubeFollowPoint.GetComponent<Renderer>().enabled = true;
             cubeFollowPoint.transform.position = pose.Position;
+            //cubeFollowPoint.transform.rotation = Quaternion.Euler(0, pose.Rotation.eulerAngles.y + offset, 0);
         }
     }
 }

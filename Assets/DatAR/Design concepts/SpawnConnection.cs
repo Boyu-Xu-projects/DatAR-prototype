@@ -20,6 +20,10 @@ public class SpawnConnection : MonoBehaviour
     [SerializeField] private GameObject dataFlowWidget;
     [SerializeField] private GameObject resourceSphereWidget;
     [SerializeField] private GameObject sentenceExtractorWidget;
+    [SerializeField] private GameObject resourceInspectorWidget;
+
+    [SerializeField] private GameObject diseaseClassSphere;
+    [SerializeField] private GameObject regionClassSphere;
 
     Dictionary<string, WidgetConnectionInfo> widgetInformationDict;
     private List<GameObject> listOfChildren;
@@ -127,10 +131,48 @@ public class SpawnConnection : MonoBehaviour
             case "Coocurrence_IconSprite":
                 currentWidget = coocurrenceWidget;
                 break;
+            case "ResourceInspector_iconSprite":
+                currentWidget = resourceInspectorWidget;
+                break;
+            case "MinMax_IconSprite":
+                currentWidget = minMaxWidget;
+                break;
+            case "Sentence_IconSprite":
+                currentWidget = sentenceExtractorWidget;
+                break;
+            case "TopicModel_iconSprite":
+                currentWidget = topicModelWidget;
+                break;
+            case "DiseaseClass_IconSprite":
+                Instantiate(diseaseClassSphere, spherePool.transform);
+                break;
+            case "RegionClass_iconSprite":
+                Instantiate(regionClassSphere, spherePool.transform);
+                break;
+            case "Trash_IconSprite":
+                destroyObjects();
+                break;
             default:
                 break;
         }
-        WidgetConnection(currentWidget);
+
+        if (currentWidget != null)
+        {
+            WidgetConnection(currentWidget);
+        }
+    }
+
+    private void destroyObjects()
+    {
+        foreach (Transform child in spherePool.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in widgetPool.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
     }
 
     private void WidgetConnection(GameObject currentWidget)

@@ -12,6 +12,7 @@ TagManager:
   - PalletIcon
   - UpArrow
   - DownArrow
+  - FingerSphere
   layers:
   - Default
   - TransparentFX

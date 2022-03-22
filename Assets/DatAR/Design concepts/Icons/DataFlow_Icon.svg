@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="100mm"
+   height="100mm"
+   viewBox="0 0 100 100"
+   version="1.1"
+   id="svg132"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   sodipodi:docname="DataFlow_Icon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview134"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.28"
+     inkscape:cx="174.21875"
+     inkscape:cy="249.60938"
+     inkscape:window-width="1371"
+     inkscape:window-height="1000"
+     inkscape:window-x="2220"
+     inkscape:window-y="164"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs129" />
+  <g
+     inkscape:label="Laag 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       style="fill:#ffffff"
+       id="g178"
+       transform="matrix(0,-0.65053966,0.65053966,0,-1.5509262,64.654869)">
+      <g
+         id="g158">
+        <path
+           d="m 89.001,12 c 0,-0.828 -0.672,-1.5 -1.5,-1.5 h -54 c -0.008,0 -0.016,0.002 -0.023,0.002 -0.012,0 -0.022,0.003 -0.034,0.004 -0.188,0.007 -0.369,0.045 -0.534,0.116 -0.004,10e-4 -0.007,0.004 -0.011,0.006 -0.179,0.078 -0.339,0.19 -0.474,0.329 -0.002,0.003 -0.006,0.003 -0.008,0.006 L 11.409,32.899 c -0.201,0.21 -0.302,0.467 -0.358,0.731 -0.016,0.063 -0.026,0.13 -0.034,0.197 C 11.013,33.886 10.997,33.941 11,34 v 54 c 0,0.828 0.671,1.5 1.5,1.5 h 54.001 c 0.426,0 0.809,-0.18 1.082,-0.466 l 0.002,0.002 21,-22 -0.002,-0.002 C 88.841,66.764 89.001,66.401 89.001,66 Z M 83.518,68 68.001,84.256 V 34.602 l 18,-18.857 v 49.654 l -1.502,1.573 V 65 h -6 v 3 z M 32,29.999 V 32.5 H 15.945 L 32,15.735 V 18 h 3 v -4.5 h 48.995 l -18.137,19 H 35 V 29.999 Z M 15.623,86.5 15.825,86.298 14,84.474 V 35.5 h 18 v 0.499 h 3 V 35.5 H 65 V 65 h -4.502 v 3 H 65 v 18.5 z"
+           id="path136" />
+        <rect
+           x="32"
+           y="38.999001"
+           width="3"
+           height="6"
+           id="rect138" />
+        <rect
+           x="32"
+           y="47.999001"
+           width="3"
+           height="6"
+           id="rect140" />
+        <rect
+           x="32"
+           y="21"
+           width="3"
+           height="5.9990001"
+           id="rect142" />
+        <rect
+           x="17.507"
+           y="77.994003"
+           transform="matrix(-0.7071,-0.7071,0.7071,-0.7071,-24.8256,151.7052)"
+           width="3"
+           height="5.9990001"
+           id="rect144" />
+        <rect
+           x="32"
+           y="56.998001"
+           width="3"
+           height="6"
+           id="rect146" />
+        <rect
+           x="23.870001"
+           y="71.629997"
+           transform="matrix(-0.7071,-0.7071,0.7071,-0.7071,-9.463,145.341)"
+           width="3"
+           height="6"
+           id="rect148" />
+        <rect
+           x="51.5"
+           y="65"
+           width="5.9990001"
+           height="3"
+           id="rect150" />
+        <rect
+           x="69.499001"
+           y="65"
+           width="6"
+           height="3"
+           id="rect152" />
+        <rect
+           x="42.5"
+           y="65"
+           width="6"
+           height="3"
+           id="rect154" />
+        <polygon
+           points="32.44,65.439 28.551,69.327 30.672,71.448 34.122,68 39.5,68 39.5,65 33.5,65 33.5,65.998 32.999,65.998 "
+           id="polygon156" />
+      </g>
+    </g>
+    <g
+       style="fill:#ffffff"
+       id="g189"
+       transform="matrix(0,0.62693984,-0.62693984,0,60.871377,0.36269851)">
+      <path
+         d="M 51.1,13.1 C 40.6,2.6 23.5,2.6 13,13.1 2.5,23.6 2.5,40.7 13,51.2 c 9.6,9.6 24.7,10.4 35.2,2.5 l 3.6,3.6 c -1.1,2.4 -0.6,5.3 1.3,7.3 l 28.7,28.7 c 2.6,2.6 6.7,2.5 9.3,-0.1 L 93,91.3 c 2.6,-2.6 2.6,-6.8 0.1,-9.3 L 64.4,53.2 c -2,-2 -4.9,-2.4 -7.3,-1.3 l -3.6,-3.6 c 8,-10.6 7.2,-25.6 -2.4,-35.2 z M 17.4,46.7 c -8.1,-8.1 -8.1,-21.2 0,-29.3 8.1,-8.1 21.2,-8.1 29.2,0 8.1,8.1 8.1,21.2 0,29.3 -8,8.1 -21.1,8.1 -29.2,0 z M 48.8,33.1 C 47.9,27 44.4,21.8 39.4,19 c -5,-2.8 -11.3,-3 -16.9,-0.5 2.3,-2 5.4,-3.3 8.7,-3.5 3.2,-0.3 6.5,0.5 9.4,2 2.9,1.6 5.2,4 6.7,6.9 1.4,2.8 2,6.1 1.5,9.2 z"
+         id="path180" />
+    </g>
+  </g>
+</svg>
