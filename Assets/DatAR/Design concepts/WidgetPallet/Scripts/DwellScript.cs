@@ -45,7 +45,7 @@ public class DwellScript : BaseDwellSample
             slidePlane.transform.localScale = new Vector3(0, 0.002f, 0.0001f);
         }
 
-        if (currentIcon != null)
+        if (currentIcon != null && this.transform.gameObject.tag.ToString() == "PalletIcon")
         {
             GameObject child = currentIcon.transform.GetChild(0).gameObject;
             SpriteRenderer renderer = child.GetComponent<SpriteRenderer>();
@@ -54,6 +54,14 @@ public class DwellScript : BaseDwellSample
             {
                 SpawnConnection.Instance.ChosenWidget(iconName);
             }
+        }
+        else if (this.transform.gameObject.tag.ToString() == "UpArrow")
+        {
+            DynamicPalletIcons.Instance.UpArrow();
+        }
+        else if (this.transform.gameObject.tag.ToString() == "DownArrow")
+        {
+            DynamicPalletIcons.Instance.DownArrow();
         }
     }
 }

@@ -11,8 +11,25 @@ public class HololensTouch : MonoBehaviour
 
     public void ButtonPressed()
     {
-        Debug.Log("You pressed me bitch");
         this.GetComponent<Renderer>().material = selectMaterial;
+        if (this.transform.gameObject.tag.ToString() == "PalletIcon")
+        {
+            GameObject iconButton = this.transform.GetChild(0).transform.GetChild(0).gameObject;
+            SpriteRenderer renderer = iconButton.GetComponent<SpriteRenderer>();
+            string iconName = renderer.sprite.name;
+            if (iconName != null)
+            {
+                SpawnConnection.Instance.ChosenWidget(iconName);
+            }
+        }
+        else if (this.transform.gameObject.tag.ToString() == "UpArrow")
+        {
+            DynamicPalletIcons.Instance.UpArrow();
+        }
+        else if (this.transform.gameObject.tag.ToString() == "DownArrow")
+        {
+            DynamicPalletIcons.Instance.DownArrow();
+        }
     }
 
     public void ButtonReleased()
