@@ -178,7 +178,7 @@ namespace DatAR.Widgets.VisualisationTopicModel
 
                 for(var i=0; i < data.Count; i++) {
                     CoordsResource coord = new CoordsResource(
-                        data[i]["Disease Names"].ToString(),
+                        data[i]["disease Names"].ToString(),
                         data_type,
                         Convert.ToSingle(data[i][" X"].ToString().Replace(".", ",")),
                         Convert.ToSingle(data[i][" Y"].ToString().Replace(".", ",")),
