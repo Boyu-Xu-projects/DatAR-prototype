@@ -12,7 +12,7 @@ public static class GestureUtils
     private const float PinchThreshold = 0.7f;
     private const float GrabThreshold = 0.2f;
     private const float thumbUpThreshold = 0.2f;
-    private const float swipeThreshold = 0.4f;
+    private const float swipeThreshold = 0.2f;
 
     public static bool IsGrabbing(Handedness trackedHand)
     {
@@ -23,30 +23,32 @@ public static class GestureUtils
                HandPoseUtils.IndexFingerCurl(trackedHand) > GrabThreshold;
     }
 
-    public static bool isThumbsUp(Handedness trackedHand)
-    {
-        return !IsGrabbing(trackedHand) &&
-            HandPoseUtils.MiddleFingerCurl(trackedHand) > thumbUpThreshold &&
-               HandPoseUtils.RingFingerCurl(trackedHand) > thumbUpThreshold &&
-               HandPoseUtils.PinkyFingerCurl(trackedHand) > thumbUpThreshold &&
-               HandPoseUtils.IndexFingerCurl(trackedHand) > thumbUpThreshold &&
-               HandPoseUtils.ThumbFingerCurl(trackedHand) < thumbUpThreshold;
-    }
+    //public static bool isThumbsUp(Handedness trackedHand)
+    //{
+    //    return !IsGrabbing(trackedHand) &&
+    //        HandPoseUtils.MiddleFingerCurl(trackedHand) > thumbUpThreshold &&
+    //           HandPoseUtils.RingFingerCurl(trackedHand) > thumbUpThreshold &&
+    //           HandPoseUtils.PinkyFingerCurl(trackedHand) > thumbUpThreshold &&
+    //           HandPoseUtils.IndexFingerCurl(trackedHand) > thumbUpThreshold &&
+    //           HandPoseUtils.ThumbFingerCurl(trackedHand) < thumbUpThreshold;
+    //}
 
     public static bool isSwipe(Handedness trackedHand)
     {
-        return !IsGrabbing(trackedHand) && !isThumbsUp(trackedHand) &&
-            HandPoseUtils.ThumbFingerCurl(trackedHand) < swipeThreshold &&
+        return !IsGrabbing(trackedHand) && /*!isThumbsUp(trackedHand) &&*/
+            HandPoseUtils.ThumbFingerCurl(trackedHand) > swipeThreshold &&
             HandPoseUtils.IndexFingerCurl(trackedHand) < swipeThreshold &&
-            HandPoseUtils.MiddleFingerCurl(trackedHand) > swipeThreshold &&
+            HandPoseUtils.MiddleFingerCurl(trackedHand) < swipeThreshold &&
             HandPoseUtils.RingFingerCurl(trackedHand) > swipeThreshold &&
             HandPoseUtils.PinkyFingerCurl(trackedHand) > swipeThreshold;
     }
 }
 
-public class SwitchGesture : MonoBehaviour
+public class SwitchGesture : MonoBehaviour, IMixedRealityGestureHandler
 {
     public GameObject SwipePie;
+    public MixedRealityInputAction selectAction;
+
     private bool gestureInstantiated = false;
     private bool thumbGestureInnit = false;
     private bool isPalmUp = false;
@@ -56,6 +58,9 @@ public class SwitchGesture : MonoBehaviour
     private float currentTime = 0;
     private Vector3 startLocation;
     private Vector3 endLocation;
+    private bool fistGestureCompleted = false;
+    private bool timerStarted = false;
+    private Coroutine storedCoroutine = null;
 
     private MixedRealityPose pose;
 
@@ -77,42 +82,38 @@ public class SwitchGesture : MonoBehaviour
 
     private void Update()
     {
-        if (GestureUtils.isThumbsUp(HandSettings.Instance.nonDominantHand))
-        {
-            if (!thumbGestureInnit)
-            {
-                if (isPalmUp)
-                {
-                    DynamicIcons.Instance.SwipeMenu(true);
-                }
-                else
-                {
-                    DynamicIcons.Instance.SwipeMenu(false);
-                }
-                thumbGestureInnit = true;
-            }
-        }
-        else if(!GestureUtils.isThumbsUp(HandSettings.Instance.nonDominantHand))
-        {
-            if (thumbGestureInnit)
-            {
-                thumbGestureInnit = false;
-            }
-        }
+        //if (GestureUtils.isThumbsUp(HandSettings.Instance.nonDominantHand))
+        //{
+        //    if (!thumbGestureInnit)
+        //    {
+        //        if (isPalmUp)
+        //        {
+        //            DynamicIcons.Instance.SwipeMenu(true);
+        //        }
+        //        else
+        //        {
+        //            DynamicIcons.Instance.SwipeMenu(false);
+        //        }
+        //        thumbGestureInnit = true;
+        //    }
+        //}
+        //else if (!GestureUtils.isThumbsUp(HandSettings.Instance.nonDominantHand))
+        //{
+        //    if (thumbGestureInnit)
+        //    {
+        //        thumbGestureInnit = false;
+        //    }
+        //}
 
         //===========================================================================================
         if (GestureUtils.IsGrabbing(HandSettings.Instance.nonDominantHand))
         {
             if (!gestureInstantiated)
             {
-                if (SwipePie.activeSelf)
+                if (!timerStarted)
                 {
-                    SwipePie.SetActive(false);
-                }
-                else if(!SwipePie.activeSelf)
-                {
-                    SwipePie.SetActive(true);
-                    StartCoroutine(WaitToUse());
+                    storedCoroutine = StartCoroutine(HoldFist());
+                    timerStarted = true;
                 }
                 gestureInstantiated = true;
             }
@@ -122,7 +123,29 @@ public class SwitchGesture : MonoBehaviour
             if (gestureInstantiated)
             {
                 gestureInstantiated = false;
+                if (timerStarted)
+                {
+                    StopCoroutine(storedCoroutine);
+                    fistGestureCompleted = false;
+                    timerStarted = false;
+                }
+                
             }
+        }
+
+        //check for 0.2 seconds to hold it
+        if (fistGestureCompleted)
+        {
+            if (SwipePie.activeSelf)
+            {
+                SwipePie.SetActive(false);
+            }
+            else if (!SwipePie.activeSelf)
+            {
+                SwipePie.SetActive(true);
+                StartCoroutine(WaitToUse());
+            }
+            fistGestureCompleted = false;
         }
         //===========================================================================================
         if (stopWatchActive)
@@ -157,23 +180,42 @@ public class SwitchGesture : MonoBehaviour
                 //Debug.Log("end:" + endLocation);
 
                 //Calculate velocity
+                //TODO: improve this
                 float swipeDifference = endLocation.y - startLocation.y;
                 double velocity = swipeDifference / time.Milliseconds;
                 Debug.Log(velocity);
-                if (velocity < 0.0004 && velocity > -0.0004)
+
+
+                if (velocity > 0)
                 {
-                    //Is y axis difference positive?(up swipe) or negative(down swipe)
-                    if (swipeDifference > 0)
+                    if (velocity > 0.0001)
                     {
-                        //swipe up
+                        Debug.Log("Swipe up");
                         DynamicIcons.Instance.SwipeMenu(true);
                     }
-                    else
+                }
+                else if(velocity < 0)
+                {
+                    if (velocity < -0.0001)
                     {
-                        //swipe down
+                        Debug.Log("Swipe down");
                         DynamicIcons.Instance.SwipeMenu(false);
                     }
                 }
+                //if (velocity < 0.0004 || velocity > -0.0004)
+                //{
+                //    //Is y axis difference positive?(up swipe) or negative(down swipe)
+                //    if (swipeDifference > 0)
+                //    {
+                //        //swipe up
+                //        DynamicIcons.Instance.SwipeMenu(true);
+                //    }
+                //    else
+                //    {
+                //        //swipe down
+                //        DynamicIcons.Instance.SwipeMenu(false);
+                //    }
+                //}
 
                 swipeInnit = false;
             }
@@ -201,5 +243,34 @@ public class SwitchGesture : MonoBehaviour
         yield return new WaitForSeconds(0.7f);
         Debug.Log("Can use");
         SwipePieTap.Instance.CanInteract(true);
+    }
+
+    private IEnumerator HoldFist()
+    {
+        Debug.Log("Start");
+        yield return new WaitForSeconds(.35f);
+        fistGestureCompleted = true;
+        timerStarted = false;
+        Debug.Log("End");
+    }
+
+    public void OnGestureStarted(InputEventData eventData)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnGestureUpdated(InputEventData eventData)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnGestureCompleted(InputEventData eventData)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnGestureCanceled(InputEventData eventData)
+    {
+        throw new NotImplementedException();
     }
 }
