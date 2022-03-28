@@ -99,6 +99,7 @@ public class DataflowInlet : MonoBehaviour
     private void OnDestroy()
     {
         _dataSubscription?.Dispose();
+        Destroy(_dataLink.gameObject);
     }
 
     private void DrawLink()
