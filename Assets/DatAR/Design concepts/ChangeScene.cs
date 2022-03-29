@@ -24,4 +24,24 @@ public class ChangeScene : MonoBehaviour
     {
         SceneManager.LoadScene(3);
     }
+
+    public void WidgetPalletLeftTouch()
+    {
+        SceneManager.LoadScene(4);
+    }
+
+    public void WidgetPalletRightTouch()
+    {
+        SceneManager.LoadScene(5);
+    }
+
+    public void WidgetPalletLeftGaze()
+    {
+        SceneManager.LoadScene(6);
+    }
+
+    public void WidgetPalletRightGaze()
+    {
+        SceneManager.LoadScene(7);
+    }
 }

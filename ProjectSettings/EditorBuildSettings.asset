@@ -17,6 +17,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/DatAR/Design concepts/SwipePie/SwipePie_Left_Swipe.unity
     guid: dcf6d88aae475e742a0ac031a727a04a
+  - enabled: 1
+    path: Assets/DatAR/Design concepts/WidgetPallet/WidgetPallet_Left_Touch.unity
+    guid: b5d334ac21f88ea4a92cf12375e29ee8
+  - enabled: 1
+    path: Assets/DatAR/Design concepts/WidgetPallet/WidgetPallet_Right_Touch.unity
+    guid: 0702490aa19ca25428c2af60ad10fc53
+  - enabled: 1
+    path: Assets/DatAR/Design concepts/WidgetPallet/WidgetPallet_Left_Gaze.unity
+    guid: 447eee9c8129bf54f841d87f23a0431e
+  - enabled: 1
+    path: Assets/DatAR/Design concepts/WidgetPallet/WidgetPallet_Right_Gaze.unity
+    guid: ea258b1b844a5db4eb71412a8db0e83f
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 84cbc53528f476a40ae8a5b65d3b368c,
       type: 2}

@@ -61,10 +61,10 @@ MonoBehaviour:
   controllerRotateButton:
     bindingType: 2
     code: 306
-  defaultHandGesture: 5
+  defaultHandGesture: 2
   leftMouseHandGesture: 8
   middleMouseHandGesture: 3
-  rightMouseHandGesture: 6
+  rightMouseHandGesture: 7
   handGestureAnimationSpeed: 8
   holdStartDuration: 0.5
   navigationStartThreshold: 0.03

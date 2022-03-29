@@ -13,6 +13,7 @@ public static class GestureUtils
     private const float GrabThreshold = 0.2f;
     private const float thumbUpThreshold = 0.2f;
     private const float swipeThreshold = 0.2f;
+    public static bool isPalmUp = false;
 
     public static bool IsGrabbing(Handedness trackedHand)
     {
@@ -23,15 +24,15 @@ public static class GestureUtils
                HandPoseUtils.IndexFingerCurl(trackedHand) > GrabThreshold;
     }
 
-    //public static bool isThumbsUp(Handedness trackedHand)
-    //{
-    //    return !IsGrabbing(trackedHand) &&
-    //        HandPoseUtils.MiddleFingerCurl(trackedHand) > thumbUpThreshold &&
-    //           HandPoseUtils.RingFingerCurl(trackedHand) > thumbUpThreshold &&
-    //           HandPoseUtils.PinkyFingerCurl(trackedHand) > thumbUpThreshold &&
-    //           HandPoseUtils.IndexFingerCurl(trackedHand) > thumbUpThreshold &&
-    //           HandPoseUtils.ThumbFingerCurl(trackedHand) < thumbUpThreshold;
-    //}
+    public static bool isThumbsUp(Handedness trackedHand)
+    {
+        return !IsGrabbing(trackedHand) &&
+            HandPoseUtils.MiddleFingerCurl(trackedHand) > thumbUpThreshold &&
+               HandPoseUtils.RingFingerCurl(trackedHand) > thumbUpThreshold &&
+               HandPoseUtils.PinkyFingerCurl(trackedHand) > thumbUpThreshold &&
+               HandPoseUtils.IndexFingerCurl(trackedHand) > thumbUpThreshold &&
+               HandPoseUtils.ThumbFingerCurl(trackedHand) < thumbUpThreshold;
+    }
 
     public static bool isSwipe(Handedness trackedHand)
     {
@@ -51,7 +52,7 @@ public class SwitchGesture : MonoBehaviour, IMixedRealityGestureHandler
 
     private bool gestureInstantiated = false;
     private bool thumbGestureInnit = false;
-    private bool isPalmUp = false;
+    //private bool isPalmUp = false;
     private bool swipeInnit = false;
 
     private bool stopWatchActive = false;
@@ -72,12 +73,12 @@ public class SwitchGesture : MonoBehaviour, IMixedRealityGestureHandler
 
     public void PalmShowing()
     {
-        isPalmUp = true;
+        GestureUtils.isPalmUp = true;
     }
 
     public void PalmNotShowing()
     {
-        isPalmUp = false;
+        GestureUtils.isPalmUp = false;
     }
 
     private void Update()
