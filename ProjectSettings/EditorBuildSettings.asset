@@ -5,18 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/DatAR/Design concepts/SwipePie/SwipePie Playground.unity
-    guid: 59a4694917111884782738df46ee3468
-  - enabled: 0
-    path: Assets/DatAR/Design concepts/WidgetPallet/WidgetPallet_playground.unity
-    guid: 0702490aa19ca25428c2af60ad10fc53
   - enabled: 1
-    path: Assets/DatAR/Design concepts/WidgetPallet/WidgetPallet_playground_gaze.unity
-    guid: ea258b1b844a5db4eb71412a8db0e83f
-  - enabled: 0
-    path: Assets/DatAR/Scenes/Playground.unity
-    guid: 78ca517bf260db54da731c65cbed8edb
+    path: Assets/DatAR/Design concepts/SwipePie/SwipePie_Left_Thumb.unity
+    guid: 59a4694917111884782738df46ee3468
+  - enabled: 1
+    path: Assets/DatAR/Design concepts/SwipePie/SwipePie_Right_Thumb.unity
+    guid: e1ad80cb89955724ca9e4e0c2be2f503
+  - enabled: 1
+    path: Assets/DatAR/Design concepts/SwipePie/SwipePie_Right_Swipe.unity
+    guid: a52226617d80c19409287c262bad1993
+  - enabled: 1
+    path: Assets/DatAR/Design concepts/SwipePie/SwipePie_Left_Swipe.unity
+    guid: dcf6d88aae475e742a0ac031a727a04a
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 84cbc53528f476a40ae8a5b65d3b368c,
       type: 2}

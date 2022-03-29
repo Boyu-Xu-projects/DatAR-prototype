@@ -33,31 +33,31 @@ public class HandTracking : MonoBehaviour
         ringObject.GetComponent<Renderer>().enabled = false;
         pinkyObject.GetComponent<Renderer>().enabled = false;
 
-        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.ThumbTip, Handedness.Right, out pose))
+        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.ThumbTip, HandSettings.Instance.dominantHand, out pose))
         {
             thumbObject.GetComponent<Renderer>().enabled = true;
             thumbObject.transform.position = pose.Position;
         }
 
-        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, Handedness.Right, out pose))
+        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, HandSettings.Instance.dominantHand, out pose))
         {
             indexObject.GetComponent<Renderer>().enabled = true;
             indexObject.transform.position = pose.Position;
         }
 
-        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.MiddleTip, Handedness.Right, out pose))
+        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.MiddleTip, HandSettings.Instance.dominantHand, out pose))
         {
             middleObject.GetComponent<Renderer>().enabled = true;
             middleObject.transform.position = pose.Position;
         }
 
-        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.RingTip, Handedness.Right, out pose))
+        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.RingTip, HandSettings.Instance.dominantHand, out pose))
         {
             ringObject.GetComponent<Renderer>().enabled = true;
             ringObject.transform.position = pose.Position;
         }
 
-        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.PinkyTip, Handedness.Right, out pose))
+        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.PinkyTip, HandSettings.Instance.dominantHand, out pose))
         {
             pinkyObject.GetComponent<Renderer>().enabled = true;
             pinkyObject.transform.position = pose.Position;

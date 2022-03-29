@@ -158,7 +158,7 @@ public class SwitchGesture : MonoBehaviour, IMixedRealityGestureHandler
             if (!swipeInnit)
             {
                 stopWatchActive = true;
-                if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, Handedness.Left, out pose))
+                if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, HandSettings.Instance.nonDominantHand, out pose))
                 {
                     startLocation = pose.Position;
                 }
@@ -170,7 +170,7 @@ public class SwitchGesture : MonoBehaviour, IMixedRealityGestureHandler
             if (swipeInnit)
             {
                 stopWatchActive = false;
-                if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, Handedness.Left, out pose))
+                if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, HandSettings.Instance.nonDominantHand, out pose))
                 {
                     endLocation = pose.Position;
                 }
