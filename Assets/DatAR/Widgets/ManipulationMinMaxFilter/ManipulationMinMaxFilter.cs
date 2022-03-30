@@ -51,14 +51,40 @@ namespace DatAR.Widgets.ManipulationMinMaxFilter
                 // Check if supported type
                 if (!(passable is Passable<CooccurrenceListPassable>))
                 {
-                    if (passable.GetType().ToString() == "DatAR.DataModels.Passables.Passable")
+                    if (passable == null)
                     {
-                        Debug.Log("Filter listening to data stream");
+                        //Get concept label
+                        string conceptLabel = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.Find("QueryCooccurrences(Clone)")
+                        .gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.transform.GetChild(0)
+                        .gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshPro>().text;
+                        string classLabel = "region";
+
+                        //create the text for the sliders
+                        _cooccurrencesSlider.Label.text = $"Number of times {conceptLabel} co-occurs with given {classLabel}";
+                        _conceptGivenClassSlider.Label.text = $"If {conceptLabel} mentioned, given {classLabel} also mentioned";
+                        _classItemGivenConceptSlider.Label.text = $"If given {classLabel} mentioned, {conceptLabel} also mentioned";
+                        SetSliderValueTexts(_cooccurrencesSlider, false);
+                        SetSliderValueTexts(_conceptGivenClassSlider);
+                        SetSliderValueTexts(_classItemGivenConceptSlider);
+
+                        //set the values for the sliders
+                        _cooccurrencesMaxValue = 100;
+                        _cooccurrencesSlider.Bottom.SetText("0");
+                        _cooccurrencesSlider.Top.SetText("1000");
+
                     }
                     else
                     {
-                        Debug.LogWarning($"Filter received incompatible data type: {passable?.GetType()}");
+                        if (passable.GetType().ToString() == "DatAR.DataModels.Passables.Passable")
+                        {
+                            Debug.Log("Filter listening to data stream");
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"Filter received incompatible data type: {passable?.GetType()}");
+                        }
                     }
+                    
                     return;
                 }
             
@@ -90,13 +116,47 @@ namespace DatAR.Widgets.ManipulationMinMaxFilter
             });
 
             // Listen to changes in slider values
+            //_cooccurrencesSlider.SelectedRange
+            //    .Merge(_conceptGivenClassSlider.SelectedRange, _classItemGivenConceptSlider.SelectedRange)
+            //    .Sample(TimeSpan.FromMilliseconds(200)) // throttle to avoid FPS slowdown
+            //    .Subscribe(incomingData => 
+            //    {
+            //        DataToSender(); 
+            //    }); 
+
             _cooccurrencesSlider.SelectedRange
-                .Merge(_conceptGivenClassSlider.SelectedRange, _classItemGivenConceptSlider.SelectedRange)
-                .Sample(TimeSpan.FromMilliseconds(200)) // throttle to avoid FPS slowdown
-                .Subscribe(incomingData => 
+            .Sample(TimeSpan.FromMilliseconds(200)) // throttle to avoid FPS slowdown
+            .Subscribe(incomingData =>
+            { 
+                _cooccurrencesSlider.Bottom.SetText(Math.Ceiling(1000 * incomingData.x).ToString());
+
+                if (incomingData.x != 0)
                 {
-                    DataToSender(); 
-                }); 
+                    FilterRangeFake.Instance.SetFilter();
+                }
+            });
+
+            _conceptGivenClassSlider.SelectedRange
+            .Sample(TimeSpan.FromMilliseconds(200)) // throttle to avoid FPS slowdown
+            .Subscribe(incomingData =>
+            {
+                _conceptGivenClassSlider.Bottom.SetText(""+ incomingData.x + "");
+                if (incomingData.x != 0)
+                {
+                    FilterRangeFake.Instance.SetFilter();
+                }
+            });
+
+            _classItemGivenConceptSlider.SelectedRange
+            .Sample(TimeSpan.FromMilliseconds(200)) // throttle to avoid FPS slowdown
+            .Subscribe(incomingData =>
+            {
+                _classItemGivenConceptSlider.Bottom.SetText("" + incomingData.x + "");
+                if (incomingData.x != 0)
+                {
+                    FilterRangeFake.Instance.SetFilter();
+                }
+            });
         }
 
         private void DataToSender()

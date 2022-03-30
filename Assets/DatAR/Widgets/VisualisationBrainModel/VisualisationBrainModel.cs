@@ -76,6 +76,49 @@ namespace DatAR.Widgets.VisualisationBrainModel
             //connectionWidgets.Add("ManipulationMinMaxFilter");
         }
 
+        private bool doneLoading = false;
+        private bool dataConnected = false;
+        private List<GameObject> brainTopics = new List<GameObject>();
+        private List<GameObject> inFilterBrainTopics = new List<GameObject>();
+        private System.Random rnd = new System.Random();
+        private void Update()
+        {
+            if (doneLoading)
+            {
+                //TODO: color random brain spheres
+                //all the spheres are present in the PointPool
+                //get a list of all those spheres
+                //use this line to change the random ones point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
+                
+                foreach (Transform child in gameObject.transform.GetChild(0).gameObject.transform)
+                {
+                    brainTopics.Add(child.gameObject);
+                }
+                
+                doneLoading = false;
+            }
+
+            if (dataConnected)
+            {
+                int brainTopicAmount = brainTopics.Count;
+                int randomHits = rnd.Next(25, brainTopicAmount);
+                for (int i = 0; i < randomHits; i++)
+                {
+                    int randomIndex = rnd.Next(brainTopicAmount);
+                    inFilterBrainTopics.Add(brainTopics[randomIndex]);
+                }
+
+                foreach (var item in inFilterBrainTopics)
+                {
+                    item.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
+                }
+
+                FilterRangeFake.Instance.SetList(inFilterBrainTopics);
+
+                dataConnected = false;
+            }
+        }
+
         /**
          * This function ensures that the very latest passable input is displayed
          */
@@ -109,17 +152,25 @@ namespace DatAR.Widgets.VisualisationBrainModel
             // Check if correct type
             if (!(rawPassable is Passable<CooccurrenceListPassable>))
             {
-                if (rawPassable.GetType().ToString() == "DatAR.DataModels.Passables.Passable")
+                if (rawPassable == null)
                 {
-                    Debug.Log("3D Plot listening to data stream");
-                    IsLoading.OnNext(QueryState.IsEmpty);
+                    dataConnected = true;
                 }
                 else
                 {
-                    Debug.LogWarning($"3D Plot received incompatible data type: {rawPassable?.GetType()}");
-                    ErrorMessage = $"3D Plot received incompatible data type: {rawPassable?.GetType()}";
-                    IsLoading.OnNext(QueryState.HasError);
+                    if (rawPassable.GetType().ToString() == "DatAR.DataModels.Passables.Passable")
+                    {
+                        Debug.Log("3D Plot listening to data stream");
+                        IsLoading.OnNext(QueryState.IsEmpty);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"3D Plot received incompatible data type: {rawPassable?.GetType()}");
+                        ErrorMessage = $"3D Plot received incompatible data type: {rawPassable?.GetType()}";
+                        IsLoading.OnNext(QueryState.HasError);
+                    }
                 }
+
                 return;
             }
 
@@ -266,6 +317,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
 
                 _pointsPool.Add(resourceComponent.Resource.Id, dataPoint);
             });
+            doneLoading = true;
         }
     }
 }

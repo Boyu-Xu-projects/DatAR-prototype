@@ -1,5 +1,6 @@
 ﻿using DatAR.DataModels.Resources;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class ResourceSphereManufacturer : MonoBehaviour
@@ -63,6 +64,28 @@ public class ResourceSphereManufacturer : MonoBehaviour
         }
 
 
+
+        return resourceSphere;
+    }
+
+    public GameObject SpawnFake(string name, Vector3 location = default, Transform parent = null)
+    {
+        if (parent == null)
+        {
+            parent = defaultSpawnLocation;
+        }
+
+        // Instantiate as gameobject variable so that it can be manipulated within loop
+        GameObject resourceSphere = Instantiate(
+            resourceSpherePrefab,
+            parent);
+
+        var resourceComponent = resourceSphere.GetComponent<ResourceComponent>();
+        resourceSphere.transform.name = name;
+        resourceSphere.transform.GetChild(0).gameObject.transform.GetComponent<TextMeshPro>().text = name;
+        resourceSphere.transform.localPosition = location;
+        resourceSphere.transform.localScale = new Vector3(pointScale, pointScale, pointScale);
+        resourceSphere.GetComponent<Renderer>().material = _colorService.neutralColor;
 
         return resourceSphere;
     }

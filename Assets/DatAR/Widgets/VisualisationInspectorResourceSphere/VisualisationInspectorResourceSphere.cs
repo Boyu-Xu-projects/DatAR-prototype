@@ -62,11 +62,39 @@ namespace DatAR.Widgets.VisualisationInspectorResourceSphere
                 {
                     return;
                 }
-                
-                InspectResource(currentBatchId);
+
+                //InspectResource(currentBatchId);
+                InspectResourceFake(currentBatchId);
             });
         }
+        async private void InspectResourceFake(int currentBatchId)
+        {
+            if (currentBatchId != conceptReceptacle.slottedResourceContainerHasChanged.Value)
+            {
+                return;
+            }
 
+            dataText.text = "";
+            if (conceptReceptacle.SlottedResourceContainer == null
+                || conceptReceptacle.SlottedResourceContainer.Resource == null)
+            {
+                return;
+            }
+
+            string sphereName = conceptReceptacle.SlottedResourceContainer.gameObject.transform.GetChild(0).gameObject.transform.GetComponent<TextMeshPro>().text;
+            if(sphereName == "Anxiety")
+            {
+                dataText.text = "Anxiety is a feeling of unease, such as worry or fear, that can be mild or severe. Everyone has feelings of anxiety at some point in their life. For example, you may feel worried and anxious about sitting an exam, or having a medical test or job interview.";
+            }
+            else if(sphereName == "Depression")
+            {
+                dataText.text = "Depression (major depressive disorder) is a common and serious medical illness that negatively affects how you feel, the way you think and how you act. Fortunately, it is also treatable. Depression causes feelings of sadness and/or a loss of interest in activities you once enjoyed. It can lead to a variety of emotional and physical problems and can decrease your ability to function at work and at home.";
+            }
+            else if (sphereName == "Cerebral Palsy")
+            {
+                dataText.text = "Cerebral palsy (CP) is a group of disorders that affect a person's ability to move and maintain balance and posture. CP is the most common motor disability in childhood. Cerebral means having to do with the brain. Palsy means weakness or problems with using the muscles.";
+            }
+        }
         async private void InspectResource(int currentBatchId)
         {
             if (currentBatchId != conceptReceptacle.slottedResourceContainerHasChanged.Value)

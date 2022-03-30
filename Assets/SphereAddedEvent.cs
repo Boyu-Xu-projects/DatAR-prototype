@@ -14,5 +14,10 @@ public class SphereAddedEvent : MonoBehaviour
             SpawnConnection.Instance.AddSphereToWidget();
             childAmount = this.transform.childCount;
         }
+
+        if (childAmount > this.transform.childCount)
+        {
+            childAmount = this.transform.childCount;
+        }
     }
 }

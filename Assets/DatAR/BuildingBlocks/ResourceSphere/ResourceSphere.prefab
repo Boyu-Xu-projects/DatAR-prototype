@@ -135,6 +135,7 @@ MonoBehaviour:
   pointRotateSpeed: 2
   lockX: 0
   lockY: 0
+  lockZ: 0
 --- !u!114 &6499431664653778288
 MonoBehaviour:
   m_ObjectHideFlags: 0

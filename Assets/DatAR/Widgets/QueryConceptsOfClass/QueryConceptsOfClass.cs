@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using DatAR.DataModels.Passables;
 using DatAR.DataModels.Resources;
 using UniRx;
@@ -58,15 +59,46 @@ namespace DatAR.Widgets.QueryConceptsOfClass
             {
                 return;
             }
-        
-            // TODO: handle empty case, and add progress indicator
-            var concepts = await _sparqlService.GetAllConceptsOfClass(classItem.Id);
 
-            _ = StartCoroutine(SpawnConcept(concepts, currentBatchId));
+            // TODO: handle empty case, and add progress indicator
+            //var concepts = await _sparqlService.GetAllConceptsOfClass(classItem.Id);
+
+            //_ = StartCoroutine(SpawnConcept(concepts, currentBatchId));
+            List<string> testingSpheres = new List<string>();
+            testingSpheres.Add("Anxiety");
+            testingSpheres.Add("Depression");
+            testingSpheres.Add("Cerebral Palsy");
+            _ = StartCoroutine(SpawnConcept(currentBatchId, testingSpheres));
         }
 
         // TODO: move to ResourceSphereManufacturer class
-        private IEnumerator SpawnConcept(ConceptListPassable concepts, int currentBatchId)
+        //private IEnumerator SpawnConcept(ConceptListPassable concepts, int currentBatchId)
+        //{
+        //    if (currentBatchId != receptacle.slottedResourceContainerHasChanged.Value)
+        //    {
+        //        yield break;
+        //    }
+
+        //    var offsetLocation = new Vector3(0, 0, 0);
+        //    foreach (var concept in concepts.Resources)
+        //    {
+        //        if (currentBatchId != receptacle.slottedResourceContainerHasChanged.Value)
+        //        {
+        //            yield break;
+        //        }
+
+        //        manufacturer.Spawn(concept, offsetLocation);
+        //        offsetLocation.y -= manufacturer.pointScale * 1.25f;
+        //        if (offsetLocation.y < -5)
+        //        {
+        //            offsetLocation.y = 0;
+        //            offsetLocation.x -= manufacturer.pointScale * 4f;
+        //        }
+        //        yield return new WaitForEndOfFrame();
+        //    }
+        //}
+
+        private IEnumerator SpawnConcept(int currentBatchId, List<string> testingSpheres)
         {
             if (currentBatchId != receptacle.slottedResourceContainerHasChanged.Value)
             {
@@ -74,14 +106,14 @@ namespace DatAR.Widgets.QueryConceptsOfClass
             }
 
             var offsetLocation = new Vector3(0, 0, 0);
-            foreach (var concept in concepts.Resources)
+            foreach (var name in testingSpheres)
             {
                 if (currentBatchId != receptacle.slottedResourceContainerHasChanged.Value)
                 {
                     yield break;
                 }
 
-                manufacturer.Spawn(concept, offsetLocation);
+                manufacturer.SpawnFake(name, offsetLocation);
                 offsetLocation.y -= manufacturer.pointScale * 1.25f;
                 if (offsetLocation.y < -5)
                 {

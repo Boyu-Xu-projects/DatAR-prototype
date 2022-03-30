@@ -28,9 +28,26 @@ namespace DatAR.Widgets.QueryCooccurrences
         {
             _services = GameObject.Find("Services");
 
-            conceptReceptacle.slottedResourceContainerHasChanged.Subscribe(currentBatchId => RetrieveCooccurrences());
+            //conceptReceptacle.slottedResourceContainerHasChanged.Subscribe(currentBatchId => RetrieveCooccurrences());
 
-            classReceptacle.slottedResourceContainerHasChanged.Subscribe(currentBatchId => RetrieveCooccurrences());
+            //classReceptacle.slottedResourceContainerHasChanged.Subscribe(currentBatchId => RetrieveCooccurrences());
+
+            conceptReceptacle.slottedResourceContainerHasChanged.Subscribe(currentBatchId => RetrieveCooccurrencesFake());
+
+            classReceptacle.slottedResourceContainerHasChanged.Subscribe(currentBatchId => RetrieveCooccurrencesFake());
+        }
+
+        public async void RetrieveCooccurrencesFake()
+        {
+            if (conceptReceptacle.SlottedResourceContainer == null
+                || conceptReceptacle.SlottedResourceContainer.Resource == null
+                || classReceptacle.SlottedResourceContainer == null
+                || classReceptacle.SlottedResourceContainer.Resource == null)
+            {
+                return;
+            }
+
+            dataSender.Send(null);
         }
 
         public async void RetrieveCooccurrences()

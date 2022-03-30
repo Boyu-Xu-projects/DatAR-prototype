@@ -34,7 +34,6 @@ public class HololensTouch : MonoBehaviour
 
     public void ButtonReleased()
     {
-        Debug.Log("You released me bitch");
         this.GetComponent<Renderer>().material = defaultMaterial;
     }
     //public TouchEvent OnTouchCompleted;

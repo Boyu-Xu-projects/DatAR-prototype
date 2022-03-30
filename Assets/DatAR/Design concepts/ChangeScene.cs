@@ -44,4 +44,9 @@ public class ChangeScene : MonoBehaviour
     {
         SceneManager.LoadScene(7);
     }
+
+    public void PinchAndGrab()
+    {
+        SceneManager.LoadScene(8);
+    }
 }

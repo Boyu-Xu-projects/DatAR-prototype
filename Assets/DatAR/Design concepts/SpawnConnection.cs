@@ -4,6 +4,7 @@ using Microsoft.MixedReality.Toolkit.Input;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class SpawnConnection : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class SpawnConnection : MonoBehaviour
 
     Dictionary<string, WidgetConnectionInfo> widgetInformationDict;
     private List<GameObject> listOfChildren;
+    private System.Random rand = new System.Random();
     void Start()
     {
         listOfChildren = new List<GameObject>();
@@ -174,7 +176,7 @@ public class SpawnConnection : MonoBehaviour
             GameObject.Destroy(child.gameObject);
         }
     }
-
+    
     private void WidgetConnection(GameObject currentWidget)
     {
         WidgetConnectionInfo scriptInfo = currentWidget.GetComponent<WidgetConnectionInfo>();
@@ -199,7 +201,8 @@ public class SpawnConnection : MonoBehaviour
 
         //spawn widget
         GameObject spawnedWidget = Instantiate(currentWidget, GameObject.Find("StandaloneWidgetPool").transform);
-        spawnedWidget.transform.position = new Vector3(0f, 0, 0.6f);
+        double val = (rand.NextDouble() * (0.5f - -0.5f) + -0.5f);
+        spawnedWidget.transform.position = new Vector3((float)val, 0f, 0.6f);
         //==================================================================================================
         //Get the most recent class and topic sphere depending on the widget info
         int childrenAmount = spherePool.transform.childCount;
@@ -215,7 +218,7 @@ public class SpawnConnection : MonoBehaviour
             }
 
             GameObject child = spherePool.transform.GetChild(i - 1).gameObject;
-            if (child.name.Contains("datar"))
+            if (child.name.Contains("datar") || child.name.Contains("Anxiety") || child.name.Contains("Depression") || child.name.Contains("Cerebral Palsy"))
             {
                 if (recentTopicSpheres.Count != scriptInfo.topicSphereAmount)
                 {
@@ -380,7 +383,7 @@ public class SpawnConnection : MonoBehaviour
                 }
 
                 GameObject child = spherePool.transform.GetChild(i - 1).gameObject;
-                if (child.name.Contains("datar"))
+                if (child.name.Contains("datar") || child.name.Contains("Anxiety") || child.name.Contains("Depression") || child.name.Contains("Cerebral Palsy"))
                 {
                     if (recentTopicSpheres.Count != scriptInfo.topicSphereAmount)
                     {

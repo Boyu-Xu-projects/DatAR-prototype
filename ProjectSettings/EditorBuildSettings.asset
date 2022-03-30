@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/DatAR/Design concepts/WidgetPallet/WidgetPallet_Right_Gaze.unity
     guid: ea258b1b844a5db4eb71412a8db0e83f
+  - enabled: 1
+    path: Assets/DatAR/Design concepts/Pinch&Grab.unity
+    guid: f8eefd9604daf5343b46a9f05b5e1cdf
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 84cbc53528f476a40ae8a5b65d3b368c,
       type: 2}
