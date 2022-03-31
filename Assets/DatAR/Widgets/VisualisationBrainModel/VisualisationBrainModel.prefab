@@ -49,6 +49,7 @@ MonoBehaviour:
   pointRotateSpeed: 2
   lockX: 0
   lockY: 0
+  lockZ: 0
 --- !u!1 &4557136940706177332
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,6 +98,7 @@ MonoBehaviour:
   pointRotateSpeed: 2
   lockX: 0
   lockY: 0
+  lockZ: 0
 --- !u!1 &4824263289975653740
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,9 +316,9 @@ GameObject:
   - component: {fileID: 2887358693485678643}
   - component: {fileID: 5351937853629300023}
   - component: {fileID: 7356422066474819101}
-  - component: {fileID: -2906502381574687965}
-  - component: {fileID: -6210088630762707366}
   - component: {fileID: 1866372789680008171}
+  - component: {fileID: 2669723991598309321}
+  - component: {fileID: 3714019859741054499}
   m_Layer: 0
   m_Name: VisualisationBrainModel
   m_TagString: Deletable
@@ -498,7 +500,7 @@ MonoBehaviour:
   onManipulationStarted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: -2906502381574687965}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
         m_MethodName: DisableMeshOutline
         m_Mode: 1
@@ -516,7 +518,7 @@ MonoBehaviour:
   onHoverEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: -2906502381574687965}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
         m_MethodName: EnableMeshOutline
         m_Mode: 0
@@ -531,7 +533,7 @@ MonoBehaviour:
   onHoverExited:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: -2906502381574687965}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: OutlineMaterialFix, Assembly-CSharp
         m_MethodName: DisableMeshOutline
         m_Mode: 1
@@ -543,32 +545,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &-2906502381574687965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6587184061863166887}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea05885103958e84990ab31056f92bc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-6210088630762707366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6587184061863166887}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa162a1be707e7f4bb2c94f4fd6df84f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMaterial: {fileID: 2100000, guid: 6c66fc1ac164cdf439dc9629a7539fc3, type: 2}
-  outlineWidth: 0.003
 --- !u!114 &1866372789680008171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,6 +563,33 @@ MonoBehaviour:
   connectionWidgets: 0300000002000000
   topicOrDiseaseSocketName: 
   classOrRegionSocketName: 
+  sentenceSocketName: 
+--- !u!114 &2669723991598309321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6587184061863166887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea05885103958e84990ab31056f92bc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3714019859741054499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6587184061863166887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa162a1be707e7f4bb2c94f4fd6df84f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMaterial: {fileID: 2100000, guid: 6c66fc1ac164cdf439dc9629a7539fc3, type: 2}
+  outlineWidth: 0.01
 --- !u!1 &6596007226300208118
 GameObject:
   m_ObjectHideFlags: 0
@@ -1023,6 +1026,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DataflowInlet
+      objectReference: {fileID: 0}
+    - target: {fileID: 8481557086576763635, guid: 1dceadf22a7db204a9b01bccac47f60e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1dceadf22a7db204a9b01bccac47f60e, type: 3}
