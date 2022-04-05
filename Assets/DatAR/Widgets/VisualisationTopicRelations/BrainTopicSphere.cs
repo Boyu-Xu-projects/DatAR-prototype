@@ -16,6 +16,69 @@ public class BrainTopicSphere : MonoBehaviour
     [HideInInspector] public int DiseaseAppearTimes { get; private set; }
     [HideInInspector] public string TopicClass { get; private set; }
 
+    private List<Transform> connectedTopicsCoords; 
+    private Transform[] points; // Format for the line renderer
+    private List<BrainTopicSphere> connectedTopics; // For tracking all duplicates of this brain topic
+
+    private void CreateConnectedTopicList()
+    {
+        connectedTopics = new List<BrainTopicSphere>();
+        connectedTopicsCoords = new List<Transform>();
+        connectedTopicsCoords.Add(transform);
+        transform.GetComponent<LineRenderer>().enabled = true;
+    }
+
+    public void AddTopicToList(BrainTopicSphere duplicatedTopic)
+    {
+        connectedTopics.Add(duplicatedTopic);
+        connectedTopicsCoords.Add(duplicatedTopic.transform);
+        return;
+    }
+
+    public void AddEdge(BrainTopicSphere topic)
+    {
+        CreateConnectedTopicList();
+        AddTopicToList(topic);
+        UpdateLR();
+    }
+
+    // Update Line Renderer 
+    private void UpdateLR()
+    {
+        points = connectedTopicsCoords.ToArray();
+        transform.GetComponent<LineRenderer>().enabled = true;
+        transform.GetComponent<LineRenderer>().positionCount = points.Length;
+    }
+
+    public void SetConnectedTopics(List<BrainTopicSphere> topics)
+    {
+        connectedTopics = topics;
+        connectedTopicsCoords = new List<Transform>();
+
+        connectedTopicsCoords.Add(transform);
+
+        foreach(BrainTopicSphere topic in connectedTopics)
+            connectedTopicsCoords.Add(topic.gameObject.transform);
+    }
+
+    public List<BrainTopicSphere> GetConnectedTopics()
+    {
+        return connectedTopics;
+    }
+
+    public void RemoveLines()
+    {
+        transform.GetComponent<LineRenderer>().enabled = false;
+    }
+
+    private void FixedUpdate()
+    {
+        if(points != null) {
+            for(int i = 0; i < points.Length; i++)
+                transform.GetComponent<LineRenderer>().SetPosition(i, points[i].position);
+        }
+    }
+
     public void PopulateData(string brainTopic, string brainClass, int diseaseAppearTimes, string brainTopicLabel, string topicClass)
     {
         BrainTopicName = brainTopic;
