@@ -84,6 +84,28 @@ namespace DatAR.Widgets.VisualisationBrainModel
          */
         private async void UpdateHighlights(Passable rawPassable)
         {
+            if(rawPassable == null) // Demo purposes
+            {
+                // First reset topic model
+                _pointsPool.ForEach(point =>
+                {
+                    point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha =  _colorService.notFoundColor.color.a;
+                });
+
+                // Randomly assign highlights in the model
+                _pointsPool.ForEach(point =>
+                {
+                    if (UnityEngine.Random.Range(0, 100) < 5)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha =  _colorService.inFilterRangeColor.color.a;
+                    }
+                });
+
+                return;
+            }
+
             if (IsLoading.Value == QueryState.IsLoading)
             {
                 // place in stack
