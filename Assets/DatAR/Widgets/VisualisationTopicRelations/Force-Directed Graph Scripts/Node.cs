@@ -10,6 +10,12 @@ public class Node : MonoBehaviour
 
     List<Node> connectedNodes = new List<Node>();
     List<Node> unconnectedNodes = new List<Node>(); 
+    public float maxDrag = 0.5f;
+    
+    void Start()
+    {
+        InvokeRepeating("AddDrag", 1.0f, 1.0f);
+    }
 
     void Update(){    
         int i = 0;
@@ -26,7 +32,7 @@ public class Node : MonoBehaviour
                     (transform.position.z+target.transform.position.z)/2);
             i++;
         }
-  }
+    }
 
   // TODO: Tune the parameters
   // 1. Collider radius
@@ -34,81 +40,89 @@ public class Node : MonoBehaviour
   // 3. Force
     private void FixedUpdate()
     {
-    /*
-    // The last parameter is the mask. 6 is the layer for all nodes
-    Collider[] colliders = Physics.OverlapSphere(transform.position, 0.05f, 1 << 6);
-    foreach (var collider in colliders)
-    {
-        Rigidbody body = collider.GetComponent<Rigidbody>();
-        if (body == null) 
-            continue;
+        /*
+        // The last parameter is the mask. 6 is the layer for all nodes
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 0.05f, 1 << 6);
+        foreach (var collider in colliders)
+        {
+            Rigidbody body = collider.GetComponent<Rigidbody>();
+            if (body == null) 
+                continue;
 
-        Vector3 direction = transform.position - body.position;
+            Vector3 direction = transform.position - body.position;
 
-        float distance = direction.magnitude;
+            float distance = direction.magnitude;
 
-        direction = direction.normalized;
+            direction = direction.normalized;
 
-        float stopRadius = 0.01f;
-        if (distance < stopRadius) 
-            continue;
+            float stopRadius = 0.01f;
+            if (distance < stopRadius) 
+                continue;
 
-        float force = 1;
-        float forceRate = (force / distance);
+            float force = 1;
+            float forceRate = (force / distance);
 
-        // -1 = Repulsion, 0 = Nothing, 1 = Attraction
-        body.AddForce(direction * (forceRate / body.mass) * -1);
+            // -1 = Repulsion, 0 = Nothing, 1 = Attraction
+            body.AddForce(direction * (forceRate / body.mass) * -1);
+        }
+        */
+
+        // Attract connected nodes
+        foreach (Node connectedNode in connectedNodes)
+        {
+            Rigidbody body = connectedNode.GetComponent<Rigidbody>();
+            if (body == null) 
+                continue;
+
+            Vector3 direction = transform.position - body.position;
+
+            float distance = direction.magnitude;
+
+            direction = direction.normalized;
+
+            float stopRadius = 0.01f;
+            if (distance < stopRadius) 
+                continue;
+
+            float force = 0.1f;
+            float forceRate = (force / distance);
+
+            // -1 = Repulsion, 0 = Nothing, 1 = Attraction
+            body.AddForce(direction * (forceRate / body.mass) * 1);
+        }
+
+        // Repel unconnected nodes
+        foreach (Node unconnectedNode in unconnectedNodes)
+        {
+            Rigidbody body = GetComponent<Collider>().GetComponent<Rigidbody>();
+            if (body == null) 
+                continue;
+
+            Vector3 direction = transform.position - body.position;
+
+            float distance = direction.magnitude;
+
+            direction = direction.normalized;
+
+            float stopRadius = 0.01f;
+            if (distance < stopRadius) 
+                continue;
+
+            float force = 0.1f;
+            float forceRate = (force / distance);
+
+            // -1 = Repulsion, 0 = Nothing, 1 = Attraction
+            body.AddForce(direction * (forceRate / body.mass) * -1);
+        }
     }
-    */
 
-    // Attract connected nodes
-    foreach (Node connectedNode in connectedNodes)
+    // Add drag to node to stabilize the graph
+    private void AddDrag()
     {
-        Rigidbody body = connectedNode.GetComponent<Rigidbody>();
-        if (body == null) 
-            continue;
-
-        Vector3 direction = transform.position - body.position;
-
-        float distance = direction.magnitude;
-
-        direction = direction.normalized;
-
-        float stopRadius = 0.01f;
-        if (distance < stopRadius) 
-            continue;
-
-        float force = 0.1f;
-        float forceRate = (force / distance);
-
-        // -1 = Repulsion, 0 = Nothing, 1 = Attraction
-        body.AddForce(direction * (forceRate / body.mass) * 1);
+        Rigidbody node = transform.GetComponent<Rigidbody>();
+        if(node.drag < maxDrag)
+            node.drag = node.drag + 0.01f;
     }
-
-    // Repel unconnected nodes
-    foreach (Node unconnectedNode in unconnectedNodes)
-    {
-        Rigidbody body = GetComponent<Collider>().GetComponent<Rigidbody>();
-        if (body == null) 
-            continue;
-
-        Vector3 direction = transform.position - body.position;
-
-        float distance = direction.magnitude;
-
-        direction = direction.normalized;
-
-        float stopRadius = 0.01f;
-        if (distance < stopRadius) 
-            continue;
-
-        float force = 0.1f;
-        float forceRate = (force / distance);
-
-        // -1 = Repulsion, 0 = Nothing, 1 = Attraction
-        body.AddForce(direction * (forceRate / body.mass) * -1);
-    }
-  }
 
     public void SetEdgePrefab(GameObject epf){
         this.epf = epf;
