@@ -35,7 +35,7 @@ public class TopicDuplicationBehaviour : MonoBehaviour
     async public void DuplicateIfFixed()
     {
         // Sorted list
-        if (shouldDuplicateOnGrab && !QueryTopicManager.QTM.GetGraphMode())
+        if (shouldDuplicateOnGrab && !transform.GetComponent<BrainTopicSphere>().GetTRM().GetGraphMode())
         {
             // FIXED TOPIC IN LIST
             // Leave a duplicate behind in the same place, since we grabbed the original topic sphere
@@ -62,6 +62,7 @@ public class TopicDuplicationBehaviour : MonoBehaviour
             BrainTopicManager btm = brainTopics.GetComponent<BrainTopicManager>();
             btm.MaxHistogramScale = 3;
             btm.TopicPrefab = Resources.Load<BrainTopicSphere>("TopicPrefab");
+            btm.trm = transform.GetComponent<BrainTopicSphere>().GetTRM();
             BrainTopics = btm;
 
             BrainTopicSphere topicInList = duplicate.GetComponent<BrainTopicSphere>();

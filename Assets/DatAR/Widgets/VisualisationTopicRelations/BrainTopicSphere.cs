@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class BrainTopicSphere : MonoBehaviour
 {
+    private TopicRelationManager trm;
     public TMPro.TextMeshPro conceptText;
     public TMPro.TextMeshPro topicLabel;
     public TMPro.TextMeshPro diseaseAppearTimesText;
@@ -112,5 +113,15 @@ public class BrainTopicSphere : MonoBehaviour
                 GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_Gene");
                 break;
         }
+    }
+
+    public void SetTRM(TopicRelationManager newTrm)
+    {
+        trm = newTrm;
+    }
+
+    public TopicRelationManager GetTRM()
+    {
+        return trm;
     }
 }

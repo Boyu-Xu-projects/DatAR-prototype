@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class GraphButton : MonoBehaviour
 {
-    public BrainTopicManager BrainTopicManager;
+    public TopicRelationManager trm;
 
     public void Toggle()
     {
-        QueryTopicManager.QTM.SetGraphMode();
+        trm.SetGraphMode();
     }
 }

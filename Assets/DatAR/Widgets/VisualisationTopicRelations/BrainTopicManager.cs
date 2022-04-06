@@ -8,6 +8,7 @@ using UnityEditor;
 
 public class BrainTopicManager : MonoBehaviour
 {
+    public TopicRelationManager trm;
     public BrainTopicSphere TopicPrefab;
     public float MaxHistogramScale;
 
@@ -23,6 +24,7 @@ public class BrainTopicManager : MonoBehaviour
             var conceptObject = Instantiate(TopicPrefab, transform);
             conceptObject.transform.localPosition = new Vector3(0, -0.6f * transform.childCount, 0);
             conceptObject.name = cooccurrence.Concept;
+            conceptObject.GetComponent<BrainTopicSphere>().SetTRM(trm);
 
             if (!displayRatio)
                 conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, cooccurrence.TopicCooccurrences, cooccurrence.TopicLabel, cooccurrence.Class);
@@ -43,6 +45,8 @@ public class BrainTopicManager : MonoBehaviour
             transform.localPosition = new Vector3(0, 5.5f, 0);
             transform.localScale = new Vector3(1f, 1f, 1f);
         }
+
+        trm.UpdateTopicModel(null);
     }
 
     public void GenerateConnectedTopicList(List<FormattedTopicCooccurrence> cooccurrences, bool displayRatio = false, bool centerAndUpscale = false)
@@ -53,6 +57,7 @@ public class BrainTopicManager : MonoBehaviour
             conceptObject.transform.localPosition = new Vector3(0, -1.2f * transform.childCount, 0);
             conceptObject.transform.localScale = new Vector3(1f, 1f, 1f);
             conceptObject.name = cooccurrence.Concept;
+            conceptObject.GetComponent<BrainTopicSphere>().SetTRM(trm);
 
             if (!displayRatio)
                 conceptObject.PopulateData(cooccurrence.Concept, cooccurrence.Class, cooccurrence.TopicCooccurrences, cooccurrence.TopicLabel, cooccurrence.Class);
@@ -75,6 +80,8 @@ public class BrainTopicManager : MonoBehaviour
             transform.localPosition = new Vector3(transform.parent.localPosition.x + 2f, transform.parent.localPosition.y + 5f, 0);
             transform.localScale = new Vector3(1f, 1f, 1f); 
         }
+
+        trm.UpdateTopicModel(null);
     }
 
     private void SetHistogramValues(bool displayRatio)

@@ -12,8 +12,11 @@ using System.Threading.Tasks;
 
 public class TopicRelationManager : MonoBehaviour, IQueryState
 {
+    private bool graphMode = false; 
+    private DataflowOutlet dataSender;
 
     [SerializeField] private Receptacle diseaseReceptacle;
+    [SerializeField] private DataflowOutlet dataflowOutlet;
 
     public TMPro.TextMeshPro diseaseText;
     public BrainTopicManager BrainTopics;
@@ -36,6 +39,7 @@ public class TopicRelationManager : MonoBehaviour, IQueryState
     private void Awake()
     {
         diseaseReceptacle.slottedResourceContainerHasChanged.Subscribe(currentBatchId => GetRelatedTopics());
+        BrainTopics.trm = transform.GetComponent<TopicRelationManager>();
     }
 
     public void SetDisplayRatio(bool value)
@@ -142,5 +146,20 @@ public class TopicRelationManager : MonoBehaviour, IQueryState
             SelectOverview();
             CurrentFilter = null;
         }
+    }
+
+     public void SetGraphMode()
+    {
+        graphMode = !graphMode;
+    }
+
+    public bool GetGraphMode()
+    {
+        return graphMode;
+    }
+
+    public void UpdateTopicModel(Passable newData)
+    {
+        dataflowOutlet.Send(newData);
     }
 }
