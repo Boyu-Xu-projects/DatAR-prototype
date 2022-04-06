@@ -265,7 +265,7 @@ public class GraphManager : MonoBehaviour
                     int randomNumber = UnityEngine.Random.Range(0, 100);
                     if (percentChance < randomNumber)
                     {
-                        currentNode.AddEdge(possibleEdge.Value);
+                        currentNode.AddEdge(possibleEdge.Value, edgeOrganizer);
                         possibleEdge.Value.AddConnectedNode(currentNode);
                     }
                 }

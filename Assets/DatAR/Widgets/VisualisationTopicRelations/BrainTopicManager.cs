@@ -84,11 +84,11 @@ public class BrainTopicManager : MonoBehaviour
             100 :
             allConcepts.SelectMany(x => new[] { x.DiseaseAppearTimes }).Max();
 
-        allConcepts.ForEach(concept =>
+        foreach (BrainTopicSphere concept in allConcepts)
         {
             var calculatedScaleDisease = Util.Map(concept.DiseaseAppearTimes, 0, maxDiseaseAppearTimes, 0, MaxHistogramScale);
             concept.diseaseBar.transform.localScale = new Vector3(calculatedScaleDisease, 0.25f, 0.01f); //TODO: Hardcoded scales, make dynamic
             concept.diseaseBar.transform.localPosition += new Vector3(calculatedScaleDisease / 2, 0, 0);
-        });
+        };
     }
 }

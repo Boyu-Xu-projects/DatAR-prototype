@@ -6,7 +6,7 @@ using UnityEngine;
 public class TopicToggleButtonLock : MonoBehaviour
 {
     public GameObject OtherButton;
-    public QueryDiseaseCoocurrences Visualization;
+    public TopicRelationManager Visualization;
     public bool SetDisplayRatio;
     public bool toggled;
 

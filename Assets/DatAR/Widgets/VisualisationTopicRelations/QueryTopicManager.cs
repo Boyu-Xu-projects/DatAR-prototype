@@ -9,6 +9,7 @@ public class QueryTopicManager : MonoBehaviour
 {
     private SparqlService _sparqlService;
     private static QueryTopicManager qtm;
+    private bool graphMode = false; // Bad placement; only placed here for singleton convenience. Probably better move all widget settings to a singleton class
     public static QueryTopicManager QTM {
         get 
         {
@@ -225,6 +226,16 @@ public class QueryTopicManager : MonoBehaviour
             
             return retrievedCooccurrences;
         }
+    }
+
+    public void SetGraphMode()
+    {
+        graphMode = !graphMode;
+    }
+
+    public bool GetGraphMode()
+    {
+        return graphMode;
     }
 }
 
