@@ -14,6 +14,7 @@ public class GraphManager : MonoBehaviour
 
     public Node nodepf;
     private Node rootNode;
+    private GameObject edgeOrganizer;
 
     public GameObject edgepf; 
     public float width = 100;
@@ -40,15 +41,14 @@ public class GraphManager : MonoBehaviour
 
     public void CreateGraph(string topic, string topicLabel, string topicClass, string category = "")
     {
-        // TODO:
-        // 0: Request topic and retrieve the wanted categories to get results in
-        // 1: Generate all the Nodes
-        // 2: Connect all Nodes. If showing only in-class graph, then they all probably connect to 1 topic
+        // TODO: Request topic and retrieve the wanted categories to get results in
         
         rootNode = transform.gameObject.GetComponent<Node>();
+        // Create game object to save edges of the graph in
+        edgeOrganizer = Instantiate(new GameObject(), transform.parent);
+        edgeOrganizer.name = rootNode.name + "_Edges";
         // LoadRelatedTopics(topic, topicLabel, topicClass, category);
         LoadDemoTopics();
-        
     }
 
     async private void LoadDemoTopics()
@@ -211,7 +211,7 @@ public class GraphManager : MonoBehaviour
         edgepf.GetComponent<Renderer>().material = Resources.Load<Material>("TopicMaterials/RootEdge");
 
         foreach (var topicNode in topicList) {
-            if(nodes.ContainsKey(topicNode.Concept)) // Only for demo
+            if(nodes.ContainsKey(topicNode.Concept)) // Only for demo. Prevents adding dupes.
                 continue;
 
             //Node go = Instantiate(nodepf, new Vector3(Random.Range(-width/2, width/2), Random.Range(-length/2, length/2), Random.Range(-height/2, height/2)), Quaternion.identity);
@@ -222,7 +222,7 @@ public class GraphManager : MonoBehaviour
             n.SetClass(topicNode.Class);
             n.transform.GetChild(0).GetComponent<TextMeshPro>().text = topicNode.Concept;
             n.SetEdgePrefab(edgepf);
-            n.AddEdge(rootNode);
+            n.AddEdge(rootNode, edgeOrganizer);
             nodes.Add(topicNode.Concept, n);
 
             allNodes.Add(n);
@@ -243,7 +243,7 @@ public class GraphManager : MonoBehaviour
                 if(edge.Concept.Label == edge.Disease.Label)
                     continue;
                 
-                node.AddEdge(nodes[edge.Disease.Label]);
+                node.AddEdge(nodes[edge.Disease.Label], edgeOrganizer);
                 nodes[edge.Disease.Label].AddConnectedNode(node);
             }
         }

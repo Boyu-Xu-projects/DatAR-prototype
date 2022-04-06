@@ -114,7 +114,7 @@ public class Node : MonoBehaviour
         this.epf = epf;
     }
 
-    public void AddEdge(Node n){
+    public void AddEdge(Node n, GameObject goEdges){
         SpringJoint sj = gameObject.AddComponent<SpringJoint> ();  
         sj.autoConfigureConnectedAnchor = false;
         sj.anchor = new Vector3(0,0.5f,0);
@@ -122,7 +122,8 @@ public class Node : MonoBehaviour
         sj.enableCollision = true;
         sj.connectedBody = n.GetComponent<Rigidbody>();
         GameObject edge = Instantiate(this.epf, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
-        //edge.transform.SetParent(transform.parent.gameObject.transform, false);
+        edge.name = $"{@n.name}2{@transform.name}";
+        edge.transform.SetParent(goEdges.transform, false);
         edges.Add(edge);
         joints.Add(sj);
 
