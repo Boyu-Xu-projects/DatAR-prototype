@@ -206,6 +206,9 @@ public class GraphManager : MonoBehaviour
         Node n = null;
         Dictionary<string,Node> nodes = new Dictionary<string,Node>();
         List<Node> allNodes = new List<Node>();
+
+        float maxCooccurrencesRoot = -Mathf.Infinity;
+        float minCooccurrencesRoot = Mathf.Infinity;
         
         // Root connections have transparent edges for more clarity
         edgepf.GetComponent<Renderer>().material = Resources.Load<Material>("TopicMaterials/RootEdge");
@@ -224,11 +227,28 @@ public class GraphManager : MonoBehaviour
             n.SetEdgePrefab(edgepf);
             n.AddEdge(rootNode, edgeOrganizer);
             nodes.Add(topicNode.Concept, n);
-
+            n.cooccurrencesRoot = topicNode.TopicCooccurrences;
             allNodes.Add(n);
+
+            if(topicNode.TopicCooccurrences > maxCooccurrencesRoot)
+                maxCooccurrencesRoot = topicNode.TopicCooccurrences;
+            else if(topicNode.TopicCooccurrences < minCooccurrencesRoot)
+                minCooccurrencesRoot = topicNode.TopicCooccurrences;
         }
 
         edgepf.GetComponent<Renderer>().material = Resources.Load<Material>("TopicMaterials/Edge");
+        
+        // Dynamic Sizing
+        int maxNodeScale = 3;
+        float minimumScale = 0.5f;
+        foreach(Node node in allNodes)
+        {
+            float normalizedScale = Mathf.InverseLerp(minCooccurrencesRoot, maxCooccurrencesRoot, node.cooccurrencesRoot);
+            if(normalizedScale * maxNodeScale < minimumScale)
+                node.gameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            else
+                node.gameObject.transform.localScale = node.gameObject.transform.localScale * normalizedScale;
+        }
         
         try
         {

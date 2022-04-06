@@ -11,6 +11,8 @@ public class Node : MonoBehaviour
     List<Node> connectedNodes = new List<Node>();
     List<Node> unconnectedNodes = new List<Node>(); 
     public float maxDrag = 0.5f;
+    public float maxSize = 3.0f;
+    public int cooccurrencesRoot = 10; // 10 is the minimum since we filtered for that.
     
     void Start()
     {
