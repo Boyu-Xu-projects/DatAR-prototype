@@ -42,6 +42,7 @@ public class TopicDuplicationBehaviour : MonoBehaviour
             var duplicate = Instantiate(gameObject, transform.parent);
             duplicate.transform.position = transform.position;
             duplicate.GetComponent<Renderer>().material = GetComponent<Renderer>().material;
+            duplicate.GetComponent<BrainTopicSphere>().SetTRM(transform.GetComponent<BrainTopicSphere>().GetTRM());
 
             // MOVABLE TOPIC IN SCENE
             // Assign topic to topic pool
@@ -102,6 +103,7 @@ public class TopicDuplicationBehaviour : MonoBehaviour
             var duplicate = Instantiate(gameObject, transform.parent);
             duplicate.transform.position = transform.position;
             duplicate.GetComponent<Renderer>().material = GetComponent<Renderer>().material;
+            duplicate.GetComponent<BrainTopicSphere>().SetTRM(transform.GetComponent<BrainTopicSphere>().GetTRM());
 
             // Assign topic to topic pool
             transform.SetParent(GameObject.Find("StandaloneGraphPool").transform, true);

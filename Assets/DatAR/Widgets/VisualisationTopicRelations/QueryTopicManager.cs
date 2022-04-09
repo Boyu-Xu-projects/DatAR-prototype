@@ -37,7 +37,6 @@ public class QueryTopicManager : MonoBehaviour
 
         var services = GameObject.Find("Services");
         _sparqlService = services.GetComponent<SparqlService>();
-        var test = transform;
     }
 
     async public Task<List<FormattedTopicCooccurrence>> QueryTopic(string topicId, string topicLabel, string topicClass = "")
