@@ -230,6 +230,8 @@ public class GraphManager : MonoBehaviour
             n.cooccurrencesRoot = topicNode.TopicCooccurrences;
             allNodes.Add(n);
 
+            n.GetComponent<Rigidbody>().drag = 0.5f;
+
             if(topicNode.TopicCooccurrences > maxCooccurrencesRoot)
                 maxCooccurrencesRoot = topicNode.TopicCooccurrences;
             else if(topicNode.TopicCooccurrences < minCooccurrencesRoot)
@@ -237,6 +239,8 @@ public class GraphManager : MonoBehaviour
         }
 
         edgepf.GetComponent<Renderer>().material = Resources.Load<Material>("TopicMaterials/Edge");
+
+        
         
         // Dynamic Sizing
         int maxNodeScale = 3;
