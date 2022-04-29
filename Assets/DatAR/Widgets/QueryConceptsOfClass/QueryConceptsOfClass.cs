@@ -1,9 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using DatAR.DataModels.Passables;
 using DatAR.DataModels.Resources;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
+using System;
 
 namespace DatAR.Widgets.QueryConceptsOfClass
 {
@@ -59,10 +61,44 @@ namespace DatAR.Widgets.QueryConceptsOfClass
                 return;
             }
         
-            // TODO: handle empty case, and add progress indicator
-            var concepts = await _sparqlService.GetAllConceptsOfClass(classItem.Id);
+            try
+            {
+                // TODO: handle empty case, and add progress indicator
+                var concepts = await _sparqlService.GetAllConceptsOfClass(classItem.Id);
+                _ = StartCoroutine(SpawnConcept(concepts, currentBatchId));
+            }
+            catch(Exception e)
+            {
+                Debug.Log("Couldn't retrieve data from API. Retrieve local data instead.");
 
-            _ = StartCoroutine(SpawnConcept(concepts, currentBatchId));
+                List<DynamicResource> backUp = new List<DynamicResource>();
+
+                string documentName = "BrainRegions(25-4-22)";
+                string typeName = "Triply Brain Region";
+                string searchTerm = "\"brainregion\"";
+
+                if(classItem.Id == "lbd:disease")
+                {
+                    documentName = "Diseases(25-4-22)";
+                    typeName = "Triply Brain Disease";
+                    searchTerm = "\"disease\"";
+                }
+
+                List<Dictionary<string,object>> data = CSVReader.Read(documentName);
+                List<string> type = new List<string>();
+                type.Add(typeName);
+
+                for(var i=0; i < data.Count; i++) {
+                    DynamicResource resource = new DynamicResource(
+                        data[i][searchTerm].ToString(),
+                        type);
+                    backUp.Add(resource);
+                }
+
+                ConceptListPassable newFormat = new ConceptListPassable(backUp);
+
+                _ = StartCoroutine(SpawnConcept(newFormat, currentBatchId));
+            }
         }
 
         // TODO: move to ResourceSphereManufacturer class
