@@ -10,21 +10,50 @@ public class DwellScript : BaseDwellSample
     public Animator animator;
     public GameObject slidePlane;
     private GameObject currentIcon;
+
+    public Material defaultMaterial;
+    public Material selectedMaterial;
+
+    AudioSource audio;
+
+
+    private void Start()
+    {
+        audio = GetComponent<AudioSource>();
+    }
+
+    //private void Update()
+    //{
+    //    if (CoreServices.InputSystem.GazeProvider.GazeTarget == null)
+    //    {
+    //        Debug.Log(CoreServices.InputSystem.GazeProvider.GazeTarget.gameObject);
+    //    }
+    //}
+
     public override void DwellStarted(IMixedRealityPointer pointer)
     {
-        base.DwellStarted(pointer);
+        //base.DwellStarted(pointer);
         Debug.Log("started!");
+        this.transform.parent.gameObject.GetComponent<Renderer>().material = selectedMaterial;
         if (animator != null)
         {
             animator.enabled = true;
             animator.Play("SlideAnimation", 0, 0);
         }
-        currentIcon = CoreServices.InputSystem.GazeProvider.GazeTarget.gameObject;
+
+        if (CoreServices.InputSystem.GazeProvider.GazeTarget != null)
+        {
+            currentIcon = CoreServices.InputSystem.GazeProvider.GazeTarget.gameObject;
+        }
+        else
+        {
+            currentIcon = null;
+        }    
     }
 
     public override void DwellCanceled(IMixedRealityPointer pointer)
     {
-        base.DwellCanceled(pointer);
+        //base.DwellCanceled(pointer);
         Debug.Log("Stopped!");
         if (animator != null)
         {
@@ -33,11 +62,12 @@ public class DwellScript : BaseDwellSample
             slidePlane.transform.localScale = new Vector3(0, 0.002f, 0.0001f);
         }
         currentIcon = null;
+        this.transform.parent.gameObject.GetComponent<Renderer>().material = defaultMaterial;
     }
 
     public override void DwellCompleted(IMixedRealityPointer pointer)
     {
-        base.DwellCompleted(pointer);
+        //base.DwellCompleted(pointer);
         Debug.Log("Hey doe iets");
         if (animator != null)
         {
@@ -50,8 +80,10 @@ public class DwellScript : BaseDwellSample
             GameObject child = currentIcon.transform.GetChild(0).gameObject;
             SpriteRenderer renderer = child.GetComponent<SpriteRenderer>();
             string iconName = renderer.sprite.name;
+
             if (iconName != null)
             {
+                audio.Play();
                 SpawnConnection.Instance.ChosenWidget(iconName);
             }
         }
@@ -63,5 +95,6 @@ public class DwellScript : BaseDwellSample
         {
             DynamicPalletIcons.Instance.DownArrow();
         }
+        this.transform.parent.gameObject.GetComponent<Renderer>().material = defaultMaterial;
     }
 }

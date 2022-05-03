@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class DynamicIcons : MonoBehaviour
@@ -42,6 +43,8 @@ public class DynamicIcons : MonoBehaviour
     public GameObject bottomMiddleIcon;
     public GameObject bottomLeftIcon;
     public GameObject bottomRightIcon;
+
+    //public GameObject middleButtonText;
 
     private List<int> topRowIndex = new List<int>();
     List<List<Sprite>> buttonRows = new List<List<Sprite>>();

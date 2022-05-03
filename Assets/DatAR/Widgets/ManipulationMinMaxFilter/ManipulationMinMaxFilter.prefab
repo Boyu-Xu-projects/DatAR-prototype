@@ -340,6 +340,7 @@ MonoBehaviour:
   connectionWidgets: 00000000010000000300000005000000
   topicOrDiseaseSocketName: 
   classOrRegionSocketName: 
+  sentenceSocketName: 
 --- !u!1 &8660084161039169742
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,6 +389,7 @@ MonoBehaviour:
   pointRotateSpeed: 2
   lockX: 0
   lockY: 0
+  lockZ: 0
 --- !u!1001 &2308347027148914133
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -921,6 +923,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: noun_Settings_943929
+      objectReference: {fileID: 0}
+    - target: {fileID: 8742538545776668643, guid: 5a719a233120fbe4b83fe86ec0279232,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8742538545776668643, guid: 5a719a233120fbe4b83fe86ec0279232,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8742538545776668643, guid: 5a719a233120fbe4b83fe86ec0279232,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 7243324766535440047, guid: 5a719a233120fbe4b83fe86ec0279232,

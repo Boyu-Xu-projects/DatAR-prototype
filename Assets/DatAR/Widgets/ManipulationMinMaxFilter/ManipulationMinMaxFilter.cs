@@ -129,8 +129,9 @@ namespace DatAR.Widgets.ManipulationMinMaxFilter
             .Subscribe(incomingData =>
             { 
                 _cooccurrencesSlider.Bottom.SetText(Math.Ceiling(1000 * incomingData.x).ToString());
+                _cooccurrencesSlider.Top.SetText(Math.Ceiling(1000 * incomingData.y).ToString());
 
-                if (incomingData.x != 0)
+                if (incomingData.x != 0 || incomingData.y != 1.0f)
                 {
                     FilterRangeFake.Instance.SetFilter();
                 }
@@ -141,7 +142,8 @@ namespace DatAR.Widgets.ManipulationMinMaxFilter
             .Subscribe(incomingData =>
             {
                 _conceptGivenClassSlider.Bottom.SetText(""+ incomingData.x + "");
-                if (incomingData.x != 0)
+                _conceptGivenClassSlider.Top.SetText("" + incomingData.y + "");
+                if (incomingData.x != 0 || incomingData.y != 1.0f)
                 {
                     FilterRangeFake.Instance.SetFilter();
                 }
@@ -152,7 +154,8 @@ namespace DatAR.Widgets.ManipulationMinMaxFilter
             .Subscribe(incomingData =>
             {
                 _classItemGivenConceptSlider.Bottom.SetText("" + incomingData.x + "");
-                if (incomingData.x != 0)
+                _classItemGivenConceptSlider.Top.SetText("" + incomingData.y + "");
+                if (incomingData.x != 0 || incomingData.y != 1.0f)
                 {
                     FilterRangeFake.Instance.SetFilter();
                 }

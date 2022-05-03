@@ -15,16 +15,17 @@ public class SpawnConnection : MonoBehaviour
     [Header("Widgets")]
     [SerializeField] private GameObject brainModelWidget;
     [SerializeField] private GameObject coocurrenceWidget;
-    [SerializeField] private GameObject topicModelWidget;
+    //[SerializeField] private GameObject topicModelWidget;
     [SerializeField] private GameObject minMaxWidget;
     [SerializeField] private GameObject classRetrieverWidget;
-    [SerializeField] private GameObject dataFlowWidget;
-    [SerializeField] private GameObject resourceSphereWidget;
-    [SerializeField] private GameObject sentenceExtractorWidget;
+    //[SerializeField] private GameObject dataFlowWidget;
+    //[SerializeField] private GameObject resourceSphereWidget;
+    //[SerializeField] private GameObject sentenceExtractorWidget;
     [SerializeField] private GameObject resourceInspectorWidget;
-
     [SerializeField] private GameObject diseaseClassSphere;
     [SerializeField] private GameObject regionClassSphere;
+
+    [SerializeField] private GameObject WidgetPallet;
 
     Dictionary<string, WidgetConnectionInfo> widgetInformationDict;
     private List<GameObject> listOfChildren;
@@ -139,17 +140,17 @@ public class SpawnConnection : MonoBehaviour
             case "MinMax_IconSprite":
                 currentWidget = minMaxWidget;
                 break;
-            case "Sentence_IconSprite":
-                currentWidget = sentenceExtractorWidget;
-                break;
-            case "TopicModel_iconSprite":
-                currentWidget = topicModelWidget;
-                break;
+            //case "Sentence_IconSprite":
+            //    currentWidget = sentenceExtractorWidget;
+            //    break;
+            //case "TopicModel_iconSprite":
+            //    currentWidget = topicModelWidget;
+            //    break;
             case "DiseaseClass_IconSprite":
-                Instantiate(diseaseClassSphere, spherePool.transform);
+                SpawnSpheres(diseaseClassSphere);
                 break;
             case "RegionClass_iconSprite":
-                Instantiate(regionClassSphere, spherePool.transform);
+                SpawnSpheres(regionClassSphere);
                 break;
             case "Trash_IconSprite":
                 destroyObjects();
@@ -176,6 +177,13 @@ public class SpawnConnection : MonoBehaviour
             GameObject.Destroy(child.gameObject);
         }
     }
+
+    private void SpawnSpheres(GameObject currentSphere)
+    {
+        GameObject spawnedClass = Instantiate(currentSphere, spherePool.transform);
+        double val = (rand.NextDouble() * (0.2f - 0.1f) + 0.1f);
+        spawnedClass.transform.position = new Vector3(WidgetPallet.transform.position.x + (float)val, WidgetPallet.transform.position.y, WidgetPallet.transform.position.z);
+    }
     
     private void WidgetConnection(GameObject currentWidget)
     {
@@ -201,8 +209,12 @@ public class SpawnConnection : MonoBehaviour
 
         //spawn widget
         GameObject spawnedWidget = Instantiate(currentWidget, GameObject.Find("StandaloneWidgetPool").transform);
-        double val = (rand.NextDouble() * (0.2f - -0.2f) + -0.2f);
-        spawnedWidget.transform.position = new Vector3((float)val, 0f, 0.6f);
+
+        var palletX = WidgetPallet.transform.position.x;
+        double val = (rand.NextDouble() * (0.2f - 0.1f) + 0.1f);
+        spawnedWidget.transform.position = new Vector3(WidgetPallet.transform.position.x + (float)val, WidgetPallet.transform.position.y, WidgetPallet.transform.position.z);
+        //double val = (rand.NextDouble() * (0.2f - -0.2f) + -0.2f);
+        //spawnedWidget.transform.position = new Vector3((float)val, 0f, 0.6f);
         //==================================================================================================
         //Get the most recent class and topic sphere depending on the widget info
         //int childrenAmount = spherePool.transform.childCount;

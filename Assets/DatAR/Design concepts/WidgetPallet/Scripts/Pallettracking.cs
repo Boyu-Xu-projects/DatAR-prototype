@@ -16,6 +16,7 @@ public class Pallettracking : MonoBehaviour
         if (HandJointUtils.TryGetJointPose(TrackedHandJoint.Wrist, HandSettings.Instance.nonDominantHand, out pose))
         {
             cubeFollowPoint.transform.position = pose.Position;
+            cubeFollowPoint.transform.rotation = Quaternion.Euler(0, pose.Rotation.eulerAngles.y, 0);
         }
     }
 }

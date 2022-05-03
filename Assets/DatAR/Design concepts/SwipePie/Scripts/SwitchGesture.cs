@@ -24,15 +24,15 @@ public static class GestureUtils
                HandPoseUtils.IndexFingerCurl(trackedHand) > GrabThreshold;
     }
 
-    public static bool isThumbsUp(Handedness trackedHand)
-    {
-        return !IsGrabbing(trackedHand) &&
-            HandPoseUtils.MiddleFingerCurl(trackedHand) > thumbUpThreshold &&
-               HandPoseUtils.RingFingerCurl(trackedHand) > thumbUpThreshold &&
-               HandPoseUtils.PinkyFingerCurl(trackedHand) > thumbUpThreshold &&
-               HandPoseUtils.IndexFingerCurl(trackedHand) > thumbUpThreshold &&
-               HandPoseUtils.ThumbFingerCurl(trackedHand) < thumbUpThreshold;
-    }
+    //public static bool isThumbsUp(Handedness trackedHand)
+    //{
+    //    return !IsGrabbing(trackedHand) &&
+    //        HandPoseUtils.MiddleFingerCurl(trackedHand) > thumbUpThreshold &&
+    //           HandPoseUtils.RingFingerCurl(trackedHand) > thumbUpThreshold &&
+    //           HandPoseUtils.PinkyFingerCurl(trackedHand) > thumbUpThreshold &&
+    //           HandPoseUtils.IndexFingerCurl(trackedHand) > thumbUpThreshold &&
+    //           HandPoseUtils.ThumbFingerCurl(trackedHand) < thumbUpThreshold;
+    //}
 
     public static bool isSwipe(Handedness trackedHand)
     {
@@ -249,7 +249,7 @@ public class SwitchGesture : MonoBehaviour, IMixedRealityGestureHandler
     private IEnumerator HoldFist()
     {
         Debug.Log("Start");
-        yield return new WaitForSeconds(.35f);
+        yield return new WaitForSeconds(.60f);
         fistGestureCompleted = true;
         timerStarted = false;
         Debug.Log("End");
