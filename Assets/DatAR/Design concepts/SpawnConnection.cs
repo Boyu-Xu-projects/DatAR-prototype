@@ -26,6 +26,7 @@ public class SpawnConnection : MonoBehaviour
     [SerializeField] private GameObject regionClassSphere;
 
     [SerializeField] private GameObject WidgetPallet;
+    [SerializeField] private bool IsRightHanded;
 
     Dictionary<string, WidgetConnectionInfo> widgetInformationDict;
     private List<GameObject> listOfChildren;
@@ -153,7 +154,8 @@ public class SpawnConnection : MonoBehaviour
                 SpawnSpheres(regionClassSphere);
                 break;
             case "Trash_IconSprite":
-                destroyObjects();
+                //Destroy most recent widget
+                Destroy(widgetPool.transform.GetChild(widgetPool.transform.childCount - 1).gameObject);
                 break;
             default:
                 break;
@@ -180,9 +182,18 @@ public class SpawnConnection : MonoBehaviour
 
     private void SpawnSpheres(GameObject currentSphere)
     {
-        GameObject spawnedClass = Instantiate(currentSphere, spherePool.transform);
-        double val = (rand.NextDouble() * (0.2f - 0.1f) + 0.1f);
-        spawnedClass.transform.position = new Vector3(WidgetPallet.transform.position.x + (float)val, WidgetPallet.transform.position.y, WidgetPallet.transform.position.z);
+        if (IsRightHanded)
+        {
+            GameObject spawnedClass = Instantiate(currentSphere, spherePool.transform);
+            double val = (rand.NextDouble() * (0.2f - 0.1f) + 0.1f);
+            spawnedClass.transform.position = new Vector3(WidgetPallet.transform.position.x + (float)val, WidgetPallet.transform.position.y, WidgetPallet.transform.position.z);
+        }
+        else
+        {
+            GameObject spawnedClass = Instantiate(currentSphere, spherePool.transform);
+            double val = (rand.NextDouble() * (-0.2f - -0.1f) + -0.1f);
+            spawnedClass.transform.position = new Vector3(WidgetPallet.transform.position.x + (float)val, WidgetPallet.transform.position.y, WidgetPallet.transform.position.z);
+        }
     }
     
     private void WidgetConnection(GameObject currentWidget)
@@ -208,11 +219,21 @@ public class SpawnConnection : MonoBehaviour
         //}
 
         //spawn widget
-        GameObject spawnedWidget = Instantiate(currentWidget, GameObject.Find("StandaloneWidgetPool").transform);
-
-        var palletX = WidgetPallet.transform.position.x;
-        double val = (rand.NextDouble() * (0.2f - 0.1f) + 0.1f);
-        spawnedWidget.transform.position = new Vector3(WidgetPallet.transform.position.x + (float)val, WidgetPallet.transform.position.y, WidgetPallet.transform.position.z);
+        if (IsRightHanded)
+        {
+            GameObject spawnedWidget = Instantiate(currentWidget, GameObject.Find("StandaloneWidgetPool").transform);
+            var palletX = WidgetPallet.transform.position.x;
+            double val = (rand.NextDouble() * (0.2f - 0.1f) + 0.1f);
+            spawnedWidget.transform.position = new Vector3(WidgetPallet.transform.position.x + (float)val, WidgetPallet.transform.position.y, WidgetPallet.transform.position.z);
+        }
+        else
+        {
+            GameObject spawnedWidget = Instantiate(currentWidget, GameObject.Find("StandaloneWidgetPool").transform);
+            var palletX = WidgetPallet.transform.position.x;
+            double val = (rand.NextDouble() * (-0.2f - -0.1f) + -0.1f);
+            spawnedWidget.transform.position = new Vector3(WidgetPallet.transform.position.x + (float)val, WidgetPallet.transform.position.y, WidgetPallet.transform.position.z);
+        }
+       
         //double val = (rand.NextDouble() * (0.2f - -0.2f) + -0.2f);
         //spawnedWidget.transform.position = new Vector3((float)val, 0f, 0.6f);
         //==================================================================================================

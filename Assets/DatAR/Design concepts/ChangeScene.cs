@@ -27,26 +27,26 @@ public class ChangeScene : MonoBehaviour
 
     public void WidgetPalletLeftTouch()
     {
-        SceneManager.LoadScene(4);
+        SceneManager.LoadScene(2);
     }
 
     public void WidgetPalletRightTouch()
     {
-        SceneManager.LoadScene(5);
+        SceneManager.LoadScene(0);
     }
 
     public void WidgetPalletLeftGaze()
     {
-        SceneManager.LoadScene(6);
+        SceneManager.LoadScene(3);
     }
 
     public void WidgetPalletRightGaze()
     {
-        SceneManager.LoadScene(7);
+        SceneManager.LoadScene(1);
     }
 
     public void PinchAndGrab()
     {
-        SceneManager.LoadScene(8);
+        SceneManager.LoadScene(9);
     }
 }

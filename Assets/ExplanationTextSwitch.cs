@@ -11,7 +11,7 @@ public class ExplanationTextSwitch : MonoBehaviour
     public GameObject largeTaskSlide;
 
     private int index = 0;
-    private int amount = 3;
+    private int amount = 4;
 
     private void Start()
     {
@@ -44,66 +44,55 @@ public class ExplanationTextSwitch : MonoBehaviour
 
     private void ChangeSlide()
     {
-        //switch (index)
-        //{
-        //    case 0:
-        //        titleSlide.SetActive(true);
-        //        checkTaskSlide.SetActive(false);
-        //        smallTaskSlide.SetActive(false);
-        //        mediumTaskSlide.SetActive(false);
-        //        largeTaskSlide.SetActive(false);
-        //        break;
-        //    case 1:
-        //        titleSlide.SetActive(false);
-        //        checkTaskSlide.SetActive(true);
-        //        smallTaskSlide.SetActive(false);
-        //        mediumTaskSlide.SetActive(false);
-        //        largeTaskSlide.SetActive(false);
-        //        break;
-        //    case 2:
-        //        titleSlide.SetActive(false);
-        //        checkTaskSlide.SetActive(false);
-        //        smallTaskSlide.SetActive(true);
-        //        mediumTaskSlide.SetActive(false);
-        //        largeTaskSlide.SetActive(false);
-        //        break;
-        //    case 3:
-        //        titleSlide.SetActive(false);
-        //        checkTaskSlide.SetActive(false);
-        //        smallTaskSlide.SetActive(false);
-        //        mediumTaskSlide.SetActive(true);
-        //        largeTaskSlide.SetActive(false);
-        //        break;
-        //    case 4:
-        //        titleSlide.SetActive(false);
-        //        checkTaskSlide.SetActive(false);
-        //        smallTaskSlide.SetActive(false);
-        //        mediumTaskSlide.SetActive(false);
-        //        largeTaskSlide.SetActive(true);
-        //        break;
-        //    default:
-        //        break;
-        //}
-
         switch (index)
         {
             case 0:
                 titleSlide.SetActive(true);
+                checkTaskSlide.SetActive(false);
                 smallTaskSlide.SetActive(false);
                 largeTaskSlide.SetActive(false);
                 break;
             case 1:
                 titleSlide.SetActive(false);
-                smallTaskSlide.SetActive(true);
+                checkTaskSlide.SetActive(true);
+                smallTaskSlide.SetActive(false);
                 largeTaskSlide.SetActive(false);
                 break;
             case 2:
                 titleSlide.SetActive(false);
+                checkTaskSlide.SetActive(false);
+                smallTaskSlide.SetActive(true);
+                largeTaskSlide.SetActive(false);
+                break;
+            case 3:
+                titleSlide.SetActive(false);
+                checkTaskSlide.SetActive(false);
                 smallTaskSlide.SetActive(false);
                 largeTaskSlide.SetActive(true);
                 break;
             default:
                 break;
         }
+
+        //switch (index)
+        //{
+        //    case 0:
+        //        titleSlide.SetActive(true);
+        //        smallTaskSlide.SetActive(false);
+        //        largeTaskSlide.SetActive(false);
+        //        break;
+        //    case 1:
+        //        titleSlide.SetActive(false);
+        //        smallTaskSlide.SetActive(true);
+        //        largeTaskSlide.SetActive(false);
+        //        break;
+        //    case 2:
+        //        titleSlide.SetActive(false);
+        //        smallTaskSlide.SetActive(false);
+        //        largeTaskSlide.SetActive(true);
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 }
