@@ -116,6 +116,7 @@ namespace DatAR.Widgets.QueryCooccurrences
                             DatAR.DataModels.Misc.FilterSelectionStateType.InRange
                             );
 
+                        cooccurrence.Label = data[i][matchTerm].ToString();
                         
                         backUp.Add(cooccurrence);
                     }
