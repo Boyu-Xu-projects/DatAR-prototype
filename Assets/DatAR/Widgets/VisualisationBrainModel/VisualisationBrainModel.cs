@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
@@ -142,9 +143,9 @@ namespace DatAR.Widgets.VisualisationBrainModel
             }
             // Debug.Log($"3D PLOT OBJECT: Received {passable.data.Resources.Count} items. Objects: {JsonConvert.SerializeObject(passable.data)}"); // DEBUG
 
-            List<DynamicResource> inFilterItems = new List<DynamicResource>(), outFilterItems = new List<DynamicResource>();
             try
             {
+                List<DynamicResource> inFilterItems = new List<DynamicResource>(), outFilterItems = new List<DynamicResource>();
                 var outFilterItemsToMatch = passable.data.Resources
                     .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.OutRange)
                     .Select(r => r.ClassItem.Id).ToList();
@@ -155,41 +156,145 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 // Perform parallel query
                 //var sbURL = "https://datar.local/ontology/";
                 (inFilterItems, outFilterItems) = await UniTask.WhenAll(_sparqlService.GetCloseMatchingIds(inFilterItemsToMatch), _sparqlService.GetCloseMatchingIds(outFilterItemsToMatch));
+
+                // Remove overlapping items from out-filter items
+                outFilterItems = outFilterItems.Except(inFilterItems).ToList();
+
+                _pointsPool.ForEach(point =>
+                {
+                    var matchInFilter = inFilterItems.Find(item => item.Id == point.Key);
+                    if (matchInFilter != null)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
+                        return;
+                    }
+                    
+                    var matchOutFilter = outFilterItems.Find(item => item.Id == point.Key);
+                    if (matchOutFilter != null)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.outFilterRangeColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.outFilterRangeColor.color.a;
+                        return;
+                    }
+                    
+                    // Else
+                    point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
+                });
             }
             catch (Exception e)
             {
-                Debug.Log(e);
-                ErrorMessage = e.Message;
-                IsLoading.OnNext(QueryState.HasError);
-                return;
+                // Old error handling
+                // Debug.Log(e);
+                // ErrorMessage = e.Message;
+                // IsLoading.OnNext(QueryState.HasError);
+                // return;
+
+                Debug.Log("Couldn't retrieve data from API. Retrieve local data instead.");
+
+                var inFilterItemsToMatch = passable.data.Resources
+                    .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.InRange)
+                    .Select(r => r.ClassItem.Id).ToList();
+
+                var outFilterItemsToMatch = passable.data.Resources
+                    .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.OutRange)
+                    .Select(r => r.ClassItem.Id).ToList();
+
+                // Get UMLS IDs for Triply brain regions
+                Dictionary<string,string> UMLS2TRIPLY = new Dictionary<string,string>();
+                TextAsset datass = Resources.Load ("Triply_BrainRegion_ID") as TextAsset;
+                string[] triplyIDs = datass.text.Split(new string[] { "\r\n" }, StringSplitOptions.None); 
+                IEnumerable<string> cleanTriplyIDs = triplyIDs.Distinct();
+                foreach(var id in cleanTriplyIDs) // TO DO: Handle duplicate entries and escape commas
+                {
+                    string[] entry = id.Split('\t');
+                    UMLS2TRIPLY.Add(entry[0], entry[1]);
+                }
+
+                // Get UMLS IDs for SBA brain regions
+                List<Dictionary<string,object>> data = CSVReader.Read("SBA2UMLS(12-6-22)");
+                Dictionary<string,string> UMLS2SBA = new Dictionary<string,string>(); 
+
+                // TO DO: Handle duplicate entries and escape commas
+                foreach(Dictionary<string,object> item in data)
+                {
+                    try
+                    {
+                        UMLS2SBA.Add(item["Scalable Brain ID"].ToString(), item["UMLS ID (Boyu)"].ToString());
+                    }
+                    catch(Exception ex)
+                    {
+                        // For some reason, numerous entries are not read correctly from CSV... 
+                        string[] itemString = item["Order"].ToString().Split(',');
+                        // Reads random tab in ID? Maybe this is what breaks the above. Dirty fix
+                        if(itemString[7].Contains('\t'))
+                            itemString[7] = itemString[7].Split('\t')[0];
+
+                        UMLS2SBA.Add(itemString[1], itemString[7]); // 1 = SBA ID, 7 = UMLS ID (Boyu)
+                        Debug.Log(ex);
+                    }
+                }
+
+                // Find the relevant SBA IDs based on UMLS ID
+                List<string> inFilterIDs = new List<string>();
+                List<string> outFilterIDs = new List<string>();
+                foreach(var inFilterItem in inFilterItemsToMatch)
+                {
+                    var myKey = UMLS2TRIPLY.FirstOrDefault(x => x.Value == inFilterItem).Key;
+                    inFilterIDs.Add(myKey);
+                }
+
+                foreach(var outFilterItem in outFilterItemsToMatch)
+                {
+                    var myKey = UMLS2TRIPLY.FirstOrDefault(x => x.Value == outFilterItem).Key;
+                    inFilterIDs.Add(myKey);
+                }
+
+                List<string> inFilterSBA_IDs = new List<string>();
+                List<string> outFilterSBA_IDs = new List<string>();
+                foreach(string id in inFilterIDs)
+                {
+                    foreach(KeyValuePair<string, string> SBA_ID in UMLS2SBA)
+                    {
+                        if(SBA_ID.Key == id)
+                            inFilterSBA_IDs.Add("datar:"+SBA_ID.Value);
+                    }
+                }
+
+                foreach(string id in outFilterIDs)
+                {
+                    foreach(KeyValuePair<string, string> SBA_ID in UMLS2SBA)
+                    {
+                        if(SBA_ID.Key == id)
+                            outFilterSBA_IDs.Add("datar:"+SBA_ID.Value);
+                    }
+                }
+
+                _pointsPool.ForEach(point =>
+                {
+                    var matchInFilter = inFilterSBA_IDs.Find(item => item == point.Key);
+                    if (matchInFilter != null)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
+                        return;
+                    }
+                    
+                    var matchOutFilter = outFilterSBA_IDs.Find(item => item == point.Key);
+                    if (matchOutFilter != null)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.outFilterRangeColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.outFilterRangeColor.color.a;
+                        return;
+                    }
+                    
+                    // Else
+                    point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
+                });
             }
             IsLoading.OnNext(QueryState.HasLoaded);
-
-            // Remove overlapping items from out-filter items
-            outFilterItems = outFilterItems.Except(inFilterItems).ToList();
-
-            _pointsPool.ForEach(point =>
-            {
-                var matchInFilter = inFilterItems.Find(item => item.Id == point.Key);
-                if (matchInFilter != null)
-                {
-                    point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
-                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
-                    return;
-                }
-                
-                var matchOutFilter = outFilterItems.Find(item => item.Id == point.Key);
-                if (matchOutFilter != null)
-                {
-                    point.Value.GetComponent<Renderer>().material = _colorService.outFilterRangeColor;
-                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.outFilterRangeColor.color.a;
-                    return;
-                }
-                
-                // Else
-                point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
-                point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
-            });
         }
 
         async void UpdatePlot(bool fixedAspectRatio = false)
