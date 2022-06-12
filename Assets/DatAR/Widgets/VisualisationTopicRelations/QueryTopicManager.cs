@@ -41,6 +41,13 @@ public class QueryTopicManager : MonoBehaviour
 
     async public Task<List<FormattedTopicCooccurrence>> QueryTopic(string topicId, string topicLabel, string topicClass = "")
     {
+        var cooccurrences = await _sparqlService.Test("", "");
+        Debug.Log("Test");
+        return new List<FormattedTopicCooccurrence>();
+    }
+
+    /*async public Task<List<FormattedTopicCooccurrence>> QueryTopic(string topicId, string topicLabel, string topicClass = "")
+    {
         try
         {
             var cooccurrences = await _sparqlService.GetTopicsRelatedToDisease(topicId);
@@ -226,7 +233,7 @@ public class QueryTopicManager : MonoBehaviour
             
             return retrievedCooccurrences;
         }
-    }
+    }*/
 }
 
 public class FormattedTopicCooccurrence
