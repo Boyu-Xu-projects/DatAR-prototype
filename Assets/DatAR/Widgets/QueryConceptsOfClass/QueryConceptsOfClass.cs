@@ -179,7 +179,7 @@ namespace DatAR.Widgets.QueryConceptsOfClass
                             List<string> type = new List<string>();  
                             string typeName = "Triply Brain Region";            
                             type.Add(typeName); 
-                            type.Add(LABEL_ID[data[i]["\"brainregion\""]]); // Add ID for future use
+                            type.Add(LABEL_ID[data[i]["\"brainregion\""].ToString()]); // Add ID for future use
 
                             DynamicResource resource = new DynamicResource(
                                 data[i]["\"brainregion\""].ToString(),

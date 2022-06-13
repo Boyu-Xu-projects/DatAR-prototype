@@ -241,10 +241,10 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 List<string> inFilterIDs = new List<string>();
                 List<string> outFilterIDs = new List<string>();
                 foreach(var inFilterItem in inFilterItemsToMatch)
-                    inFilterIDs.Add(inFilterItem.type[1]); // 1 = UMLS ID
+                    inFilterIDs.Add(inFilterItem); // 1 = UMLS ID
 
                 foreach(var outFilterItem in outFilterItemsToMatch)
-                    outFilterIDs.Add(outFilterItem.type[1]);
+                    outFilterIDs.Add(outFilterItem);
 
                 List<string> inFilterSBA_IDs = new List<string>();
                 List<string> outFilterSBA_IDs = new List<string>();
