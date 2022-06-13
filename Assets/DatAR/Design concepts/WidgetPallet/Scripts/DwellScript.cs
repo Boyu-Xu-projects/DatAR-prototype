@@ -4,6 +4,7 @@ using Microsoft.MixedReality.Toolkit.Input;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DwellScript : BaseDwellSample
 {
@@ -40,15 +41,6 @@ public class DwellScript : BaseDwellSample
             animator.enabled = true;
             animator.Play("SlideAnimation", 0, 0);
         }
-
-        if (CoreServices.InputSystem.GazeProvider.GazeTarget != null)
-        {
-            currentIcon = CoreServices.InputSystem.GazeProvider.GazeTarget.gameObject;
-        }
-        else
-        {
-            currentIcon = null;
-        }    
     }
 
     public override void DwellCanceled(IMixedRealityPointer pointer)
@@ -75,6 +67,16 @@ public class DwellScript : BaseDwellSample
             slidePlane.transform.localScale = new Vector3(0, 0.002f, 0.0001f);
         }
 
+        if (CoreServices.InputSystem.GazeProvider.GazeTarget != null)
+        {
+            currentIcon = CoreServices.InputSystem.GazeProvider.GazeTarget.gameObject;
+        }
+        else
+        {
+            currentIcon = null;
+            Debug.Log("Item is null");
+        }
+
         if (currentIcon != null && this.transform.gameObject.tag.ToString() == "PalletIcon")
         {
             GameObject child = currentIcon.transform.GetChild(0).gameObject;
@@ -89,12 +91,17 @@ public class DwellScript : BaseDwellSample
         }
         else if (this.transform.gameObject.tag.ToString() == "UpArrow")
         {
-            DynamicPalletIcons.Instance.UpArrow();
+            ExplanationTextSwitch.Instance.IncreaseSlide();
         }
         else if (this.transform.gameObject.tag.ToString() == "DownArrow")
         {
-            DynamicPalletIcons.Instance.DownArrow();
+            ExplanationTextSwitch.Instance.DecreaseSlide();
         }
         this.transform.parent.gameObject.GetComponent<Renderer>().material = defaultMaterial;
+    }
+
+    public void ChangeScene(int index)
+    {
+        SceneManager.LoadScene(index);
     }
 }

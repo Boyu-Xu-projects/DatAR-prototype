@@ -4,6 +4,28 @@ using UnityEngine;
 
 public class ExplanationTextSwitch : MonoBehaviour
 {
+    #region SINGLETON PATTERN
+    private static ExplanationTextSwitch _instance;
+    public static ExplanationTextSwitch Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = GameObject.FindObjectOfType<ExplanationTextSwitch>();
+
+                if (_instance == null)
+                {
+                    GameObject container = new GameObject("ExplanationTextSwitch");
+                    _instance = container.AddComponent<ExplanationTextSwitch>();
+                }
+            }
+
+            return _instance;
+        }
+    }
+    #endregion
+
     public GameObject titleSlide;
     public GameObject checkTaskSlide;
     public GameObject smallTaskSlide;
