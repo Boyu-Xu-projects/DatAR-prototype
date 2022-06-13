@@ -202,7 +202,6 @@ namespace DatAR.Widgets.VisualisationBrainModel
                     .Select(r => r.ClassItem.Id).ToList();
 
                 // Get UMLS IDs for Triply brain regions
-                /*
                 Dictionary<string,string> UMLS2TRIPLY = new Dictionary<string,string>();
                 TextAsset datass = Resources.Load ("Triply_BrainRegion_ID") as TextAsset;
                 string[] triplyIDs = datass.text.Split(new string[] { "\r\n" }, StringSplitOptions.None); 
@@ -211,7 +210,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 {
                     string[] entry = id.Split('\t');
                     UMLS2TRIPLY.Add(entry[0], entry[1]);
-                }*/
+                }
 
                 // Get UMLS IDs for SBA brain regions
                 List<Dictionary<string,object>> data = CSVReader.Read("SBA2UMLS(12-6-22)");
@@ -222,7 +221,11 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 {
                     try
                     {
-                        UMLS2SBA.Add(item["Scalable Brain ID"].ToString(), item["UMLS ID (Boyu)"].ToString());
+                        string label = item["Scalable Brain ID"].ToString();
+                        if(label.Contains(' '))
+                            label = label.Split(' ')[0];
+
+                        UMLS2SBA.Add(label, item["UMLS ID (Boyu)"].ToString());
                     }
                     catch(Exception ex)
                     {
@@ -232,8 +235,11 @@ namespace DatAR.Widgets.VisualisationBrainModel
                         if(itemString[7].Contains('\t'))
                             itemString[7] = itemString[7].Split('\t')[0];
 
-                        UMLS2SBA.Add(itemString[1], itemString[7]); // 1 = SBA ID, 7 = UMLS ID (Boyu)
-                        Debug.Log(ex);
+                        string label = itemString[1];
+                        if(label.Contains(' '))
+                            label = label.Split(' ')[0];
+
+                        UMLS2SBA.Add(label, itemString[7]); // 1 = SBA ID, 7 = UMLS ID (Boyu)
                     }
                 }
 
@@ -241,10 +247,16 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 List<string> inFilterIDs = new List<string>();
                 List<string> outFilterIDs = new List<string>();
                 foreach(var inFilterItem in inFilterItemsToMatch)
-                    inFilterIDs.Add(inFilterItem); // 1 = UMLS ID
+                {
+                    var myKey = UMLS2TRIPLY.FirstOrDefault(x => x.Value == inFilterItem).Key;
+                    inFilterIDs.Add(myKey);
+                }
 
                 foreach(var outFilterItem in outFilterItemsToMatch)
-                    outFilterIDs.Add(outFilterItem);
+                {
+                    var myKey = UMLS2TRIPLY.FirstOrDefault(x => x.Value == outFilterItem).Key;
+                    outFilterIDs.Add(myKey);
+                }
 
                 List<string> inFilterSBA_IDs = new List<string>();
                 List<string> outFilterSBA_IDs = new List<string>();
@@ -252,8 +264,8 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 {
                     foreach(KeyValuePair<string, string> SBA_ID in UMLS2SBA)
                     {
-                        if(SBA_ID.Key == id)
-                            inFilterSBA_IDs.Add("datar:"+SBA_ID.Value);
+                        if(SBA_ID.Value == id)
+                            inFilterSBA_IDs.Add("datar:"+SBA_ID.Key);
                     }
                 }
 
@@ -261,8 +273,8 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 {
                     foreach(KeyValuePair<string, string> SBA_ID in UMLS2SBA)
                     {
-                        if(SBA_ID.Key == id)
-                            outFilterSBA_IDs.Add("datar:"+SBA_ID.Value);
+                        if(SBA_ID.Value == id)
+                            outFilterSBA_IDs.Add("datar:"+SBA_ID.Key);
                     }
                 }
 
