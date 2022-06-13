@@ -202,6 +202,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
                     .Select(r => r.ClassItem.Id).ToList();
 
                 // Get UMLS IDs for Triply brain regions
+                /*
                 Dictionary<string,string> UMLS2TRIPLY = new Dictionary<string,string>();
                 TextAsset datass = Resources.Load ("Triply_BrainRegion_ID") as TextAsset;
                 string[] triplyIDs = datass.text.Split(new string[] { "\r\n" }, StringSplitOptions.None); 
@@ -210,7 +211,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 {
                     string[] entry = id.Split('\t');
                     UMLS2TRIPLY.Add(entry[0], entry[1]);
-                }
+                }*/
 
                 // Get UMLS IDs for SBA brain regions
                 List<Dictionary<string,object>> data = CSVReader.Read("SBA2UMLS(12-6-22)");
@@ -240,16 +241,10 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 List<string> inFilterIDs = new List<string>();
                 List<string> outFilterIDs = new List<string>();
                 foreach(var inFilterItem in inFilterItemsToMatch)
-                {
-                    var myKey = UMLS2TRIPLY.FirstOrDefault(x => x.Value == inFilterItem).Key;
-                    inFilterIDs.Add(myKey);
-                }
+                    inFilterIDs.Add(inFilterItem.type[1]); // 1 = UMLS ID
 
                 foreach(var outFilterItem in outFilterItemsToMatch)
-                {
-                    var myKey = UMLS2TRIPLY.FirstOrDefault(x => x.Value == outFilterItem).Key;
-                    inFilterIDs.Add(myKey);
-                }
+                    outFilterIDs.Add(outFilterItem.type[1]);
 
                 List<string> inFilterSBA_IDs = new List<string>();
                 List<string> outFilterSBA_IDs = new List<string>();

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using DatAR.DataModels.Passables;
 using DatAR.DataModels.Resources;
@@ -71,6 +72,8 @@ namespace DatAR.Widgets.QueryConceptsOfClass
             {
                 Debug.Log("Couldn't retrieve data from API. Retrieve local data instead.");
 
+                // RETRIEVE ALL AVAILABLE DATA ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                /*
                 List<DynamicResource> backUp = new List<DynamicResource>();
 
                 string documentName = "BrainRegions(25-4-22)";
@@ -95,6 +98,100 @@ namespace DatAR.Widgets.QueryConceptsOfClass
                     backUp.Add(resource);
                 }
 
+                ConceptListPassable newFormat = new ConceptListPassable(backUp);
+
+                _ = StartCoroutine(SpawnConcept(newFormat, currentBatchId));
+                */
+                // RETRIEVE ALL AVAILABLE DATA ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                // RETRIEVE DATA AVAILABLE IN SBA BRAIN MODEL /////////////////////////////////////////////////////////////////////////////////////////////////////
+                // Retrieve all IDs and labels available in Triply
+                // <UMLS ID, Disease Label>
+                Dictionary<string,string> UMLS2TRIPLY = new Dictionary<string,string>();
+                TextAsset datass = Resources.Load ("Triply_BrainRegion_ID") as TextAsset;
+                string[] triplyIDs = datass.text.Split(new string[] { "\r\n" }, StringSplitOptions.None); 
+                IEnumerable<string> cleanTriplyIDs = triplyIDs.Distinct();
+                foreach(var id in cleanTriplyIDs) // TO DO: Handle duplicate entries and escape commas
+                {
+                    string[] entry = id.Split('\t');
+                    UMLS2TRIPLY.Add(entry[0], entry[1]);
+                    // type.Add(entry[1]); // Add UMLS ID to this list
+                }
+
+                // Retrieve UMLS IDs which can be found in the SBA Brain model
+                List<Dictionary<string,object>> sba_data = CSVReader.Read("SBA2UMLS(12-6-22)");
+                List<string> availableUMLSids = new List<string>();
+
+                // TO DO: Handle duplicate entries and escape commas
+                foreach(Dictionary<string,object> item in sba_data)
+                {
+                    try 
+                    {
+                        availableUMLSids.Add(item["UMLS ID (Boyu)"].ToString());
+                    }
+                    catch(Exception ex)
+                    {
+                        // For some reason, numerous entries are not read correctly from CSV... 
+                        string[] itemString = item["Order"].ToString().Split(',');
+                        // Reads random tab in ID? Maybe this is what breaks the above. Dirty fix
+                        if(itemString[7].Contains("\t"))
+                            itemString[7] = itemString[7].Split('\t')[0];
+
+                        availableUMLSids.Add(itemString[7]);
+                    }
+                }
+
+                // Get brain regions that show up in the brain model
+                availableUMLSids = availableUMLSids.Distinct().ToList();
+
+                // Reverse dictionary from UMLS2TRIPLY 
+                Dictionary<string, string> LABEL_ID = new Dictionary<string, string>();
+                foreach(string id in availableUMLSids)
+                    LABEL_ID.Add(UMLS2TRIPLY[id], id);
+
+                List<DynamicResource> backUp = new List<DynamicResource>();
+                List<Dictionary<string,object>> data = CSVReader.Read("brainregion-disease(29-4-22)");
+
+                // Get either all brain regions or brain diseases 
+                if(classItem.Id == "lbd:disease")
+                {
+                    List<string> type = new List<string>();  
+                    string typeName = "Triply Brain Disease";            
+                    type.Add(typeName); 
+                    
+                    for(var i=0; i < data.Count; i++) 
+                    {
+                        if(LABEL_ID.ContainsKey(data[i]["\"brainregion\""].ToString()))
+                        {
+                            DynamicResource resource = new DynamicResource(
+                                data[i]["\"disease\""].ToString(),
+                                type);
+                            backUp.Add(resource);
+                        }
+                    }
+                }
+                else
+                {
+                    for(var i=0; i < data.Count; i++) 
+                    {
+                        if(LABEL_ID.ContainsKey(data[i]["\"brainregion\""].ToString()))
+                        {
+                            List<string> type = new List<string>();  
+                            string typeName = "Triply Brain Region";            
+                            type.Add(typeName); 
+                            type.Add(LABEL_ID[data[i]["\"brainregion\""]]); // Add ID for future use
+
+                            DynamicResource resource = new DynamicResource(
+                                data[i]["\"brainregion\""].ToString(),
+                                type);
+                            backUp.Add(resource);
+                        }
+                    }
+                }
+
+                backUp = backUp.Distinct().ToList();
+                backUp = backUp.OrderBy(o=>o.Label).ToList();
+    
                 ConceptListPassable newFormat = new ConceptListPassable(backUp);
 
                 _ = StartCoroutine(SpawnConcept(newFormat, currentBatchId));
