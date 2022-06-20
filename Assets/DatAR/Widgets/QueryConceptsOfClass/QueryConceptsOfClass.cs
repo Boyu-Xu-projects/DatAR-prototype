@@ -72,41 +72,11 @@ namespace DatAR.Widgets.QueryConceptsOfClass
             {
                 Debug.Log("Couldn't retrieve data from API. Retrieve local data instead.");
 
-                // RETRIEVE ALL AVAILABLE DATA ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                /*
-                List<DynamicResource> backUp = new List<DynamicResource>();
-
-                string documentName = "BrainRegions(25-4-22)";
-                string typeName = "Triply Brain Region";
-                string searchTerm = "\"brainregion\"";
-
-                if(classItem.Id == "lbd:disease")
-                {
-                    documentName = "Diseases(25-4-22)";
-                    typeName = "Triply Brain Disease";
-                    searchTerm = "\"disease\"";
-                }
-
-                List<Dictionary<string,object>> data = CSVReader.Read(documentName);
-                List<string> type = new List<string>();
-                type.Add(typeName);
-
-                for(var i=0; i < data.Count; i++) {
-                    DynamicResource resource = new DynamicResource(
-                        data[i][searchTerm].ToString(),
-                        type);
-                    backUp.Add(resource);
-                }
-
-                ConceptListPassable newFormat = new ConceptListPassable(backUp);
-
-                _ = StartCoroutine(SpawnConcept(newFormat, currentBatchId));
-                */
-                // RETRIEVE ALL AVAILABLE DATA ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+                #region
                 // RETRIEVE DATA AVAILABLE IN SBA BRAIN MODEL /////////////////////////////////////////////////////////////////////////////////////////////////////
                 // Retrieve all IDs and labels available in Triply
                 // <UMLS ID, Disease Label>
+                /* Code to filter the original triply csv
                 Dictionary<string,string> UMLS2TRIPLY = new Dictionary<string,string>();
                 TextAsset datass = Resources.Load ("Triply_BrainRegion_ID") as TextAsset;
                 string[] triplyIDs = datass.text.Split(new string[] { "\r\n" }, StringSplitOptions.None); 
@@ -151,47 +121,36 @@ namespace DatAR.Widgets.QueryConceptsOfClass
 
                 List<DynamicResource> backUp = new List<DynamicResource>();
                 List<Dictionary<string,object>> data = CSVReader.Read("brainregion-disease(29-4-22)");
+                */
+                #endregion
 
                 // Get either all brain regions or brain diseases 
+
+                List<DynamicResource> backUp = new List<DynamicResource>();
+
+                string csvPath = "SBA Available Brain Regions";
+                string columnName = "Brain Region";
+                string typeOfClass = "Triply Brain Region";
+
                 if(classItem.Id == "lbd:disease")
                 {
-                    List<string> type = new List<string>();  
-                    string typeName = "Triply Brain Disease";            
-                    type.Add(typeName); 
-                    
-                    for(var i=0; i < data.Count; i++) 
-                    {
-                        if(LABEL_ID.ContainsKey(data[i]["\"brainregion\""].ToString()))
-                        {
-                            DynamicResource resource = new DynamicResource(
-                                data[i]["\"disease\""].ToString(),
-                                type);
-                            backUp.Add(resource);
-                        }
-                    }
+                    csvPath = "SBA Available Brain Diseases";
+                    columnName = "Brain Diseases";
+                    typeOfClass = "Triply Brain Disease";
                 }
-                else
+                
+                List<Dictionary<string,object>> data = CSVReader.Read(csvPath);
+                List<string> type = new List<string>();      
+                type.Add(typeOfClass); 
+
+                foreach(Dictionary<string,object> item in data)
                 {
-                    for(var i=0; i < data.Count; i++) 
-                    {
-                        if(LABEL_ID.ContainsKey(data[i]["\"brainregion\""].ToString()))
-                        {
-                            List<string> type = new List<string>();  
-                            string typeName = "Triply Brain Region";            
-                            type.Add(typeName); 
-                            type.Add(LABEL_ID[data[i]["\"brainregion\""].ToString()]); // Add ID for future use
-
-                            DynamicResource resource = new DynamicResource(
-                                data[i]["\"brainregion\""].ToString(),
-                                type);
-                            backUp.Add(resource);
-                        }
-                    }
+                    DynamicResource resource = new DynamicResource(
+                        item[columnName].ToString(),
+                        type);
+                    backUp.Add(resource);
                 }
-
-                backUp = backUp.Distinct().ToList();
-                backUp = backUp.OrderBy(o=>o.Label).ToList();
-    
+                
                 ConceptListPassable newFormat = new ConceptListPassable(backUp);
 
                 _ = StartCoroutine(SpawnConcept(newFormat, currentBatchId));

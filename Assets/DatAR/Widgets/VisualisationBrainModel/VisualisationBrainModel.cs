@@ -202,7 +202,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
                     .Select(r => r.ClassItem.Id).ToList();
 
                 // Get UMLS IDs for Triply brain regions
-                Dictionary<string,string> UMLS2TRIPLY = new Dictionary<string,string>();
+                /*Dictionary<string,string> UMLS2TRIPLY = new Dictionary<string,string>();
                 TextAsset datass = Resources.Load ("Triply_BrainRegion_ID") as TextAsset;
                 string[] triplyIDs = datass.text.Split(new string[] { "\r\n" }, StringSplitOptions.None); 
                 IEnumerable<string> cleanTriplyIDs = triplyIDs.Distinct();
@@ -210,8 +210,16 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 {
                     string[] entry = id.Split('\t');
                     UMLS2TRIPLY.Add(entry[0], entry[1]);
-                }
+                }*/
+                
+                Dictionary<string,string> UMLS2TRIPLY = new Dictionary<string,string>();
+                List<Dictionary<string,object>> brainRegions = CSVReader.Read("SBA Available Brain Regions");
+                List<string> type = new List<string>();      
+                type.Add("Triply Brain Region"); 
 
+                foreach(Dictionary<string,object> brainRegion in brainRegions) // TO DO: Handle duplicate entries and escape commas
+                    UMLS2TRIPLY.Add(brainRegion["UMLS ID"].ToString(), brainRegion["Brain Region"].ToString());
+                
                 // Get UMLS IDs for SBA brain regions
                 List<Dictionary<string,object>> data = CSVReader.Read("SBA2UMLS(12-6-22)");
                 Dictionary<string,string> UMLS2SBA = new Dictionary<string,string>(); 
