@@ -5,10 +5,10 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class DataflowInOulet : MonoBehaviour
+public class DataflowInletL : MonoBehaviour
 {
     private IDisposable _dataSubscription;
-    public readonly BehaviorSubject<Passable> data;
+    public readonly BehaviorSubject<Passable> dataL;
     [SerializeField] private DataflowOutlet inputGameObject;
 
     [SerializeField] private MeshRenderer inlet;
@@ -19,41 +19,15 @@ public class DataflowInOulet : MonoBehaviour
 
     private TriggerPassthroughComponent _linkTrigger;
 
-    public readonly BehaviorSubject<Passable> dataP;
-
-    public MeshRenderer outlet;
-    //private Color _originalColor;
-
-    public DataflowOutlet()
+    public DataflowInletL()
     {
         // Instantiate with an empty _data object
-        data = new BehaviorSubject<Passable>(
-            new Passable());
-    }
-
-
-    public void Send(Passable newData)
-    {
-        PulseIndicator();
-        data.OnNext(newData);
-    }
-
- 
-    public DataflowInlet()
-    {
-        // Instantiate with an empty _data object
-        dataP = new BehaviorSubject<Passable>(
+        dataL = new BehaviorSubject<Passable>(
             new Passable());
     }
 
     void Start()
     {
-        if (outlet)
-        {
-            _originalColor = outlet.material.color;
-            var tag = outlet.gameObject.AddComponent<MyControllerComponent>();
-            tag.myController = gameObject;
-        }
         if (inlet)
         {
             _originalColor = inlet.material.color;
@@ -78,7 +52,7 @@ public class DataflowInOulet : MonoBehaviour
                 .Subscribe(incomingData =>
                 {
                     PulseIndicator();
-                    dataP.OnNext(incomingData);
+                    dataL.OnNext(incomingData);
                     DrawLink();
                 });
         }
@@ -108,12 +82,6 @@ public class DataflowInOulet : MonoBehaviour
             inlet.material.color = Color.green;
             await UniTask.Delay(TimeSpan.FromSeconds(.5));
             inlet.material.color = _originalColor;
-        }
-        if (outlet)
-        {
-            outlet.material.color = Color.cyan;
-            await UniTask.Delay(TimeSpan.FromSeconds(.5));
-            outlet.material.color = _originalColor;
         }
     }
 
