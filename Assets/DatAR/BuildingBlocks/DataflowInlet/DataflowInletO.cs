@@ -5,11 +5,12 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class DataflowInletR : MonoBehaviour
+public class DataflowInletO : MonoBehaviour
 {
     private IDisposable _dataSubscription;
-    public readonly BehaviorSubject<Passable> dataR;
-    [SerializeField] private DataflowOutlet inputGameObject;
+    public readonly BehaviorSubject<Passable> dataO;
+    [SerializeField] private DataflowOutletL inputGameObject;
+
 
     [SerializeField] private MeshRenderer inlet;
     private Color _originalColor;
@@ -19,10 +20,10 @@ public class DataflowInletR : MonoBehaviour
 
     private TriggerPassthroughComponent _linkTrigger;
 
-    public DataflowInletR()
+    public DataflowInletO()
     {
         // Instantiate with an empty _data object
-        dataR = new BehaviorSubject<Passable>(
+        dataO = new BehaviorSubject<Passable>(
             new Passable());
     }
     
@@ -46,13 +47,13 @@ public class DataflowInletR : MonoBehaviour
             _dataSubscription?.Dispose();
 
             // Pass on any events from the linked game object
-            _dataSubscription = inputGameObject.GetComponent<DataflowOutlet>()
-                .data
+            _dataSubscription = inputGameObject.GetComponent<DataflowOutletL>()
+                .dataL
                 .Sample(TimeSpan.FromMilliseconds(200)) // Don't take in more updates once per time unit
                 .Subscribe(incomingData =>
                 {
                     PulseIndicator();
-                    dataR.OnNext(incomingData);
+                    dataO.OnNext(incomingData);
                     DrawLink();
                 });
         } 
@@ -65,7 +66,8 @@ public class DataflowInletR : MonoBehaviour
         _linkTrigger.collideTrigger.Subscribe((other) =>
         {
             var dataSender = other.GetComponent<MyControllerComponent>()?
-                .myController?.GetComponent<DataflowOutlet>();
+                .myController?.GetComponent<DataflowOutletL>();
+            
             if (!dataSender)
             {
                 return;
@@ -85,7 +87,7 @@ public class DataflowInletR : MonoBehaviour
         }
     }
 
-    public void SetInputGameObject(DataflowOutlet incomingGameObject)
+    public void SetInputGameObject(DataflowOutletL incomingGameObject)
     {
         if (incomingGameObject == inputGameObject)
         {
@@ -93,6 +95,7 @@ public class DataflowInletR : MonoBehaviour
         }
         
         inputGameObject = incomingGameObject;
+        
         StartDataListener();
     }
 
@@ -123,11 +126,14 @@ public class DataflowInletR : MonoBehaviour
             Destroy(_dataLink.gameObject);
             return;
         }
-        
+
         if (_dataLink)
         {
             _dataLink.SetPosition(0, inputGameObject.outlet.transform.position);
+           
             _dataLink.SetPosition(1, inlet.transform.position);
+            
+
         }
     }
 }
