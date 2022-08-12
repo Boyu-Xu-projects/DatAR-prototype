@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 public class DataflowInletO1 : MonoBehaviour
 {
     private IDisposable _dataSubscription;
-    public readonly BehaviorSubject<Passable> dataO;
+    public readonly BehaviorSubject<Passable> dataO1;
     [SerializeField] private DataflowOutletR inputGameObjectS;
 
     [SerializeField] private MeshRenderer inlet;
@@ -22,7 +22,7 @@ public class DataflowInletO1 : MonoBehaviour
     public DataflowInletO1()
     {
         // Instantiate with an empty _data object
-        dataO = new BehaviorSubject<Passable>(
+        dataO1 = new BehaviorSubject<Passable>(
             new Passable());
     }
     
@@ -52,7 +52,7 @@ public class DataflowInletO1 : MonoBehaviour
                 .Subscribe(incomingDataS =>
                 {
                     PulseIndicator();
-                    dataO.OnNext(incomingDataS);
+                    dataO1.OnNext(incomingDataS);
                     DrawLink();
                 });
         }
