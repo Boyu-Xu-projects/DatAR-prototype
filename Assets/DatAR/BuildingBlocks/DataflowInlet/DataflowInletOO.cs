@@ -5,10 +5,10 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class DataflowInletO1 : MonoBehaviour
+public class DataflowInletOO : MonoBehaviour
 {
     private IDisposable _dataSubscription;
-    public readonly BehaviorSubject<Passable> dataO1;
+    public readonly BehaviorSubject<Passable> dataOO;
     [SerializeField] private DataflowOutletR inputGameObjectS;
 
     [SerializeField] private MeshRenderer inlet;
@@ -19,10 +19,10 @@ public class DataflowInletO1 : MonoBehaviour
 
     private TriggerPassthroughComponent _linkTrigger;
 
-    public DataflowInletO1()
+    public DataflowInletOO()
     {
         // Instantiate with an empty _data object
-        dataO1 = new BehaviorSubject<Passable>(
+        dataOO = new BehaviorSubject<Passable>(
             new Passable());
     }
     
@@ -52,7 +52,7 @@ public class DataflowInletO1 : MonoBehaviour
                 .Subscribe(incomingDataS =>
                 {
                     PulseIndicator();
-                    dataO1.OnNext(incomingDataS);
+                    dataOO.OnNext(incomingDataS);
                     DrawLink();
                 });
         }

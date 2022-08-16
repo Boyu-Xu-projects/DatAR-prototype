@@ -34,6 +34,11 @@ namespace DatAR.Widgets.VisualisationBrainModel
         public GameObject pointPool;
 
         [SerializeField] private DataflowInlet highlightDataReceiver;
+        [SerializeField] private DataflowInletO highlightDataReceiverO;
+        [SerializeField] private DataflowInletOO highlightDataReceiverOO;
+        
+
+        [SerializeField] private DataflowOutlet dataSender;
 
         private ColorService _colorService;
         private SparqlService _sparqlService;
@@ -56,13 +61,15 @@ namespace DatAR.Widgets.VisualisationBrainModel
         private void Start()
         {
             highlightDataReceiver.data.Subscribe(UpdateHighlights);
+            highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
+            highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
             UpdatePlot(true);
             IsLoading.Subscribe((isRunning) =>
             {
                 if (isRunning != QueryState.IsLoading) CheckStackForLatest();
             });
         }
-
+        dataSender.Send(highlightDataReceiver);
         /**
          * This function ensures that the very latest passable input is displayed
          */
@@ -90,6 +97,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 _awaitingPassable = new Tuple<float, Passable>(Time.time, rawPassable);
                 return;
             }
+            
             IsLoading.OnNext(QueryState.IsLoading);
             _lastRunTime = Time.time;
 
@@ -118,6 +126,8 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 IsLoading.OnNext(QueryState.HasError);
                 return;
             }
+            
+
             // Debug.Log($"3D PLOT OBJECT: Received {passable.data.Resources.Count} items. Objects: {JsonConvert.SerializeObject(passable.data)}"); // DEBUG
 
             List<DynamicResource> inFilterItems = new List<DynamicResource>(), outFilterItems = new List<DynamicResource>();
@@ -179,6 +189,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
             try
             {
                 coords = await _sparqlService.GetTopicModelCoordsOfType(type);
+                
                 if (coords.Count < 1)
                 {
                     ErrorMessage = $"Failed to load brain model data - data is missing from endpoint.";
@@ -192,6 +203,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 IsLoading.OnNext(QueryState.HasError);
                 return;
             }
+           // dataSender.Send(coords);
             IsLoading.OnNext(QueryState.HasLoaded);
 
             // Get max values on each axis
