@@ -15,10 +15,10 @@ using Newtonsoft.Json;
 
 namespace DatAR.Widgets.MathFunctions
 { 
-    public class MathFunctions : MonoBehaviour, IQueryState
+    public class MathFunctions : MonoBehaviour//, //IQueryState
     {
-        public BehaviorSubject<QueryState> IsLoading { get; }
-        public string ErrorMessage { get; private set; }
+        //public BehaviorSubject<QueryState> IsLoading { get; }
+        //public string ErrorMessage { get; private set; }
 
         public DataflowInletL dataReceiver;
         public DataflowOutletL dataSender;
@@ -68,20 +68,24 @@ namespace DatAR.Widgets.MathFunctions
         {
             if (tgvalue.isOn)
             {
-                
-                var both = dataReceiver.Intersect(dataReceiverR);
-               // if (both.Count() < 1)
+
+                IEnumerable<Passable> both = dataReceiver.dataL.Intersect(dataReceiverR.dataR);
+                // if (both.Count() < 1)
                 //{
-               // ErrorMessage = $"No Common topics found";
+                // ErrorMessage = $"No Common topics found";
                 //IsLoading.OnNext(QueryState.HasError);
-               // }
+                // }
+               // both = new Passable<CooccurrenceListPassable>
                 dataSender.Send(both);
                 dataSenderR.Send(both);
             }
         }
         void UnionValueChangedOccour(Toggle tgvalue)
         {
-            if (tgvalue.isOn) { }
+            if (tgvalue.isOn) 
+            {
+                IEnumerable<Passable> both = dataReceiver.dataL.Union(dataReceiverR.dataR);
+            }
         }
         void DifferenceValueChangedOccour(Toggle tgvalue)
         {

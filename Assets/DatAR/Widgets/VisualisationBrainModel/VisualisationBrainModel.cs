@@ -61,15 +61,15 @@ namespace DatAR.Widgets.VisualisationBrainModel
         private void Start()
         {
             highlightDataReceiver.data.Subscribe(UpdateHighlights);
-            highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
-            highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
+            highlightDataReceiverO.dataO.Subscribe(UpdateHighlightsecond);
+            highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlightsecond);
             UpdatePlot(true);
             IsLoading.Subscribe((isRunning) =>
             {
                 if (isRunning != QueryState.IsLoading) CheckStackForLatest();
             });
         }
-        dataSender.Send(highlightDataReceiver);
+        //dataSender.Send(highlightDataReceiver.data.Subscribe);
         /**
          * This function ensures that the very latest passable input is displayed
          */
@@ -126,7 +126,96 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 IsLoading.OnNext(QueryState.HasError);
                 return;
             }
+            dataSender.Send(passable);
+
+            // Debug.Log($"3D PLOT OBJECT: Received {passable.data.Resources.Count} items. Objects: {JsonConvert.SerializeObject(passable.data)}"); // DEBUG
+
+            List<DynamicResource> inFilterItems = new List<DynamicResource>(), outFilterItems = new List<DynamicResource>();
+            try
+            {
+                var outFilterItemsToMatch = passable.data.Resources
+                    .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.OutRange)
+                    .Select(r => r.ClassItem.Id).ToList();
+                var inFilterItemsToMatch = passable.data.Resources
+                    .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.InRange)
+                    .Select(r => r.ClassItem.Id).ToList();
+
+                // Perform parallel query
+                //var sbURL = "https://datar.local/ontology/";
+                (inFilterItems, outFilterItems) = await UniTask.WhenAll(_sparqlService.GetCloseMatchingIds(inFilterItemsToMatch), _sparqlService.GetCloseMatchingIds(outFilterItemsToMatch));
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+                ErrorMessage = e.Message;
+                IsLoading.OnNext(QueryState.HasError);
+                return;
+            }
+            IsLoading.OnNext(QueryState.HasLoaded);
+
+            // Remove overlapping items from out-filter items
+            outFilterItems = outFilterItems.Except(inFilterItems).ToList();
+
+            _pointsPool.ForEach(point =>
+            {
+                var matchInFilter = inFilterItems.Find(item => item.Id == point.Key);
+                if (matchInFilter != null)
+                {
+                    point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
+                    return;
+                }
+                
+                var matchOutFilter = outFilterItems.Find(item => item.Id == point.Key);
+                if (matchOutFilter != null)
+                {
+                    point.Value.GetComponent<Renderer>().material = _colorService.outFilterRangeColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.outFilterRangeColor.color.a;
+                    return;
+                }
+                
+                // Else
+                point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
+                point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
+            });
+        }private async void UpdateHighlightsecond(Passable rawPassable)
+        {
+            if (IsLoading.Value == QueryState.IsLoading)
+            {
+                // place in stack
+                _awaitingPassable = new Tuple<float, Passable>(Time.time, rawPassable);
+                return;
+            }
             
+            IsLoading.OnNext(QueryState.IsLoading);
+            _lastRunTime = Time.time;
+
+            // Check if correct type
+            if (!(rawPassable is Passable<CooccurrenceListPassable>))
+            {
+                if (rawPassable.GetType().ToString() == "DatAR.DataModels.Passables.Passable")
+                {
+                    Debug.Log("3D Plot listening to data stream");
+                    IsLoading.OnNext(QueryState.IsEmpty);
+                }
+                else
+                {
+                    Debug.LogWarning($"3D Plot received incompatible data type: {rawPassable?.GetType()}");
+                    ErrorMessage = $"3D Plot received incompatible data type: {rawPassable?.GetType()}";
+                    IsLoading.OnNext(QueryState.HasError);
+                }
+                return;
+            }
+
+            var passable = (Passable<CooccurrenceListPassable>) rawPassable;
+        
+            if (passable.data.Resources.Count < 1)
+            {
+                ErrorMessage = "Data flow does not contain any items";
+                IsLoading.OnNext(QueryState.HasError);
+                return;
+            }
+            dataSender.Send(passable);
 
             // Debug.Log($"3D PLOT OBJECT: Received {passable.data.Resources.Count} items. Objects: {JsonConvert.SerializeObject(passable.data)}"); // DEBUG
 
