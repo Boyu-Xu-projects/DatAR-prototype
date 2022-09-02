@@ -61,13 +61,15 @@ namespace DatAR.Widgets.VisualisationBrainModel
         private void Start()
         {
             highlightDataReceiver.data.Subscribe(UpdateHighlights);
-            highlightDataReceiverO.dataO.Subscribe(UpdateHighlightsecond);
-            highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlightsecond);
+            //highlightDataReceiverO.dataO.Subscribe(UpdateHighlightsecond);
+            //highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlightsecond);
             UpdatePlot(true);
             IsLoading.Subscribe((isRunning) =>
             {
                 if (isRunning != QueryState.IsLoading) CheckStackForLatest();
             });
+            
+            //dataSender.Send();
         }
         //dataSender.Send(highlightDataReceiver.data.Subscribe);
         /**
@@ -82,7 +84,9 @@ namespace DatAR.Widgets.VisualisationBrainModel
 
             if (_awaitingPassable.Item1 > _lastRunTime)
             {
-                UpdateHighlights(_awaitingPassable.Item2);
+                // UpdateHighlights(_awaitingPassable.Item2);
+                highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
+                highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
             }
         }
 
@@ -91,13 +95,34 @@ namespace DatAR.Widgets.VisualisationBrainModel
          */
         private async void UpdateHighlights(Passable rawPassable)
         {
+            if (rawPassable == null) // Demo purposes
+            {
+                // First reset topic model
+                _pointsPool.ForEach(point =>
+                {
+                    point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
+                });
+
+                // Randomly assign highlights in the model
+                _pointsPool.ForEach(point =>
+                {
+                    if (UnityEngine.Random.Range(0, 100) < 5)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
+                    }
+                });
+
+                return;
+            }
+
             if (IsLoading.Value == QueryState.IsLoading)
             {
                 // place in stack
                 _awaitingPassable = new Tuple<float, Passable>(Time.time, rawPassable);
                 return;
             }
-            
             IsLoading.OnNext(QueryState.IsLoading);
             _lastRunTime = Time.time;
 
@@ -118,21 +143,19 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 return;
             }
 
-            var passable = (Passable<CooccurrenceListPassable>) rawPassable;
-        
+            var passable = (Passable<CooccurrenceListPassable>)rawPassable;
+
             if (passable.data.Resources.Count < 1)
             {
                 ErrorMessage = "Data flow does not contain any items";
                 IsLoading.OnNext(QueryState.HasError);
                 return;
             }
-            dataSender.Send(passable);
-
             // Debug.Log($"3D PLOT OBJECT: Received {passable.data.Resources.Count} items. Objects: {JsonConvert.SerializeObject(passable.data)}"); // DEBUG
 
-            List<DynamicResource> inFilterItems = new List<DynamicResource>(), outFilterItems = new List<DynamicResource>();
             try
             {
+                List<DynamicResource> inFilterItems = new List<DynamicResource>(), outFilterItems = new List<DynamicResource>();
                 var outFilterItemsToMatch = passable.data.Resources
                     .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.OutRange)
                     .Select(r => r.ClassItem.Id).ToList();
@@ -143,130 +166,160 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 // Perform parallel query
                 //var sbURL = "https://datar.local/ontology/";
                 (inFilterItems, outFilterItems) = await UniTask.WhenAll(_sparqlService.GetCloseMatchingIds(inFilterItemsToMatch), _sparqlService.GetCloseMatchingIds(outFilterItemsToMatch));
+
+                // Remove overlapping items from out-filter items
+                outFilterItems = outFilterItems.Except(inFilterItems).ToList();
+
+                _pointsPool.ForEach(point =>
+                {
+                    var matchInFilter = inFilterItems.Find(item => item.Id == point.Key);
+                    if (matchInFilter != null)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
+                        return;
+                    }
+
+                    var matchOutFilter = outFilterItems.Find(item => item.Id == point.Key);
+                    if (matchOutFilter != null)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.outFilterRangeColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.outFilterRangeColor.color.a;
+                        return;
+                    }
+
+                    // Else
+                    point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
+                });
             }
             catch (Exception e)
             {
-                Debug.Log(e);
-                ErrorMessage = e.Message;
-                IsLoading.OnNext(QueryState.HasError);
-                return;
-            }
-            IsLoading.OnNext(QueryState.HasLoaded);
+                // Old error handling
+                // Debug.Log(e);
+                // ErrorMessage = e.Message;
+                // IsLoading.OnNext(QueryState.HasError);
+                // return;
 
-            // Remove overlapping items from out-filter items
-            outFilterItems = outFilterItems.Except(inFilterItems).ToList();
+                Debug.Log("Couldn't retrieve data from API. Retrieve local data instead.");
 
-            _pointsPool.ForEach(point =>
-            {
-                var matchInFilter = inFilterItems.Find(item => item.Id == point.Key);
-                if (matchInFilter != null)
-                {
-                    point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
-                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
-                    return;
-                }
-                
-                var matchOutFilter = outFilterItems.Find(item => item.Id == point.Key);
-                if (matchOutFilter != null)
-                {
-                    point.Value.GetComponent<Renderer>().material = _colorService.outFilterRangeColor;
-                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.outFilterRangeColor.color.a;
-                    return;
-                }
-                
-                // Else
-                point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
-                point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
-            });
-        }private async void UpdateHighlightsecond(Passable rawPassable)
-        {
-            if (IsLoading.Value == QueryState.IsLoading)
-            {
-                // place in stack
-                _awaitingPassable = new Tuple<float, Passable>(Time.time, rawPassable);
-                return;
-            }
-            
-            IsLoading.OnNext(QueryState.IsLoading);
-            _lastRunTime = Time.time;
-
-            // Check if correct type
-            if (!(rawPassable is Passable<CooccurrenceListPassable>))
-            {
-                if (rawPassable.GetType().ToString() == "DatAR.DataModels.Passables.Passable")
-                {
-                    Debug.Log("3D Plot listening to data stream");
-                    IsLoading.OnNext(QueryState.IsEmpty);
-                }
-                else
-                {
-                    Debug.LogWarning($"3D Plot received incompatible data type: {rawPassable?.GetType()}");
-                    ErrorMessage = $"3D Plot received incompatible data type: {rawPassable?.GetType()}";
-                    IsLoading.OnNext(QueryState.HasError);
-                }
-                return;
-            }
-
-            var passable = (Passable<CooccurrenceListPassable>) rawPassable;
-        
-            if (passable.data.Resources.Count < 1)
-            {
-                ErrorMessage = "Data flow does not contain any items";
-                IsLoading.OnNext(QueryState.HasError);
-                return;
-            }
-            dataSender.Send(passable);
-
-            // Debug.Log($"3D PLOT OBJECT: Received {passable.data.Resources.Count} items. Objects: {JsonConvert.SerializeObject(passable.data)}"); // DEBUG
-
-            List<DynamicResource> inFilterItems = new List<DynamicResource>(), outFilterItems = new List<DynamicResource>();
-            try
-            {
-                var outFilterItemsToMatch = passable.data.Resources
-                    .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.OutRange)
-                    .Select(r => r.ClassItem.Id).ToList();
                 var inFilterItemsToMatch = passable.data.Resources
                     .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.InRange)
                     .Select(r => r.ClassItem.Id).ToList();
 
-                // Perform parallel query
-                //var sbURL = "https://datar.local/ontology/";
-                (inFilterItems, outFilterItems) = await UniTask.WhenAll(_sparqlService.GetCloseMatchingIds(inFilterItemsToMatch), _sparqlService.GetCloseMatchingIds(outFilterItemsToMatch));
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e);
-                ErrorMessage = e.Message;
-                IsLoading.OnNext(QueryState.HasError);
-                return;
+                var outFilterItemsToMatch = passable.data.Resources
+                    .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.OutRange)
+                    .Select(r => r.ClassItem.Id).ToList();
+
+                // Get UMLS IDs for Triply brain regions
+                /*Dictionary<string,string> UMLS2TRIPLY = new Dictionary<string,string>();
+                TextAsset datass = Resources.Load ("Triply_BrainRegion_ID") as TextAsset;
+                string[] triplyIDs = datass.text.Split(new string[] { "\r\n" }, StringSplitOptions.None); 
+                IEnumerable<string> cleanTriplyIDs = triplyIDs.Distinct();
+                foreach(var id in cleanTriplyIDs) // TO DO: Handle duplicate entries and escape commas
+                {
+                    string[] entry = id.Split('\t');
+                    UMLS2TRIPLY.Add(entry[0], entry[1]);
+                }*/
+
+                Dictionary<string, string> UMLS2TRIPLY = new Dictionary<string, string>();
+                List<Dictionary<string, object>> brainRegions = CSVReader.Read("SBA Available Brain Regions");
+                List<string> type = new List<string>();
+                type.Add("Triply Brain Region");
+
+                foreach (Dictionary<string, object> brainRegion in brainRegions) // TO DO: Handle duplicate entries and escape commas
+                    UMLS2TRIPLY.Add(brainRegion["UMLS ID"].ToString(), brainRegion["Brain Region"].ToString());
+
+                // Get UMLS IDs for SBA brain regions
+                List<Dictionary<string, object>> data = CSVReader.Read("SBA2UMLS(12-6-22)");
+                Dictionary<string, string> UMLS2SBA = new Dictionary<string, string>();
+
+                // TO DO: Handle duplicate entries and escape commas
+                foreach (Dictionary<string, object> item in data)
+                {
+                    try
+                    {
+                        string label = item["Scalable Brain ID"].ToString();
+                        if (label.Contains(' '))
+                            label = label.Split(' ')[0];
+
+                        UMLS2SBA.Add(label, item["UMLS ID (Boyu)"].ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        // For some reason, numerous entries are not read correctly from CSV... 
+                        string[] itemString = item["Order"].ToString().Split(',');
+                        // Reads random tab in ID? Maybe this is what breaks the above. Dirty fix
+                        if (itemString[7].Contains('\t'))
+                            itemString[7] = itemString[7].Split('\t')[0];
+
+                        string label = itemString[1];
+                        if (label.Contains(' '))
+                            label = label.Split(' ')[0];
+
+                        UMLS2SBA.Add(label, itemString[7]); // 1 = SBA ID, 7 = UMLS ID (Boyu)
+                    }
+                }
+
+                // Find the relevant SBA IDs based on UMLS ID
+                List<string> inFilterIDs = new List<string>();
+                List<string> outFilterIDs = new List<string>();
+                foreach (var inFilterItem in inFilterItemsToMatch)
+                {
+                    var myKey = UMLS2TRIPLY.FirstOrDefault(x => x.Value == inFilterItem).Key;
+                    inFilterIDs.Add(myKey);
+                }
+
+                foreach (var outFilterItem in outFilterItemsToMatch)
+                {
+                    var myKey = UMLS2TRIPLY.FirstOrDefault(x => x.Value == outFilterItem).Key;
+                    outFilterIDs.Add(myKey);
+                }
+
+                List<string> inFilterSBA_IDs = new List<string>();
+                List<string> outFilterSBA_IDs = new List<string>();
+                foreach (string id in inFilterIDs)
+                {
+                    foreach (KeyValuePair<string, string> SBA_ID in UMLS2SBA)
+                    {
+                        if (SBA_ID.Value == id)
+                            inFilterSBA_IDs.Add("datar:" + SBA_ID.Key);
+                    }
+                }
+
+                foreach (string id in outFilterIDs)
+                {
+                    foreach (KeyValuePair<string, string> SBA_ID in UMLS2SBA)
+                    {
+                        if (SBA_ID.Value == id)
+                            outFilterSBA_IDs.Add("datar:" + SBA_ID.Key);
+                    }
+                }
+
+                _pointsPool.ForEach(point =>
+                {
+                    var matchInFilter = inFilterSBA_IDs.Find(item => item == point.Key);
+                    if (matchInFilter != null)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
+                        return;
+                    }
+
+                    var matchOutFilter = outFilterSBA_IDs.Find(item => item == point.Key);
+                    if (matchOutFilter != null)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.outFilterRangeColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.outFilterRangeColor.color.a;
+                        return;
+                    }
+
+                    // Else
+                    point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
+                });
             }
             IsLoading.OnNext(QueryState.HasLoaded);
-
-            // Remove overlapping items from out-filter items
-            outFilterItems = outFilterItems.Except(inFilterItems).ToList();
-
-            _pointsPool.ForEach(point =>
-            {
-                var matchInFilter = inFilterItems.Find(item => item.Id == point.Key);
-                if (matchInFilter != null)
-                {
-                    point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
-                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
-                    return;
-                }
-                
-                var matchOutFilter = outFilterItems.Find(item => item.Id == point.Key);
-                if (matchOutFilter != null)
-                {
-                    point.Value.GetComponent<Renderer>().material = _colorService.outFilterRangeColor;
-                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.outFilterRangeColor.color.a;
-                    return;
-                }
-                
-                // Else
-                point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
-                point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
-            });
         }
 
         async void UpdatePlot(bool fixedAspectRatio = false)
@@ -278,7 +331,6 @@ namespace DatAR.Widgets.VisualisationBrainModel
             try
             {
                 coords = await _sparqlService.GetTopicModelCoordsOfType(type);
-                
                 if (coords.Count < 1)
                 {
                     ErrorMessage = $"Failed to load brain model data - data is missing from endpoint.";
@@ -292,7 +344,6 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 IsLoading.OnNext(QueryState.HasError);
                 return;
             }
-           // dataSender.Send(coords);
             IsLoading.OnNext(QueryState.HasLoaded);
 
             // Get max values on each axis
@@ -306,7 +357,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
             float yMin = coords.Select(resource => resource.CoordY).Min();
             float zMin = coords.Select(resource => resource.CoordZ).Min();
             float trueMin = Math.Min(xMin, Math.Min(yMin, zMin));
-            
+
             coords.ForEach(resource =>
             {
                 float x, y, z;
