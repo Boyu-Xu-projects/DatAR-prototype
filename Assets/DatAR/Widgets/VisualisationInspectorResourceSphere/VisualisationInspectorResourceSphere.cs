@@ -40,7 +40,7 @@ namespace DatAR.Widgets.VisualisationInspectorResourceSphere
             }
             _sparqlService = services.GetComponent<SparqlService>();
             _debugService = services.GetComponent<DebugService>();
-            
+
             Init();
         }
 
@@ -51,18 +51,19 @@ namespace DatAR.Widgets.VisualisationInspectorResourceSphere
 
                 var pool = manufacturer.defaultSpawnLocation;
                 // Reset items in container
-                for (int i = pool.transform.childCount - 1; i >= 0; --i) {
+                for (int i = pool.transform.childCount - 1; i >= 0; --i)
+                {
                     // Add wait period to avoid completely locking the process
                     // For large collections this still causes lower FPS.
                     // TODO: resolve performance issues with large amount of resources, e.g., by pooling / ECS.
                     Destroy(pool.transform.GetChild(i).gameObject, i * .01f);
                 }
-            
+
                 if (conceptReceptacle.SlottedResourceContainer == null || conceptReceptacle.SlottedResourceContainer.Resource == null)
                 {
                     return;
                 }
-                
+
                 InspectResource(currentBatchId);
             });
         }
@@ -73,16 +74,16 @@ namespace DatAR.Widgets.VisualisationInspectorResourceSphere
             {
                 return;
             }
-            
+
             IsLoading.OnNext(QueryState.IsEmpty);
             dataText.text = "";
-            
+
             if (conceptReceptacle.SlottedResourceContainer == null
                 || conceptReceptacle.SlottedResourceContainer.Resource == null)
             {
                 return;
             }
-            
+
             var text = "";
             // Debug: output resource data
             if (_debugService.debugOn)
@@ -116,7 +117,7 @@ namespace DatAR.Widgets.VisualisationInspectorResourceSphere
                 ErrorMessage = e.Message;
                 IsLoading.OnNext(QueryState.HasError);
             }
-            
+
             // If related items are available of type LBD, show these
             List<DynamicResource> concepts = null;
             try

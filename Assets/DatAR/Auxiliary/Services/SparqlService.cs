@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -375,6 +376,88 @@ public class SparqlService : MonoBehaviour
         return await ConvertRdfToResourceList<DiseaseRelationResource>(queryResponseRaw, frame);
     }
 
+    public async UniTask<List<DiseaseTopicsResource>> GetTopicsRelatedToDisease(string disease, int appearTimes = 10)
+    {
+        var queryRequest = $@"
+            CONSTRUCT {{
+                	?statement 		a 			        datar:cooccurrenceStatement .
+                	?statement 		datar:disease       ?disease .
+                	?disease 		a 			        lbd:disease .
+                	?statement 		datar:appearTimes 	?appearTimes .
+                	?statement 		datar:concept 		?concept .
+                	?concept 		a 			        ?conceptClass .
+            }}
+            WHERE {{
+                        {{
+                    		?statement	    rdf:object	        ?disease .
+                    		FILTER 	(?disease = {disease}) .
+                            ?statement 	    rdf:subject 	    ?concept .
+                   		    ?statement 	    lbdp:appearTimes 	?appearTimes .
+                            FILTER 	        (?appearTimes > {appearTimes}) .
+                    		?concept 	    a 		            ?conceptClass .
+              	        }}
+                	    UNION
+                	    {{
+                    		?statement      rdf:subject 		?disease .
+                    		FILTER 	        (?disease = {disease}) .
+                    		?statement 	    rdf:object 		    ?concept .
+                    		?statement 	    lbdp:appearTimes 	?appearTimes .
+                            FILTER 	        (?appearTimes > {appearTimes}) .
+                    		?concept 	    a 			        ?conceptClass .
+                	    }}
+            }}";
+
+        // Need this to properly frame the data structure in ConvertRdfToResourceList. Not sure why...
+        JObject frame = (JObject)_context.DeepClone();
+        JToken frame2 = JToken.Parse($@"{{
+            ""datar:disease"": {{
+                ""@type"": ""lbd:disease""
+            }}
+        }}");
+        frame.Add(frame2.First);
+
+        var queryResponseRaw = await QueryEndpoint(queryRequest);
+
+        return await ConvertRdfToResourceList<DiseaseTopicsResource>(queryResponseRaw, frame);
+    }
+
+    public async UniTask<List<DiseaseTopicsResource>> GetTopicEdges(string filter, int appearTimes = 10)
+    {
+        var queryRequest = $@"
+            CONSTRUCT {{
+                	?statement 		a 			        datar:cooccurrenceStatement .
+                	?statement 		datar:disease       ?disease .
+                	?disease 		a 			        lbd:disease .
+                	?statement 		datar:appearTimes 	?appearTimes .
+                	?statement 		datar:concept 		?concept .
+                	?concept 		a 			        ?conceptClass .
+            }}
+            WHERE {{
+                        {{
+                    		?statement	    rdf:object	        ?disease .
+                    		FILTER 	({filter}) .
+                            ?statement 	    rdf:subject 	    ?concept .
+                   		    ?statement 	    lbdp:appearTimes 	?appearTimes .
+                            FILTER 	        (?appearTimes > {appearTimes}) .
+                    		?concept 	    a 		            ?conceptClass .
+              	        }}
+            }}";
+
+
+        // Need this to properly frame the data structure in ConvertRdfToResourceList. Not sure why...
+        JObject frame = (JObject)_context.DeepClone();
+        JToken frame2 = JToken.Parse($@"{{
+            ""datar:disease"": {{
+                ""@type"": ""lbd:disease""
+            }}
+        }}");
+        frame.Add(frame2.First);
+
+        var queryResponseRaw = await QueryEndpoint(queryRequest);
+
+        return await ConvertRdfToResourceList<DiseaseTopicsResource>(queryResponseRaw, frame);
+    }
+
     public async UniTask<List<SentenceResource>> GetCooccurrenceSentences(string region, string disease){
         var query = $@"
             CONSTRUCT {{
@@ -433,12 +516,30 @@ public class SparqlService : MonoBehaviour
         List<T> resources = new List<T>();
         compactQueryResponse["@graph"].ToList().ForEach((resource) =>
         {
+            // A few resources have multiple disease appeartimes.
+            // Before catching an error, we should check this
+            if(resource.SelectToken("datar:appearTimes") != null && 
+                resource.SelectToken("datar:appearTimes").Count<object>() > 1)
+            {
+                // Take the highest appeartime in this resource
+                int maxAppeartime = 0;
+                foreach(int appearTime in resource.SelectToken("datar:appearTimes"))
+                {
+                    if(maxAppeartime < appearTime)
+                        maxAppeartime = appearTime;
+                }
+                resource.SelectToken("datar:appearTimes").Replace(maxAppeartime);
+            }
+
             try
             {
                 resources.Add(resource.ToObject<T>());
             }
             catch (Exception e)
             {
+                JToken jToken = resource.SelectToken("datar:appearTimes");
+                Debug.Log(jToken.Count<object>());
+
                 Debug.LogError($"{e.Message} {JsonConvert.SerializeObject(resource)}");
             }
         });
@@ -475,7 +576,6 @@ public class SparqlService : MonoBehaviour
         }
 
         var webRequest = CreateQueryRequest(queryRequest, customUrl);
-
         UniTask.SwitchToThreadPool();
         var response = await webRequest.SendWebRequest();
         UniTask.SwitchToMainThread();
@@ -496,6 +596,73 @@ public class SparqlService : MonoBehaviour
         return queryResult;
     }
 
+    // LBD Format. Deprecated.
+    // private UnityWebRequest CreateQueryRequest(string queryRequest, string customUrl = null)
+    // {
+    //     var webRequest = new UnityWebRequest();
+    //     WWWForm form = new WWWForm();
+    //     webRequest.method = "POST";
+
+    //     // Set URL
+    //     string baseUrl = sparqlConfig.endpointUrl;
+    //     if (customUrl != null) baseUrl = customUrl;
+    //     webRequest.uri = new Uri(baseUrl + "?");
+        
+    //     // Determine data type to use. If string contains construct, request json-ld rather than json.
+    //     var returnType = "json";
+    //     if (queryRequest.ToLower().Contains("construct"))
+    //     {
+    //         returnType = "text/plain";
+    //     }
+    //     webRequest.SetRequestHeader("Accept", returnType);
+    //     webRequest.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        
+    //     // Combine prefixes and current query
+    //     string combinedQuery = $"{_prefixes} {queryRequest}";
+    //     form.AddField("query", combinedQuery);
+    //     UploadHandler uploadHandler = new UploadHandlerRaw(form.data);
+    //     webRequest.uploadHandler = uploadHandler;
+        
+    //     // Attach download handler
+    //     DownloadHandlerBuffer downloadHandler = new DownloadHandlerBuffer();
+    //     webRequest.downloadHandler = downloadHandler;
+
+    //     return webRequest;
+    // }
+
+    public async UniTask<List<SentenceResource>> Test(string region, string disease){
+        var query = $@"
+        CONSTRUCT {{
+            ?id1 a ?brainregion.
+            ?id2 a ?gene
+        }}
+        WHERE {{
+            ?id1 sct:hasTUI sct:T023.
+            ?t1s1 ztonekg:SenseURL ?id1.
+            ?id1 sct:hasEnglishLabel ?brainregion.
+            ?t1 ztonekg:hasSense ?t1s1.
+            ?s7 ztonekg:hasSenses ?t1.
+            ?s ztonekg:hasTerm ?s7.
+            ?s1 ztonekg:hasAnnotation ?s;
+                ztonekg:hasSource ""Abstract"";
+                ztonekg:hasAnnotation ?sb.
+            ?sb ztonekg:hasTerm ?s7b.
+            ?s7b ztonekg:hasSenses ?t1b.
+            ?t1b ztonekg:hasSense ?t1s1b.
+            ?t1s1b ztonekg:SenseURL ?id2.
+            ?id2 sct:hasTUI sct:T028;
+                sct:hasEnglishLabel ?gene.
+            ?s1 ztonekg:hasText ?text.
+        }}
+        GROUP BY ?brainregion ?gene
+        ORDER BY DESC (?count)
+        LIMIT 10000";
+
+        var queryResponse = await QueryEndpoint(query);
+        return await ConvertRdfToResourceList<SentenceResource>(queryResponse);
+    }
+
+    // Triply endpoint
     private UnityWebRequest CreateQueryRequest(string queryRequest, string customUrl = null)
     {
         var webRequest = new UnityWebRequest();
@@ -508,6 +675,7 @@ public class SparqlService : MonoBehaviour
         webRequest.uri = new Uri(baseUrl + "?");
         
         // Determine data type to use. If string contains construct, request json-ld rather than json.
+        // var returnType = "*/*";
         var returnType = "json";
         if (queryRequest.ToLower().Contains("construct"))
         {
@@ -515,7 +683,8 @@ public class SparqlService : MonoBehaviour
         }
         webRequest.SetRequestHeader("Accept", returnType);
         webRequest.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        
+        webRequest.SetRequestHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ1bmtub3duIiwiaXNzIjoiaHR0cHM6Ly9hcGkua3JyLnRyaXBseS5jYyIsImp0aSI6IjQ5ZDAxNDMwLTg1NWItNDY3NS1hZjkwLTVkNThiY2Q0MTk1NyIsInVpZCI6IjYyMjdkYmJjZmUzYTNjM2Y1YTA3YWQzYSIsImlhdCI6MTY1MDI3NTk5Nn0.ivqSezthy-CG11ASrIbvb5lAsRSzSN-wFKWWEaIJdpA");
+
         // Combine prefixes and current query
         string combinedQuery = $"{_prefixes} {queryRequest}";
         form.AddField("query", combinedQuery);

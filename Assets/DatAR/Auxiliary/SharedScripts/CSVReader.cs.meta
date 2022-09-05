@@ -1,11 +1,10 @@
 fileFormatVersion: 2
-guid: 42c2196c38db51941882b6fcdec89c98
+guid: 76198cb926baded479790c38853ab391
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - sparqlConfig: {instanceID: 0}
-  executionOrder: -300
+  defaultReferences: []
+  executionOrder: 0
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 
