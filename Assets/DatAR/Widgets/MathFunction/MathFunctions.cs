@@ -92,12 +92,18 @@ namespace DatAR.Widgets.MathFunctions
         public void RenderMathFunction(CooccurrenceListPassable dataFL, CooccurrenceListPassable dataSR)
         {
 
+            print("Hello Gh");
+            string S = dataFL.ToString();
+            string B = dataSR.ToString();
+            print(S);
+            print(B);
             Passable<CooccurrenceListPassable> result = new Passable<CooccurrenceListPassable>();
             var itemsInWigdetL = dataFL.Resources;
             var itemsInWidgetR = dataSR.Resources;
-            var Result = result.data.Resources;
+            //var Result = result.data.Resources;
 
-            IntersectionValueChangedOccour(); 
+            IntersectionValueChangedOccour();
+            print("Hello");
 
             //_Intersect.onClick.AddListener(delegate { IntersectionValueChangedOccour(); });
 
@@ -128,7 +134,7 @@ namespace DatAR.Widgets.MathFunctions
                     {
                         if (dataFL.Concept.Label == dataSR.Concept.Label)
 
-                            Result.ForEach((item) => { result.data.Concept.Label = dataFL.Concept.Label; });
+                             result.data.Concept.Label = dataFL.Concept.Label;
                     });
                 });
 
@@ -157,48 +163,48 @@ namespace DatAR.Widgets.MathFunctions
             //    dataSender.Send(result);
             //    //}
             //}
-            void UnionValueChangedOccour(Toggle tgvalue)
-            {
-                if (tgvalue.isOn)
-                {
+            //void UnionValueChangedOccour(Toggle tgvalue)
+            //{
+            //    if (tgvalue.isOn)
+            //    {
 
-                    itemsInWigdetL.ForEach((item) =>
-                    {
-                        Result.ForEach((item) =>
-                        {
-                            result.data.Concept.Label = dataFL.Concept.Label;
-                        });
-                    });
-                    itemsInWidgetR.ForEach((item) =>
-                    {
-                        Result.ForEach((item) =>
-                        {
-                            result.data.Concept.Label = dataFL.Concept.Label;
-                        });
-                    });
-                    dataSenderR.Send(result);
-                    dataSender.Send(result);
+            //        itemsInWigdetL.ForEach((item) =>
+            //        {
+            //            Result.ForEach((item) =>
+            //            {
+            //                result.data.Concept.Label = dataFL.Concept.Label;
+            //            });
+            //        });
+            //        itemsInWidgetR.ForEach((item) =>
+            //        {
+            //            Result.ForEach((item) =>
+            //            {
+            //                result.data.Concept.Label = dataFL.Concept.Label;
+            //            });
+            //        });
+            //        dataSenderR.Send(result);
+            //        dataSender.Send(result);
 
-                }
-            }
-            void DifferenceValueChangedOccour(Toggle tgvalue)
-            {
-                if (tgvalue.isOn)
-                {
+            //    }
+            //}
+            //void DifferenceValueChangedOccour(Toggle tgvalue)
+            //{
+            //    if (tgvalue.isOn)
+            //    {
 
-                    itemsInWigdetL.ForEach((item) =>
-                    {
-                        itemsInWidgetR.ForEach((item) =>
-                        {
-                            if (dataFL.Concept.Label != dataSR.Concept.Label)
+            //        itemsInWigdetL.ForEach((item) =>
+            //        {
+            //            itemsInWidgetR.ForEach((item) =>
+            //            {
+            //                if (dataFL.Concept.Label != dataSR.Concept.Label)
 
-                                Result.ForEach((item) => { result.data.Concept.Label = dataFL.Concept.Label; });
-                        });
-                    });
-                    dataSenderR.Send(result);
-                    dataSender.Send(result);
-                }
-            }
+            //                    Result.ForEach((item) => { result.data.Concept.Label = dataFL.Concept.Label; });
+            //            });
+            //        });
+            //        dataSenderR.Send(result);
+            //        dataSender.Send(result);
+            //    }
+            //}
 
 
         }

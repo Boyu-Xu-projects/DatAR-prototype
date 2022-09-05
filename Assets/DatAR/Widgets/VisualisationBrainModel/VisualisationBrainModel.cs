@@ -61,21 +61,31 @@ namespace DatAR.Widgets.VisualisationBrainModel
         private void Start()
         {
             highlightDataReceiver.data.Subscribe(UpdateHighlights);
-            //highlightDataReceiverO.dataO.Subscribe(UpdateHighlightsecond);
-            //highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlightsecond);
+
+            
             UpdatePlot(true);
             IsLoading.Subscribe((isRunning) =>
             {
                 if (isRunning != QueryState.IsLoading) CheckStackForLatest();
             });
+
+
+            highlightDataReceiver.data.Subscribe(SendFirstData);
             
-            //dataSender.Send();
+            highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
+            highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
         }
-        //dataSender.Send(highlightDataReceiver.data.Subscribe);
-        /**
-         * This function ensures that the very latest passable input is displayed
-         */
-        private void CheckStackForLatest()
+
+        private async void SendFirstData(Passable dataPassable)
+        {
+            if (dataPassable == null) return;
+            dataSender.Send(dataPassable);
+        }
+            //dataSender.Send(highlightDataReceiver.data.Subscribe);
+            /**
+             * This function ensures that the very latest passable input is displayed
+             */
+            private void CheckStackForLatest()
         {
             if (_awaitingPassable == null)
             {
@@ -84,7 +94,19 @@ namespace DatAR.Widgets.VisualisationBrainModel
 
             if (_awaitingPassable.Item1 > _lastRunTime)
             {
-                // UpdateHighlights(_awaitingPassable.Item2);
+                UpdateHighlights(_awaitingPassable.Item2);
+                NewUpdate();
+                print("HelloUpdate1");
+
+                //highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
+                //highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
+            }
+        }
+        private void NewUpdate()
+        {
+            if (highlightDataReceiverO.dataO !=null && highlightDataReceiverOO.dataOO!=null)
+            {
+                print("HelloUpdate");
                 highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
                 highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
             }
