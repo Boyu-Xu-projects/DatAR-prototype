@@ -79,7 +79,7 @@ namespace DatAR.Widgets.MathFunctions
                         // Check if compatible type
                         if (rawPassableR is Passable<CooccurrenceListPassable>)
 
-                                RenderMathFunction((rawPassableL as Passable<CooccurrenceListPassable>).data, (rawPassableR as Passable<CooccurrenceListPassable>).data);
+                                   RenderMathFunction((rawPassableL as Passable<CooccurrenceListPassable>).data, (rawPassableR as Passable<CooccurrenceListPassable>).data);
                         });
                     }
 
@@ -92,18 +92,18 @@ namespace DatAR.Widgets.MathFunctions
         public void RenderMathFunction(CooccurrenceListPassable dataFL, CooccurrenceListPassable dataSR)
         {
 
-            print("Hello Gh");
-            string S = dataFL.ToString();
-            string B = dataSR.ToString();
-            print(S);
-            print(B);
+           
             Passable<CooccurrenceListPassable> result = new Passable<CooccurrenceListPassable>();
+            List<CooccurrenceResource> results = new List<CooccurrenceResource>();
             var itemsInWigdetL = dataFL.Resources;
+            var ClassL = dataFL.Class;
+            var ConceptL = dataFL.Concept;
+
             var itemsInWidgetR = dataSR.Resources;
             //var Result = result.data.Resources;
 
             IntersectionValueChangedOccour();
-            print("Hello");
+           
 
             //_Intersect.onClick.AddListener(delegate { IntersectionValueChangedOccour(); });
 
@@ -128,20 +128,23 @@ namespace DatAR.Widgets.MathFunctions
                 //if (tgvalue.isOn)
                 //{
 
-                itemsInWigdetL.ForEach((item) =>
+                itemsInWigdetL.ForEach((itemL) =>
                 {
-                    itemsInWidgetR.ForEach((item) =>
+                    itemsInWidgetR.ForEach((itemR) =>
                     {
-                        if (dataFL.Concept.Label == dataSR.Concept.Label)
-
-                             result.data.Concept.Label = dataFL.Concept.Label;
+                        if (itemL.ClassItem.Label.Equals(itemR.ClassItem.Label))
+                        {
+                            results.Add(itemR);
+                        }
                     });
                 });
 
-                print(result);
-                print("jjjjjj");
-                dataSenderR.Send(result);
-                dataSender.Send(result);
+                //Passable<CooccurrenceListPassable> test = new Passable<CooccurrenceListPassable>(ClassL, ConceptL, result);
+
+               
+
+                //dataSenderR.Send(results);
+                //dataSender.Send(results);
                 //}
             }
 

@@ -458,7 +458,8 @@ public class SparqlService : MonoBehaviour
         return await ConvertRdfToResourceList<DiseaseTopicsResource>(queryResponseRaw, frame);
     }
 
-    public async UniTask<List<SentenceResource>> GetCooccurrenceSentences(string region, string disease){
+    public async UniTask<List<SentenceResource>> GetCooccurrenceSentences(string region, string disease)
+    {
         var query = $@"
             CONSTRUCT {{
                 ?statement lbdp:articleId ?aId ;
@@ -491,7 +492,7 @@ public class SparqlService : MonoBehaviour
         {
             return new List<T>();
         }
-        
+
         await UniTask.SwitchToThreadPool();
         if (frame == null)
         {
@@ -507,25 +508,25 @@ public class SparqlService : MonoBehaviour
         var queryResponse = JsonLdProcessor.FromRDF(queryResponseRaw, JsonLdOptions);
 
         // Debug.Log(queryResponse); // DEBUG
-        
+
         // Using frame rather than compact keeps the nesting correct (even if only providing a context)
         var compactQueryResponse = JsonLdProcessor.Frame(queryResponse, frame, JsonLdOptions);
 
         // Debug.Log(compactQueryResponse); // DEBUG
-        
+
         List<T> resources = new List<T>();
         compactQueryResponse["@graph"].ToList().ForEach((resource) =>
         {
             // A few resources have multiple disease appeartimes.
             // Before catching an error, we should check this
-            if(resource.SelectToken("datar:appearTimes") != null && 
+            if (resource.SelectToken("datar:appearTimes") != null &&
                 resource.SelectToken("datar:appearTimes").Count<object>() > 1)
             {
                 // Take the highest appeartime in this resource
                 int maxAppeartime = 0;
-                foreach(int appearTime in resource.SelectToken("datar:appearTimes"))
+                foreach (int appearTime in resource.SelectToken("datar:appearTimes"))
                 {
-                    if(maxAppeartime < appearTime)
+                    if (maxAppeartime < appearTime)
                         maxAppeartime = appearTime;
                 }
                 resource.SelectToken("datar:appearTimes").Replace(maxAppeartime);
@@ -586,13 +587,13 @@ public class SparqlService : MonoBehaviour
         {
             throw new Exception($"The query did not succeed: {response.error} (are you offline?)\n{queryResult}");
         }
-        
+
         if (queryResult.Trim() == "[]" || queryResult.Trim().StartsWith("#"))
         {
             Debug.Log($"The query did not yield any objects." + (_debugService.debugOn ? $"This was the sparql query sent: {queryRequest}" : ""));
             queryResult = null;
         }
-        
+
         return queryResult;
     }
 
@@ -607,7 +608,7 @@ public class SparqlService : MonoBehaviour
     //     string baseUrl = sparqlConfig.endpointUrl;
     //     if (customUrl != null) baseUrl = customUrl;
     //     webRequest.uri = new Uri(baseUrl + "?");
-        
+
     //     // Determine data type to use. If string contains construct, request json-ld rather than json.
     //     var returnType = "json";
     //     if (queryRequest.ToLower().Contains("construct"))
@@ -616,13 +617,13 @@ public class SparqlService : MonoBehaviour
     //     }
     //     webRequest.SetRequestHeader("Accept", returnType);
     //     webRequest.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        
+
     //     // Combine prefixes and current query
     //     string combinedQuery = $"{_prefixes} {queryRequest}";
     //     form.AddField("query", combinedQuery);
     //     UploadHandler uploadHandler = new UploadHandlerRaw(form.data);
     //     webRequest.uploadHandler = uploadHandler;
-        
+
     //     // Attach download handler
     //     DownloadHandlerBuffer downloadHandler = new DownloadHandlerBuffer();
     //     webRequest.downloadHandler = downloadHandler;
@@ -630,7 +631,8 @@ public class SparqlService : MonoBehaviour
     //     return webRequest;
     // }
 
-    public async UniTask<List<SentenceResource>> Test(string region, string disease){
+    public async UniTask<List<SentenceResource>> Test(string region, string disease)
+    {
         var query = $@"
         CONSTRUCT {{
             ?id1 a ?brainregion.
@@ -673,7 +675,7 @@ public class SparqlService : MonoBehaviour
         string baseUrl = sparqlConfig.endpointUrl;
         if (customUrl != null) baseUrl = customUrl;
         webRequest.uri = new Uri(baseUrl + "?");
-        
+
         // Determine data type to use. If string contains construct, request json-ld rather than json.
         // var returnType = "*/*";
         var returnType = "json";
@@ -690,7 +692,7 @@ public class SparqlService : MonoBehaviour
         form.AddField("query", combinedQuery);
         UploadHandler uploadHandler = new UploadHandlerRaw(form.data);
         webRequest.uploadHandler = uploadHandler;
-        
+
         // Attach download handler
         DownloadHandlerBuffer downloadHandler = new DownloadHandlerBuffer();
         webRequest.downloadHandler = downloadHandler;
@@ -710,7 +712,7 @@ public class SparqlService : MonoBehaviour
                 $"Sparql Config is not assigned or incomplete on game object '{gameObject.name}'.");
         }
     }
-    
+
     private string GeneratePrefixes()
     {
         var stringBuilder = new StringBuilder();
