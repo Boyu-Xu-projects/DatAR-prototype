@@ -46,6 +46,8 @@ namespace DatAR.Widgets.VisualisationBrainModel
         private Tuple<float, Passable> _awaitingPassable;
         private float _lastRunTime = 0;
 
+        bool isMath = false;
+
         public VisualisationBrainModel()
         {
             IsLoading = new BehaviorSubject<QueryState>(QueryState.IsEmpty);
@@ -61,8 +63,9 @@ namespace DatAR.Widgets.VisualisationBrainModel
         private void Start()
         {
             highlightDataReceiver.data.Subscribe(UpdateHighlights);
+            //highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
 
-            
+
             UpdatePlot(true);
             IsLoading.Subscribe((isRunning) =>
             {
@@ -71,9 +74,10 @@ namespace DatAR.Widgets.VisualisationBrainModel
 
 
             highlightDataReceiver.data.Subscribe(SendFirstData);
-            
-            highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
-            highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
+            NewUpdate();
+
+            //highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
+            //highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
         }
 
         private async void SendFirstData(Passable dataPassable)
@@ -94,9 +98,11 @@ namespace DatAR.Widgets.VisualisationBrainModel
 
             if (_awaitingPassable.Item1 > _lastRunTime)
             {
+                //print("HelloUpdate1");
+                //NewUpdate();
+                
                 UpdateHighlights(_awaitingPassable.Item2);
-                NewUpdate();
-                print("HelloUpdate1");
+                
 
                 //highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
                 //highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
@@ -104,12 +110,14 @@ namespace DatAR.Widgets.VisualisationBrainModel
         }
         private void NewUpdate()
         {
+            print("HelloUpdateN");
             if (highlightDataReceiverO.dataO !=null && highlightDataReceiverOO.dataOO!=null)
             {
-                print("HelloUpdate");
+                isMath = true;
                 highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
                 highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
             }
+            return;
         }
 
         /**
@@ -140,31 +148,35 @@ namespace DatAR.Widgets.VisualisationBrainModel
             }
 
             //ADDED
-            var passable = (Passable<CooccurrenceListPassable>)rawPassable;
-            if (passable.data.isMakingComparison)
-            {
-                List<DynamicResource> inFilterItems = new List<DynamicResource>(), outFilterItems = new List<DynamicResource>();
-                var outFilterItemsToMatch = passable.data.Resources
-                    .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.OutRange)
-                    .Select(r => r.ClassItem.Id).ToList();
-                var inFilterItemsToMatch = passable.data.Resources
-                    .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.InRange)
-                    .Select(r => r.ClassItem.Id).ToList();
-                (inFilterItems, outFilterItems) = await UniTask.WhenAll(_sparqlService.GetCloseMatchingIds(inFilterItemsToMatch), _sparqlService.GetCloseMatchingIds(outFilterItemsToMatch));
-                outFilterItems = outFilterItems.Except(inFilterItems).ToList();
-                _pointsPool.ForEach(point =>
-                {
-                    var matchInFilter = inFilterItems.Find(item => item.Id == point.Key);
-                    if (matchInFilter != null)
-                    {
-                        point.Value.GetComponent<Renderer>().material = _colorService.matchingColor;
-                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
-                        return;
-                    }
-                });
+            //var passable = (Passable<CooccurrenceListPassable>) rawPassable;
+            //if (isMath)
+            //{
+            //    //if (passable.data.isMakingComparison)
+            //    //{
+            //        List<DynamicResource> inFilterItems = new List<DynamicResource>(), outFilterItems = new List<DynamicResource>();
+            //        var outFilterItemsToMatch = passable.data.Resources
+            //            .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.OutRange)
+            //            .Select(r => r.ClassItem.Id).ToList();
+            //        var inFilterItemsToMatch = passable.data.Resources
+            //            .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.InRange)
+            //            .Select(r => r.ClassItem.Id).ToList();
+            //        (inFilterItems, outFilterItems) = await UniTask.WhenAll(_sparqlService.GetCloseMatchingIds(inFilterItemsToMatch), _sparqlService.GetCloseMatchingIds(outFilterItemsToMatch));
+            //        outFilterItems = outFilterItems.Except(inFilterItems).ToList();
+            //        _pointsPool.ForEach(point =>
+            //        {
+            //            var matchInFilter = inFilterItems.Find(item => item.Id == point.Key);
+            //            if (matchInFilter != null)
+            //            {
+            //                point.Value.GetComponent<Renderer>().material = _colorService.matchingColor;
+            //                point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
+            //                return;
+            //            }
+            //        });
 
-                return;
-            }
+            //        //return;
+            //    //}
+                
+            //}
 
             if (IsLoading.Value == QueryState.IsLoading)
             {
@@ -192,7 +204,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 return;
             }
 
-            //var passable = (Passable<CooccurrenceListPassable>)rawPassable;
+            var passable = (Passable<CooccurrenceListPassable>)rawPassable;
 
             if (passable.data.Resources.Count < 1)
             {

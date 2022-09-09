@@ -37,11 +37,13 @@ namespace DatAR.Widgets.MathFunctions
 
         //[SerializeField] private TextMeshPro summaryText;
         //[SerializeField] private TextMeshPro dataText;
-        public Button _Intersect;
+        public Button _IntersectButton;
+        public Button _UnionButton;
+        public Button _DiffButton;
         //[SerializeField] Button _Union;
         //[SerializeField] Button _Difference;
 
-       
+
 
         //public BehaviorSubject<Passable> CoList1;
         //public BehaviorSubject<Passable> CoList2;
@@ -95,6 +97,7 @@ namespace DatAR.Widgets.MathFunctions
            
             Passable<CooccurrenceListPassable> passable = new Passable<CooccurrenceListPassable>();
             List<CooccurrenceResource> matchingCooccurrences = new List<CooccurrenceResource>();
+            List<CooccurrenceResource> diff = new List<CooccurrenceResource>();
             var itemsInWigdetL = dataFL.Resources;
             var ClassL = dataFL.Class;
             var ConceptL = dataFL.Concept;
@@ -102,10 +105,14 @@ namespace DatAR.Widgets.MathFunctions
             var itemsInWidgetR = dataSR.Resources;
             //var Result = result.data.Resources;
 
-            IntersectionValueChangedOccour();
-           
+            //IntersectionValueChangedOccour();
+            //UnionValueChangedOccour();
+            DifferenceValueChangedOccour();
 
-            //_Intersect.onClick.AddListener(delegate { IntersectionValueChangedOccour(); });
+
+            //_IntersectButton.onClick.AddListener(delegate { IntersectionValueChangedOccour(); });
+            //_UnionButton.onClick.AddListener(delegate { UnionValueChangedOccour(); });
+            //_DiffButton.onClick.AddListener(delegate { DifferenceValueChangedOccour(); });
 
 
             //_SelectedToggle0.onValueChanged.AddListener(delegate
@@ -125,8 +132,7 @@ namespace DatAR.Widgets.MathFunctions
 
             void IntersectionValueChangedOccour()
             {
-                //if (tgvalue.isOn)
-                //{
+               
 
                 itemsInWigdetL.ForEach((itemL) =>
                 {
@@ -139,15 +145,66 @@ namespace DatAR.Widgets.MathFunctions
                     });
                 });
 
-                //This just works for one side now
+                
                 CooccurrenceListPassable newFormat = new CooccurrenceListPassable(ClassL, ConceptL, matchingCooccurrences);
                 newFormat.isMakingComparison = true;
                 passable.data = newFormat;
                 dataSender.Send(passable);
+                dataSenderR.Send(passable);
 
-                //dataSenderR.Send(results);
-                //dataSender.Send(results);
-                //}
+                
+            }
+
+            void UnionValueChangedOccour()
+            {
+                itemsInWigdetL.ForEach((itemL) =>
+                {
+                    itemsInWidgetR.ForEach((itemR) =>
+                    {
+                        if (itemL.ClassItem.Label.Equals(itemR.ClassItem.Label))
+                        {
+                            matchingCooccurrences.Add(itemR);
+                        }
+                        else
+                        {
+                            matchingCooccurrences.Add(itemL);
+                            matchingCooccurrences.Add(itemR);
+                        }
+                    });
+                });
+
+                
+                CooccurrenceListPassable newFormat = new CooccurrenceListPassable(ClassL, ConceptL, matchingCooccurrences);
+                newFormat.isMakingComparison = true;
+                passable.data = newFormat;
+                dataSender.Send(passable);
+                dataSenderR.Send(passable);
+            }
+
+            void DifferenceValueChangedOccour()
+            {
+                itemsInWigdetL.ForEach((itemL) =>
+                {
+                    itemsInWidgetR.ForEach((itemR) =>
+                    {
+                        if (itemL.ClassItem.Label.Equals(itemR.ClassItem.Label))
+                        {
+                            //return;
+                        }
+                        else
+                        {
+                            matchingCooccurrences.Add(itemL);
+                        }
+                       
+                    });
+                });
+
+                
+                CooccurrenceListPassable newFormat = new CooccurrenceListPassable(ClassL, ConceptL, matchingCooccurrences);
+                newFormat.isMakingComparison = true;
+                passable.data = newFormat;
+                dataSender.Send(passable);
+                //dataSenderR.Send(passable);
             }
 
             //void IntersectionValueChangedOccour()
@@ -168,6 +225,7 @@ namespace DatAR.Widgets.MathFunctions
             //    dataSender.Send(result);
             //    //}
             //}
+
             //void UnionValueChangedOccour(Toggle tgvalue)
             //{
             //    if (tgvalue.isOn)
