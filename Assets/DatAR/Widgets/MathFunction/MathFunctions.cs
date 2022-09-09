@@ -93,8 +93,8 @@ namespace DatAR.Widgets.MathFunctions
         {
 
            
-            Passable<CooccurrenceListPassable> result = new Passable<CooccurrenceListPassable>();
-            List<CooccurrenceResource> results = new List<CooccurrenceResource>();
+            Passable<CooccurrenceListPassable> passable = new Passable<CooccurrenceListPassable>();
+            List<CooccurrenceResource> matchingCooccurrences = new List<CooccurrenceResource>();
             var itemsInWigdetL = dataFL.Resources;
             var ClassL = dataFL.Class;
             var ConceptL = dataFL.Concept;
@@ -134,14 +134,16 @@ namespace DatAR.Widgets.MathFunctions
                     {
                         if (itemL.ClassItem.Label.Equals(itemR.ClassItem.Label))
                         {
-                            results.Add(itemR);
+                            matchingCooccurrences.Add(itemR);
                         }
                     });
                 });
 
-                //Passable<CooccurrenceListPassable> test = new Passable<CooccurrenceListPassable>(ClassL, ConceptL, result);
-
-               
+                //This just works for one side now
+                CooccurrenceListPassable newFormat = new CooccurrenceListPassable(ClassL, ConceptL, matchingCooccurrences);
+                newFormat.isMakingComparison = true;
+                passable.data = newFormat;
+                dataSender.Send(passable);
 
                 //dataSenderR.Send(results);
                 //dataSender.Send(results);

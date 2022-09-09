@@ -139,6 +139,31 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 return;
             }
 
+            //ADDED
+            var passable = (Passable<CooccurrenceListPassable>)rawPassable;
+            if (passable.data.isMakingComparison)
+            {
+                List<DynamicResource> inFilterItems = new List<DynamicResource>(), outFilterItems = new List<DynamicResource>();
+                var outFilterItemsToMatch = passable.data.Resources
+                    .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.OutRange)
+                    .Select(r => r.ClassItem.Id).ToList();
+                var inFilterItemsToMatch = passable.data.Resources
+                    .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.InRange)
+                    .Select(r => r.ClassItem.Id).ToList();
+                _pointsPool.ForEach(point =>
+                {
+                    var matchInFilter = inFilterItems.Find(item => item.Id == point.Key);
+                    if (matchInFilter != null)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.matchingColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
+                        return;
+                    }
+                });
+
+                return;
+            }
+
             if (IsLoading.Value == QueryState.IsLoading)
             {
                 // place in stack
@@ -165,7 +190,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 return;
             }
 
-            var passable = (Passable<CooccurrenceListPassable>)rawPassable;
+            //var passable = (Passable<CooccurrenceListPassable>)rawPassable;
 
             if (passable.data.Resources.Count < 1)
             {
