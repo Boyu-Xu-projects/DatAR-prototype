@@ -150,6 +150,8 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 var inFilterItemsToMatch = passable.data.Resources
                     .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.InRange)
                     .Select(r => r.ClassItem.Id).ToList();
+                (inFilterItems, outFilterItems) = await UniTask.WhenAll(_sparqlService.GetCloseMatchingIds(inFilterItemsToMatch), _sparqlService.GetCloseMatchingIds(outFilterItemsToMatch));
+                outFilterItems = outFilterItems.Except(inFilterItems).ToList();
                 _pointsPool.ForEach(point =>
                 {
                     var matchInFilter = inFilterItems.Find(item => item.Id == point.Key);
