@@ -96,6 +96,7 @@ namespace DatAR.Widgets.MathFunctions
 
            
             Passable<CooccurrenceListPassable> passable = new Passable<CooccurrenceListPassable>();
+            Passable<CooccurrenceListPassable> passableR = new Passable<CooccurrenceListPassable>();
             List<CooccurrenceResource> matchingCooccurrences = new List<CooccurrenceResource>();
             List<CooccurrenceResource> diff = new List<CooccurrenceResource>();
             var itemsInWigdetL = dataFL.Resources;
@@ -103,11 +104,13 @@ namespace DatAR.Widgets.MathFunctions
             var ConceptL = dataFL.Concept;
 
             var itemsInWidgetR = dataSR.Resources;
+            var ClassR = dataSR.Class;
+            var ConceptR = dataSR.Concept;
             //var Result = result.data.Resources;
 
             //IntersectionValueChangedOccour();
-            //UnionValueChangedOccour();
-            DifferenceValueChangedOccour();
+            UnionValueChangedOccour();
+            //DifferenceValueChangedOccour();
 
 
             //_IntersectButton.onClick.AddListener(delegate { IntersectionValueChangedOccour(); });
@@ -149,8 +152,11 @@ namespace DatAR.Widgets.MathFunctions
                 CooccurrenceListPassable newFormat = new CooccurrenceListPassable(ClassL, ConceptL, matchingCooccurrences);
                 newFormat.isMakingComparison = true;
                 passable.data = newFormat;
+                CooccurrenceListPassable newFormatR = new CooccurrenceListPassable(ClassR, ConceptR, matchingCooccurrences);
+                newFormatR.isMakingComparison = true;
+                passableR.data = newFormatR;
                 dataSender.Send(passable);
-                dataSenderR.Send(passable);
+                dataSenderR.Send(passableR);
 
                 
             }
@@ -177,8 +183,11 @@ namespace DatAR.Widgets.MathFunctions
                 CooccurrenceListPassable newFormat = new CooccurrenceListPassable(ClassL, ConceptL, matchingCooccurrences);
                 newFormat.isMakingComparison = true;
                 passable.data = newFormat;
+                CooccurrenceListPassable newFormatR = new CooccurrenceListPassable(ClassR, ConceptR, matchingCooccurrences);
+                newFormatR.isMakingComparison = true;
+                passableR.data = newFormatR;
                 dataSender.Send(passable);
-                dataSenderR.Send(passable);
+                dataSenderR.Send(passableR);
             }
 
             void DifferenceValueChangedOccour()
@@ -187,24 +196,29 @@ namespace DatAR.Widgets.MathFunctions
                 {
                     itemsInWidgetR.ForEach((itemR) =>
                     {
+
                         if (itemL.ClassItem.Label.Equals(itemR.ClassItem.Label))
                         {
-                            //return;
+                            //
                         }
                         else
                         {
                             matchingCooccurrences.Add(itemL);
                         }
-                       
+
                     });
+                    //matchingCooccurrences.Add(itemL);
                 });
 
                 
                 CooccurrenceListPassable newFormat = new CooccurrenceListPassable(ClassL, ConceptL, matchingCooccurrences);
                 newFormat.isMakingComparison = true;
                 passable.data = newFormat;
+                //CooccurrenceListPassable newFormatR = new CooccurrenceListPassable(ClassR, ConceptR, matchingCooccurrences);
+                //newFormatR.isMakingComparison = true;
+                //passableR.data = newFormatR;
                 dataSender.Send(passable);
-                //dataSenderR.Send(passable);
+                //dataSenderR.Send(passableR);
             }
 
             //void IntersectionValueChangedOccour()
