@@ -40,6 +40,8 @@ namespace DatAR.Widgets.MathFunctions
         public Button _IntersectButton;
         public Button _UnionButton;
         public Button _DiffButton;
+        private int _fun;
+        //public Pressa
         //[SerializeField] Button _Union;
         //[SerializeField] Button _Difference;
 
@@ -53,14 +55,29 @@ namespace DatAR.Widgets.MathFunctions
         //private Passable<CooccurrenceListPassable> _result;
 
 
-
+        public void Intersection()
+        {
+            
+            _fun = 1;
+            Init();
+        }
+        public void Union()
+        {
+            _fun = 2;
+            Init();
+        }
+        public void Difference()
+        {
+            _fun = 3;
+            Init();
+        }
         // Start is called before the first frame update
         private void Start()
         {
             //var ItemsRight = passable.dataR.Resources.ToList();
             //var ItemsLeft = passable.dataL.Resources.ToList();
             
-            Init();
+           // Init();
             
 
 
@@ -114,12 +131,17 @@ namespace DatAR.Widgets.MathFunctions
             //UnionValueChangedOccour();
             //DifferenceValueChangedOccour();
 
+            if (_fun == 1)
+            { IntersectionValueChangedOccour(); }
+            if (_fun == 2)
+            { UnionValueChangedOccour(); }
+            if (_fun == 3)
+            { DifferenceValueChangedOccour(); }
+            //_IntersectButton.onClick.AddListener(delegate { IntersectionValueChangedOccour(); });
+            //_UnionButton.onClick.AddListener(delegate { UnionValueChangedOccour(); });
+            //_DiffButton.onClick.AddListener(delegate { DifferenceValueChangedOccour(); });
 
-            _IntersectButton.onClick.AddListener(delegate { IntersectionValueChangedOccour(); });
-            _UnionButton.onClick.AddListener(delegate { UnionValueChangedOccour(); });
-            _DiffButton.onClick.AddListener(delegate { DifferenceValueChangedOccour(); });
-
-
+            
             //_SelectedToggle0.onValueChanged.AddListener(delegate
             //{
             //    IntersectionValueChangedOccour(_SelectedToggle0);

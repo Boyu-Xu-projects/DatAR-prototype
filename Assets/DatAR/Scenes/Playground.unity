@@ -243,12 +243,12 @@ PrefabInstance:
     - target: {fileID: 1275445774102873310, guid: d0ecc0f5cdb82da4997fb811e8c23532,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.61
+      value: -0.6602
       objectReference: {fileID: 0}
     - target: {fileID: 1275445774102873310, guid: d0ecc0f5cdb82da4997fb811e8c23532,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.096
+      value: -0.096
       objectReference: {fileID: 0}
     - target: {fileID: 1275445774102873310, guid: d0ecc0f5cdb82da4997fb811e8c23532,
         type: 3}
@@ -269,7 +269,7 @@ PrefabInstance:
         type: 3}
       propertyPath: currentResource
       value: "{\r\n  \"@type\": [\r\n    \"rdf:Concept\"\r\n  ],\r\n  \"rdfs:label\":
-        \"Asperger Syndrome\",\r\n  \"@id\": \"Asperger Syndrome\"\r\n}"
+        \"Anxiety Disorders\",\r\n  \"@id\": \"Anxiety Disorders\"\r\n}"
       objectReference: {fileID: 0}
     - target: {fileID: 4918410703904992545, guid: d0ecc0f5cdb82da4997fb811e8c23532,
         type: 3}
@@ -492,17 +492,17 @@ PrefabInstance:
     - target: {fileID: 1709747229848486991, guid: b25363eeb2b89094a9f26f5d4b3cc9ef,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1709747229848486991, guid: b25363eeb2b89094a9f26f5d4b3cc9ef,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1709747229848486991, guid: b25363eeb2b89094a9f26f5d4b3cc9ef,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1709747229848486991, guid: b25363eeb2b89094a9f26f5d4b3cc9ef,
         type: 3}
@@ -563,7 +563,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 3286163911610860551, guid: ebe3938c733fd1547812815355cc79ca,
+      objectReference: {fileID: 21300000, guid: a44b2307c60070e48ae3e4c11c68e59b,
         type: 3}
     - target: {fileID: 2577607522119119320, guid: b25363eeb2b89094a9f26f5d4b3cc9ef,
         type: 3}
@@ -1519,12 +1519,12 @@ PrefabInstance:
     - target: {fileID: 1275445774102873310, guid: d0ecc0f5cdb82da4997fb811e8c23532,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.61
+      value: -0.5522
       objectReference: {fileID: 0}
     - target: {fileID: 1275445774102873310, guid: d0ecc0f5cdb82da4997fb811e8c23532,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.14
+      value: -0.0962
       objectReference: {fileID: 0}
     - target: {fileID: 1275445774102873310, guid: d0ecc0f5cdb82da4997fb811e8c23532,
         type: 3}
@@ -1545,7 +1545,7 @@ PrefabInstance:
         type: 3}
       propertyPath: currentResource
       value: "{\r\n  \"@type\": [\r\n    \"rdf:Concept\"\r\n  ],\r\n  \"rdfs:label\":
-        \"Alzheimer's Disease\",\r\n  \"@id\": \"Alzheimer's Disease\"\r\n}"
+        \"Depressive disorder\",\r\n  \"@id\": \"Depressive disorder\"\r\n}"
       objectReference: {fileID: 0}
     - target: {fileID: 4918410703904992545, guid: d0ecc0f5cdb82da4997fb811e8c23532,
         type: 3}
@@ -3251,6 +3251,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2420612047950268440, guid: 604f936a58d0d894c92af2b0f8ae6dd0,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: baf41c2c48d622948bc93eb03481e6a7,
+        type: 3}
+    - target: {fileID: 5334123028203738050, guid: 604f936a58d0d894c92af2b0f8ae6dd0,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5334123028203738050, guid: 604f936a58d0d894c92af2b0f8ae6dd0,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 604f936a58d0d894c92af2b0f8ae6dd0, type: 3}
