@@ -45,7 +45,10 @@ namespace DatAR.Widgets.MathFunctions
         //[SerializeField] Button _Union;
         //[SerializeField] Button _Difference;
 
+        [SerializeField] private TextMeshPro summaryTextMath;
+        [SerializeField] private TextMeshPro dataTextMath;
 
+        [SerializeField] private bool newLinePerConceptMath;
 
         //public BehaviorSubject<Passable> CoList1;
         //public BehaviorSubject<Passable> CoList2;
@@ -115,7 +118,8 @@ namespace DatAR.Widgets.MathFunctions
             Passable<CooccurrenceListPassable> passable = new Passable<CooccurrenceListPassable>();
             Passable<CooccurrenceListPassable> passableR = new Passable<CooccurrenceListPassable>();
             List<CooccurrenceResource> matchingCooccurrences = new List<CooccurrenceResource>();
-            
+            List<CooccurrenceResource> matchingCooccurrencesRight = new List<CooccurrenceResource>();
+
             var itemsInWigdetL = dataFL.Resources;
             
             var ClassL = dataFL.Class;
@@ -137,6 +141,8 @@ namespace DatAR.Widgets.MathFunctions
             { UnionValueChangedOccour(); }
             if (_fun == 3)
             { DifferenceValueChangedOccour(); }
+            //if (_fun == 4)
+            //{ }
             //_IntersectButton.onClick.AddListener(delegate { IntersectionValueChangedOccour(); });
             //_UnionButton.onClick.AddListener(delegate { UnionValueChangedOccour(); });
             //_DiffButton.onClick.AddListener(delegate { DifferenceValueChangedOccour(); });
@@ -183,24 +189,59 @@ namespace DatAR.Widgets.MathFunctions
                 dataSender.Send(passable);
                 dataSenderR.Send(passableR);
 
+                summaryTextMath.text = $"Received {newFormat.Resources.Count} shaired–{newFormat.Concept.Label}\n";
+
+                StringBuilder dataPreviewMath = new StringBuilder();
+
+                newFormat.Resources.ForEach((item) =>
+                {
+                    dataPreviewMath.Append($"<b><color=yellow>{item.ClassItem.Label} </color></b>");
+
+                    if (newLinePerConceptMath)
+                    {
+                        dataPreviewMath.Append("\n");
+                    }
+                });
                 
+
+                dataTextMath.text = dataPreviewMath.ToString();
+
+
             }
 
             void UnionValueChangedOccour()
             {
+                //itemsInWigdetL.ForEach((itemL) =>
+                //{
+                //    itemsInWidgetR.ForEach((itemR) =>
+                //    {
+
+                //            matchingCooccurrences.Add(itemL);
+                //            matchingCooccurrences.Add(itemR);
+
+
+                //    });
+                //});
                 itemsInWigdetL.ForEach((itemL) =>
                 {
+                    matchingCooccurrences.Add(itemL);
                     itemsInWidgetR.ForEach((itemR) =>
                     {
-                        
-                            matchingCooccurrences.Add(itemL);
-                            matchingCooccurrences.Add(itemR);
-                        
-                        
+
+                        if (itemL.ClassItem.Label.Equals(itemR.ClassItem.Label))
+                        {
+                            matchingCooccurrences.Remove(itemL);
+                        }
+
                     });
+                    //matchingCooccurrences.Add(itemL);
                 });
 
-                
+                itemsInWidgetR.ForEach((itemR) =>
+                {
+                    matchingCooccurrences.Add(itemR);
+                });
+
                 CooccurrenceListPassable newFormat = new CooccurrenceListPassable(ClassL, ConceptL, matchingCooccurrences);
                 newFormat.isMakingComparison = true;
                 passable.data = newFormat;
@@ -209,6 +250,24 @@ namespace DatAR.Widgets.MathFunctions
                 passableR.data = newFormatR;
                 dataSender.Send(passable);
                 dataSenderR.Send(passableR);
+
+                summaryTextMath.text = $"Received {newFormat.Resources.Count} {newFormat.Concept.Label}\n";
+
+                StringBuilder dataPreviewMath = new StringBuilder();
+
+                newFormat.Resources.ForEach((item) =>
+                {
+                    dataPreviewMath.Append($"<b><color=red>{item.ClassItem.Label} </color></b>");
+
+                    if (newLinePerConceptMath)
+                    {
+                        dataPreviewMath.Append("\n");
+                    }
+                });
+
+
+                dataTextMath.text = dataPreviewMath.ToString();
+
             }
 
             void DifferenceValueChangedOccour()
@@ -227,7 +286,7 @@ namespace DatAR.Widgets.MathFunctions
                         }
 
                     });
-                    //matchingCooccurrences.Add(itemL);
+                    
                 });
 
 
@@ -235,13 +294,65 @@ namespace DatAR.Widgets.MathFunctions
                 
                 newFormat.isMakingComparison = true;
                 passable.data = newFormat;
-                //CooccurrenceListPassable newFormatR = new CooccurrenceListPassable(ClassR, ConceptR, matchingCooccurrences);
-                //newFormatR.isMakingComparison = true;
-                //passableR.data = newFormatR;
                 dataSender.Send(passable);
+
+                itemsInWidgetR.ForEach((itemR) =>
+                {
+                    matchingCooccurrencesRight.Add(itemR);
+                    itemsInWigdetL.ForEach((itemL) =>
+                    {
+
+                        if (itemR.ClassItem.Label.Equals(itemL.ClassItem.Label))
+                        {
+                            matchingCooccurrencesRight.Remove(itemR);
+                        }
+
+                    });
+                  
+                });
+
+
+                CooccurrenceListPassable newFormatRight = new CooccurrenceListPassable(ClassR, ConceptR, matchingCooccurrencesRight);
+
+                newFormatRight.isMakingComparison = true;
+                passableR.data = newFormatRight;
+               
+                dataSenderR.Send(passableR);
+
+                summaryTextMath.text = $"Received {newFormat.Resources.Count} different {newFormatRight.Concept.Label} in Brain Model 1 \n " +
+                    $" and {newFormatRight.Resources.Count} different {newFormatRight.Concept.Label} in Brain Model 2\n";
+
+                StringBuilder dataPreviewMath = new StringBuilder();
+
+                newFormat.Resources.ForEach((item) =>
+                {
+                    dataPreviewMath.Append($"<b><color=green>{item.ClassItem.Label} </color></b>");
+
+                    if (newLinePerConceptMath)
+                    {
+                        dataPreviewMath.Append("\n");
+                    }
+                });
+                newFormatRight.Resources.ForEach((item) =>
+                {
+                    dataPreviewMath.Append($"<b><color=white>{item.ClassItem.Label} </color></b>");
+
+                    if (newLinePerConceptMath)
+                    {
+                        dataPreviewMath.Append("\n");
+                    }
+                });
+
+
+                dataTextMath.text = dataPreviewMath.ToString();
+
+
                 
-                //dataSenderR.Send(passableR);
             }
+            //void ShowText()
+            //{
+
+            //}
 
             //void IntersectionValueChangedOccour()
             //{
