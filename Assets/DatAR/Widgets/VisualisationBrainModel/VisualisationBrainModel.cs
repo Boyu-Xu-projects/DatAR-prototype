@@ -34,6 +34,14 @@ namespace DatAR.Widgets.VisualisationBrainModel
         public GameObject pointPool;
 
         [SerializeField] private DataflowInlet highlightDataReceiver;
+<<<<<<< Updated upstream
+=======
+        //[SerializeField] private DataflowInletO highlightDataReceiverO;
+        //[SerializeField] private DataflowInletOO highlightDataReceiverOO;
+        
+
+        [SerializeField] private DataflowOutlet dataSender;
+>>>>>>> Stashed changes
 
         private ColorService _colorService;
         private SparqlService _sparqlService;
@@ -61,6 +69,16 @@ namespace DatAR.Widgets.VisualisationBrainModel
             {
                 if (isRunning != QueryState.IsLoading) CheckStackForLatest();
             });
+<<<<<<< Updated upstream
+=======
+
+
+            highlightDataReceiver.data.Subscribe(SendFirstData);
+            //NewUpdate();
+
+            //highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
+            //highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
+>>>>>>> Stashed changes
         }
 
         /**
@@ -76,8 +94,28 @@ namespace DatAR.Widgets.VisualisationBrainModel
             if (_awaitingPassable.Item1 > _lastRunTime)
             {
                 UpdateHighlights(_awaitingPassable.Item2);
+<<<<<<< Updated upstream
             }
         }
+=======
+                
+
+                //highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
+                //highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
+            }
+        }
+        //private void NewUpdate()
+        //{
+        //    print("HelloUpdateN");
+        //    if (highlightDataReceiverO.dataO !=null && highlightDataReceiverOO.dataOO!=null)
+        //    {
+        //        isMath = true;
+        //        highlightDataReceiverO.dataO.Subscribe(UpdateHighlights);
+        //        highlightDataReceiverOO.dataOO.Subscribe(UpdateHighlights);
+        //    }
+        //    return;
+        //}
+>>>>>>> Stashed changes
 
         /**
          * TODO: Stop execution if new request comes in while running (which replaces it)
