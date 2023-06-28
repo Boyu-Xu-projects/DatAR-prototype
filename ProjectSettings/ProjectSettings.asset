@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: 0515boyu_IndirectRelations_DatAR
-  productName: 0515boyu-datar-hololens-indirectFunction_test
+  companyName: DefaultCompany
+  productName: datar-hololens
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -129,26 +129,6 @@ PlayerSettings:
     Others: 1
   bundleVersion: 0.1
   preloadedAssets:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: -635397613139553658, guid: 680582fdb70a1dc43ad56beb9190bf93, type: 2}
@@ -361,9 +341,7 @@ PlayerSettings:
     Android: 1
     iPhone: 1
     tvOS: 1
-  m_BuildTargetGroupLightmapEncodingQuality:
-  - m_BuildTarget: Windows Store Apps
-    m_EncodingQuality: 1
+  m_BuildTargetGroupLightmapEncodingQuality: []
   m_BuildTargetGroupLightmapSettings: []
   m_BuildTargetNormalMapEncoding: []
   playModeTestRunnerEnabled: 0
@@ -610,7 +588,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    14: master;MRTK_GLTF_IMPORTER_OFF
+    14: MRTK_GLTF_IMPORTER_OFF
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
@@ -627,17 +605,16 @@ PlayerSettings:
   gcIncremental: 0
   assemblyVersionValidation: 0
   gcWBarrierValidation: 0
-  apiCompatibilityLevelPerPlatform:
-    WSA: 6
+  apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: 
-  metroPackageVersion: 1.0.20.0
+  metroPackageName: Template3D
+  metroPackageVersion: 1.0.0.0
   metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: boyuDatAR
-  metroCertificateIssuer: boyuDatAR
-  metroCertificateNotAfter: 808de298c8c3d901
+  metroCertificateSubject: DefaultCompany
+  metroCertificateIssuer: DefaultCompany
+  metroCertificateNotAfter: 00e7e29f0a75d801
   metroApplicationDescription: Template_3D
   wsaImages: {}
   metroTileShortName: datar-hololens
@@ -655,6 +632,7 @@ PlayerSettings:
   metroSplashScreenUseBackgroundColor: 0
   platformCapabilities:
     WindowsStoreApps:
+      EnterpriseAuthentication: False
       OfflineMapsManagement: False
       HumanInterfaceDevice: False
       Location: False
@@ -664,10 +642,9 @@ PlayerSettings:
       MusicLibrary: False
       LowLevelDevices: False
       PrivateNetworkClientServer: False
-      InternetClientServer: True
+      InternetClientServer: False
       VideosLibrary: False
       Objects3D: False
-      InternetClient: True
       RemoteSystem: False
       BlockedChatMessages: False
       PhoneCall: False
@@ -680,7 +657,7 @@ PlayerSettings:
       InputInjectionBrokered: False
       PicturesLibrary: False
       RemovableStorage: False
-      WebCam: True
+      WebCam: False
       VoipCall: False
       GazeInput: True
       UserAccountInformation: False
@@ -690,12 +667,12 @@ PlayerSettings:
       RecordedCallsFolder: False
       Contacts: False
       Proximity: False
+      InternetClient: True
       CodeGeneration: False
       BackgroundMediaPlayback: False
-      EnterpriseAuthentication: False
   metroTargetDeviceFamilies:
     Desktop: False
-    Holographic: True
+    Holographic: False
     IoT: False
     IoTHeadless: False
     Mobile: False

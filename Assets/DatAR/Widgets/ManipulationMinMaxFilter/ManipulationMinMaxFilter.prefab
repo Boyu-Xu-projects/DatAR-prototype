@@ -401,11 +401,6 @@ PrefabInstance:
       propertyPath: m_renderer
       value: 
       objectReference: {fileID: 703530441}
-    - target: {fileID: 4969018446448916067, guid: a28973408cbc36f4ba076cc238564430,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4969018447440470994, guid: a28973408cbc36f4ba076cc238564430,
         type: 3}
       propertyPath: m_RootOrder
@@ -465,11 +460,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FilterSliderConceptGivenClassItem
-      objectReference: {fileID: 0}
-    - target: {fileID: 4969018447440470997, guid: a28973408cbc36f4ba076cc238564430,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5212914513864185162, guid: a28973408cbc36f4ba076cc238564430,
         type: 3}
@@ -552,11 +542,6 @@ PrefabInstance:
       propertyPath: LabelText
       value: 
       objectReference: {fileID: 239040091}
-    - target: {fileID: 4969018446448916067, guid: a28973408cbc36f4ba076cc238564430,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4969018447440470994, guid: a28973408cbc36f4ba076cc238564430,
         type: 3}
       propertyPath: m_RootOrder
@@ -730,11 +715,6 @@ PrefabInstance:
       propertyPath: LabelText
       value: 
       objectReference: {fileID: 1277758644}
-    - target: {fileID: 4969018446448916067, guid: a28973408cbc36f4ba076cc238564430,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4969018447440470994, guid: a28973408cbc36f4ba076cc238564430,
         type: 3}
       propertyPath: m_RootOrder
@@ -809,11 +789,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FilterSliderClassItemGivenConcept
-      objectReference: {fileID: 0}
-    - target: {fileID: 4969018447440470997, guid: a28973408cbc36f4ba076cc238564430,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5212914513864185162, guid: a28973408cbc36f4ba076cc238564430,
         type: 3}
@@ -1090,11 +1065,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DataflowInlet
-      objectReference: {fileID: 0}
-    - target: {fileID: 8481557086576763635, guid: 1dceadf22a7db204a9b01bccac47f60e,
-        type: 3}
-      propertyPath: m_TagString
-      value: FilterFunction
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1dceadf22a7db204a9b01bccac47f60e, type: 3}

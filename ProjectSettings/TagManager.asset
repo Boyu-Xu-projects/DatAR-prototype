@@ -6,14 +6,6 @@ TagManager:
   tags:
   - spotlight
   - Deletable
-  - Sphere01
-  - MentalBridge
-  - MentalIndirectFunction
-  - FilterFunction
-  - GeneBridge
-  - GeneIndirectFunction
-  - ProteinBridge
-  - ProteinIndirectFunction
   layers:
   - Default
   - TransparentFX
@@ -21,8 +13,8 @@ TagManager:
   - 
   - Water
   - UI
-  - Graph Node
-  - Sphere
+  - 
+  - 
   - 
   - 
   - 

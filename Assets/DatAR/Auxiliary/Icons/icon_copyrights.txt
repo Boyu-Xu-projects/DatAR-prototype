@@ -36,6 +36,3 @@ CC-BY, Sam Martin, https://thenounproject.com/icon/846854/
 chain-svgrepo-com.svg
 dust-bin-svgrepo-com.svg
 Icons by svgrepo.com, https://www.svgrepo.com/
-
-im-network.svg
-Icon from University of Exeter, https://www.exeter.ac.uk/research/quantitative-health-network/themes/
