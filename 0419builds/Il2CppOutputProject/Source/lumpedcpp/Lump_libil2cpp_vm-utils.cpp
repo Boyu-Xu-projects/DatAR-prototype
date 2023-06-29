@@ -1,0 +1,8 @@
+#include "il2cpp-config.h"
+#include "C:\Boyu Xu\Unity Projects\IndirectRelations\datar-hololens02\0419builds\Il2CppOutputProject\IL2CPP\libil2cpp\vm-utils\BlobReader.cpp"
+#include "C:\Boyu Xu\Unity Projects\IndirectRelations\datar-hololens02\0419builds\Il2CppOutputProject\IL2CPP\libil2cpp\vm-utils\Debugger.cpp"
+#include "C:\Boyu Xu\Unity Projects\IndirectRelations\datar-hololens02\0419builds\Il2CppOutputProject\IL2CPP\libil2cpp\vm-utils\NativeDelegateMethodCache.cpp"
+#include "C:\Boyu Xu\Unity Projects\IndirectRelations\datar-hololens02\0419builds\Il2CppOutputProject\IL2CPP\libil2cpp\vm-utils\NativeSymbol.cpp"
+#include "C:\Boyu Xu\Unity Projects\IndirectRelations\datar-hololens02\0419builds\Il2CppOutputProject\IL2CPP\libil2cpp\vm-utils\VmStringUtils.cpp"
+#include "C:\Boyu Xu\Unity Projects\IndirectRelations\datar-hololens02\0419builds\Il2CppOutputProject\IL2CPP\libil2cpp\vm-utils\icalls\mscorlib\System.Threading\Interlocked.cpp"
+#include "C:\Boyu Xu\Unity Projects\IndirectRelations\datar-hololens02\0419builds\Il2CppOutputProject\IL2CPP\libil2cpp\vm-utils\icalls\mscorlib\System\Math.cpp"
