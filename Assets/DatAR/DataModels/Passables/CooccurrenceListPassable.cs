@@ -13,6 +13,7 @@ namespace DatAR.DataModels.Passables
             Concept = concept;
             Resources = resources;
             Class = withClass;
+            isMakingComparison = false;
             OnDeserializedMethod(new StreamingContext());
         }
     
@@ -24,7 +25,9 @@ namespace DatAR.DataModels.Passables
 
         [JsonProperty("datar:resources")]
         public List<CooccurrenceResource> Resources { get; set; }
-    
+
+        public bool isMakingComparison { get; set; }
+
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
