@@ -12,9 +12,9 @@ namespace DatAR.DataModels.Resources
 {
     public sealed class DiseaseRelationResource : DynamicResource
     {
-        public DiseaseRelationResource(List<string> types, int appearTimes, DynamicResource concept, DynamicResource disease)
+        public DiseaseRelationResource(List<string> conceptClass, int appearTimes, DynamicResource concept, DynamicResource disease)
         {
-            Types = types;
+            Types = conceptClass;
             AppearTimes = appearTimes;
             Concept = concept;
             Disease = disease;
@@ -26,13 +26,13 @@ namespace DatAR.DataModels.Resources
             set => GetType().GetProperty(propertyName)?.SetValue(this, value, null);
         }
 
-        [JsonProperty("datar:appearTimes")]
+        [JsonProperty("appearTimes")]
         public int AppearTimes { get; set; }
 
-        [JsonProperty("datar:concept")]
+        [JsonProperty("concept")]
         public DynamicResource Concept { get; set; }
 
-        [JsonProperty("datar:disease")]
+        [JsonProperty("disease")]
         public DynamicResource Disease { get; set; }
 
         //[OnDeserializing]

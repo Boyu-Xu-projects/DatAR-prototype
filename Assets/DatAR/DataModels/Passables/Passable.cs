@@ -1,5 +1,6 @@
 ﻿using DatAR.DataModels.Resources;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace DatAR.DataModels.Passables
 {
@@ -17,4 +18,5 @@ namespace DatAR.DataModels.Passables
             return JsonConvert.DeserializeObject<Passable<T>>(intermediary);
         }
     }
+    //public static System.Collections.Generic.IEnumerable<TSource> Union<TSource>(this System.Collections.Generic.IEnumerable<TSource> first, System.Collections.Generic.IEnumerable<TSource> second);
 }
