@@ -12,6 +12,35 @@ namespace DatAR.Widgets.QueryCooccurrences
 {
     public class GeneIndirectExtractor : MonoBehaviour
     {
+
+        [System.Serializable]
+        public class GeneDiseaseResponse
+        {
+            public string gene;
+            public string disease;
+            public string count; // Since count is a string in the JSON, it's declared as a string here
+        }
+
+        [System.Serializable]
+        public class GeneDiseaseResponseWrapper
+        {
+            public GeneDiseaseResponse[] array;
+        }
+
+        [System.Serializable]
+        public class BrainRegionEntry
+        {
+            public string gene;
+            public string brainRegion;
+            public string count;
+        }
+
+        [System.Serializable]
+        public class BrainRegionResponseWrapper
+        {
+            public BrainRegionEntry[] array;
+        }
+
         //public behaviorsubject<querystate> isloading { get; }
         //public string errormessage { get; private set; }
 
@@ -62,8 +91,11 @@ namespace DatAR.Widgets.QueryCooccurrences
 
         IEnumerator GetDataFromEndpoint()
         {
-            string url = "https://api.krr.triply.cc/queries/BrainScienceKG/Brain-Regions---Specific-Diseases---Coun/1/run";
-            UnityWebRequest request = UnityWebRequest.Get(url);
+            string geneId = geneReceptacle.SlottedResourceContainer.Resource.Id;
+            string diseaseId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
+            //string url = $"https://api.krr.triply.cc/queries/BrainScienceKG/Indirect-relations-based-on-a-specific-G/2/run?gene={geneId}&disease={diseaseId}";
+            string geneDiseaseUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Indirect-relations-based-on-a-specific-G/2/run?gene=Heterozygote&disease=Functional+disorder";
+            UnityWebRequest request = UnityWebRequest.Get(geneDiseaseUrl);
             request.SetRequestHeader("Accept", "application/json");
 
             yield return request.SendWebRequest();
@@ -74,7 +106,44 @@ namespace DatAR.Widgets.QueryCooccurrences
             }
             else
             {
-                UnityEngine.Debug.Log("Received: " + request.downloadHandler.text);
+                //UnityEngine.Debug.Log("Received: " + request.downloadHandler.text);
+                GeneDiseaseResponseWrapper responseWrapper = JsonUtility.FromJson<GeneDiseaseResponseWrapper>($"{{\"array\":{request.downloadHandler.text}}}");
+                if (responseWrapper.array != null && responseWrapper.array.Length > 0)
+                {
+                    string geneDiseaseCount = responseWrapper.array[0].count;
+                    UnityEngine.Debug.Log("Count: " + geneDiseaseCount);
+                    //string geneBrainregionsUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Brain-Regions---Specific-Diseases---Coun/3/run?gene={geneId}";
+                    string geneBrainregionsUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Brain-Regions---Specific-Diseases---Coun/3/run?gene=Heterozygote";
+
+                    UnityWebRequest requestBrainRegions = UnityWebRequest.Get(geneBrainregionsUrl);
+                    requestBrainRegions.SetRequestHeader("Accept", "application/json");
+
+                    yield return requestBrainRegions.SendWebRequest();
+
+                    if (requestBrainRegions.result == UnityWebRequest.Result.ConnectionError || requestBrainRegions.result == UnityWebRequest.Result.ProtocolError)
+                    {
+                        UnityEngine.Debug.LogError("Error: " + requestBrainRegions.error);
+                    }
+                    else
+                    {
+                        UnityEngine.Debug.Log("Received: " + requestBrainRegions.downloadHandler.text);
+                        BrainRegionResponseWrapper brainRegionsWrapper = JsonUtility.FromJson<BrainRegionResponseWrapper>($"{{\"array\":{requestBrainRegions.downloadHandler.text}}}");
+                        List<string> brainRegionsList = new List<string>();
+                        foreach (BrainRegionEntry entry in brainRegionsWrapper.array)
+                        {
+                            brainRegionsList.Add(entry.brainRegion);
+                        }
+                        // Now you have all brain regions in brainRegionsList
+                        foreach (var region in brainRegionsList)
+                        {
+                            UnityEngine.Debug.Log("Brain Region: " + region);
+                        }
+                    }
+                }
+                else
+                {
+                    UnityEngine.Debug.Log("No data found in the JSON response.");
+                }
             }
         }
     }
