@@ -51,6 +51,34 @@ namespace DatAR.Widgets.QueryCooccurrences
             public BrainRegionEntry[] array;
         }
 
+        [System.Serializable]
+        public class GeneBrainRegionResponse
+        {
+            public string gene;
+            public string brainRegion;
+            public string count; // Since count is a string in the JSON, it's declared as a string here
+        }
+
+        [System.Serializable]
+        public class GeneBrainRegionResponseWrapper
+        {
+            public GeneBrainRegionResponse[] array;
+        }
+
+        [System.Serializable]
+        public class DiseaseEntry
+        {
+            public string gene;
+            public string disease;
+            public string count;
+        }
+
+        [System.Serializable]
+        public class DiseaseResponseWrapper
+        {
+            public DiseaseEntry[] array;
+        }
+
         //public behaviorsubject<querystate> isloading { get; }
         //public string errormessage { get; private set; }
 
@@ -162,26 +190,6 @@ namespace DatAR.Widgets.QueryCooccurrences
                             passable.data = newFormat;
 
                             dataSender.Send(passable);
-                            //dataSender.Send((Passable)passableData);
-                            // List<string> brainRegionsList = new List<string>();
-                            // foreach (BrainRegionEntry entry in brainRegionsWrapper.array)
-                            // {
-                            //     brainRegionsList.Add(entry.brainRegion);
-                            // }
-
-                            // BrainRegionPassable passableData = new BrainRegionPassable(brainRegionsList);
-                            // List<string> conceptTypes = new List<string>();
-                            // List<string> classTypes = new List<string>();
-                            // DynamicResource conceptResource = new DynamicResource(conceptReceptacle.SlottedResourceContainer.Resource.Id, conceptTypes);
-                            // DynamicResource classResource = new DynamicResource(classReceptacle.SlottedResourceContainer.Resource.Id, classTypes);
-                            ///* CooccurrenceListPassable newFormat = new CooccurrenceListPassable(conceptResource, classResource, backUp)*/;
-                            // dataSender.Send(passableData);
-
-                            // // Now you have all brain regions in brainRegionsList
-                            // foreach (var region in brainRegionsList)
-                            // {
-                            //     UnityEngine.Debug.Log("Brain Region: " + region);
-                            // }
                         }
                     }
                     else
@@ -189,11 +197,72 @@ namespace DatAR.Widgets.QueryCooccurrences
                         UnityEngine.Debug.Log("No data found in the JSON response.");
                     }
                 }
-            } else
+            } else if (classReceptacle.SlottedResourceContainer.Resource.Id == "lbd:disease")
             {
+                string geneId = geneReceptacle.SlottedResourceContainer.Resource.Id;
+                string brainRegionId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
+                string BrainRegionGeneUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Brain-region---Specific-Gene---Count/1/run?brainRegion=Cerebral+cortex&gene=Heterozygote";
 
+                UnityWebRequest request = UnityWebRequest.Get(BrainRegionGeneUrl);
+                request.SetRequestHeader("Accept", "application/json");
+
+                yield return request.SendWebRequest();
+
+                if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    UnityEngine.Debug.LogError("Error: " + request.error);
+                }
+                else
+                {
+                    GeneBrainRegionResponseWrapper responseWrapper = JsonUtility.FromJson<GeneBrainRegionResponseWrapper>($"{{\"array\":{request.downloadHandler.text}}}");
+
+                    if (responseWrapper.array != null && responseWrapper.array.Length > 0)
+                    {
+                        string geneBrainRegionCount = responseWrapper.array[0].count;
+                        UnityEngine.Debug.Log("Count: " + geneBrainRegionCount);
+                        string geneDiseasesUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Diseases---Gene-Count/run?gene=Heterozygote";
+
+                        UnityWebRequest requestDiseases = UnityWebRequest.Get(geneDiseasesUrl);
+                        requestDiseases.SetRequestHeader("Accept", "application/json");
+
+                        yield return requestDiseases.SendWebRequest();
+
+                        if (requestDiseases.result == UnityWebRequest.Result.ConnectionError || requestDiseases.result == UnityWebRequest.Result.ProtocolError)
+                        {
+                            UnityEngine.Debug.LogError("Error: " + requestDiseases.error);
+                        }
+                        else
+                        {
+                            UnityEngine.Debug.Log("Received: " + requestDiseases.downloadHandler.text);
+                            DiseaseResponseWrapper diseasesWrapper = JsonUtility.FromJson<DiseaseResponseWrapper>($"{{\"array\":{requestDiseases.downloadHandler.text}}}");
+                            List<CooccurrenceResource> cooccurrences = new List<CooccurrenceResource>();
+
+                            foreach (var entry in diseasesWrapper.array)
+                            {
+                                CooccurrenceResource cooccurrence = new CooccurrenceResource(
+                                    new List<string> { "Disease" }, // Assuming "Brain Region" is the class type
+                                    Convert.ToDouble(entry.count),
+                                    new DynamicResource(entry.disease, new List<string> { "Disease" }),
+                                    0.0, // Placeholder for other metrics, if needed
+                                    0.0, // Placeholder for other metrics, if needed
+                                    DatAR.DataModels.Misc.FilterSelectionStateType.InRange
+                                );
+                                cooccurrences.Add(cooccurrence);
+                            }
+
+                            var conceptResource = new DynamicResource(geneId, new List<string> { "Gene" });
+                            var classResource = new DynamicResource(brainRegionId, new List<string> { "Brain Region" });
+                            CooccurrenceListPassable newFormat = new CooccurrenceListPassable(conceptResource, classResource, cooccurrences);
+                            var passable = new Passable<CooccurrenceListPassable>();
+                            passable.data = newFormat;
+
+                            dataSender.Send(passable);
+                        }
+                    }
+
+                }
             }
-            
+
         }
     }
 }
