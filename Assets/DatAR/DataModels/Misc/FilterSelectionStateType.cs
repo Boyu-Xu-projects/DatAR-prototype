@@ -4,6 +4,7 @@ namespace DatAR.DataModels.Misc
     {
         OutRange,
         InRange,
-        IndirectRange
+        IndirectRange,
+        IndirectGeneRange
     }
 }

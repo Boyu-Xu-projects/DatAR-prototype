@@ -245,7 +245,7 @@ namespace DatAR.Widgets.QueryCooccurrences
                                     new DynamicResource(entry.disease, new List<string> { "Disease" }),
                                     0.0, // Placeholder for other metrics, if needed
                                     0.0, // Placeholder for other metrics, if needed
-                                    DatAR.DataModels.Misc.FilterSelectionStateType.InRange
+                                    DatAR.DataModels.Misc.FilterSelectionStateType.IndirectGeneRange
                                 );
                                 cooccurrences.Add(cooccurrence);
                             }

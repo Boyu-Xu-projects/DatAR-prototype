@@ -166,6 +166,9 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 var indirectFilterItemsToMatch = passable.data.Resources
                     .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.IndirectRange)
                     .Select(r => r.ClassItem.Id).ToList();
+                var indirectGeneFilterItemsToMatch = passable.data.Resources
+                    .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.IndirectGeneRange)
+                    .Select(r => r.ClassItem.Id).ToList();
 
                 // Perform parallel query
                 //var sbURL = "https://datar.local/ontology/";
@@ -213,6 +216,10 @@ namespace DatAR.Widgets.VisualisationBrainModel
 
                 var indirectFilterItemsToMatch = passable.data.Resources
                     .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.IndirectRange)
+                    .Select(r => r.ClassItem.Id).ToList();
+
+                var indirectGeneFilterItemsToMatch = passable.data.Resources
+                    .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.IndirectGeneRange)
                     .Select(r => r.ClassItem.Id).ToList();
 
                 var outFilterItemsToMatch = passable.data.Resources
@@ -265,7 +272,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 List<string> inFilterIDs = new List<string>();
                 List<string> indirectFilterIDs = new List<string>();
                 List<string> outFilterIDs = new List<string>();
-
+                List<string> indirectGeneFilterIDs = new List<string>();
 
 
                 foreach (var inFilterItem in inFilterItemsToMatch)
@@ -280,6 +287,11 @@ namespace DatAR.Widgets.VisualisationBrainModel
                     indirectFilterIDs.Add(myKey);
                 }
 
+                foreach (var indirectGeneFilterItem in indirectGeneFilterItemsToMatch)
+                {
+                    var myKey = UMLS2TRIPLY.FirstOrDefault(x => x.Value == indirectGeneFilterItem).Key;
+                    indirectGeneFilterIDs.Add(myKey);
+                }
 
                 foreach (var outFilterItem in outFilterItemsToMatch)
                 {
@@ -290,6 +302,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
                 List<string> inFilterSBA_IDs = new List<string>();
                 List<string> indirectFilterSBA_IDs = new List<string>();
                 List<string> outFilterSBA_IDs = new List<string>();
+                List<string> indirectGeneFilterSBA_IDs = new List<string>();
 
                 foreach (string id in inFilterIDs)
                 {
@@ -309,6 +322,15 @@ namespace DatAR.Widgets.VisualisationBrainModel
                     }
                 }
 
+                foreach (string id in indirectGeneFilterIDs)
+                {
+                    foreach (KeyValuePair<string, string> SBA_ID in UMLS2SBA)
+                    {
+                        if (SBA_ID.Value == id)
+                            indirectGeneFilterSBA_IDs.Add("datar:" + SBA_ID.Key);
+                    }
+                }
+
                 foreach (string id in outFilterIDs)
                 {
                     foreach (KeyValuePair<string, string> SBA_ID in UMLS2SBA)
@@ -323,8 +345,10 @@ namespace DatAR.Widgets.VisualisationBrainModel
                     var matchInFilter = inFilterSBA_IDs.Find(item => item == point.Key);
                     if (matchInFilter != null)
                     {
-                        point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
-                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
+                        Material yellowMaterial = new Material(Shader.Find("Standard"));
+                        yellowMaterial.color = Color.yellow; // Set the material 
+                        point.Value.GetComponent<Renderer>().material = yellowMaterial;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = 1.0f;
                         return;
                     }
 
@@ -333,6 +357,18 @@ namespace DatAR.Widgets.VisualisationBrainModel
                     {
                         point.Value.GetComponent<Renderer>().material = _colorService.indirectRelationColor;
                         point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.indirectRelationColor.color.a;
+                        return;
+                    }
+
+                    var matchIndirectGeneFilter = indirectGeneFilterSBA_IDs.Find(item => item == point.Key);
+                    if (matchIndirectGeneFilter != null)
+                    {
+                        UnityEngine.Debug.Log("MPHKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                        UnityEngine.Debug.Log(matchIndirectGeneFilter);
+                        Material yellowMaterial = new Material(Shader.Find("Standard"));
+                        yellowMaterial.color = Color.yellow; // Set the material 
+                        point.Value.GetComponent<Renderer>().material = yellowMaterial;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = 1.0f;
                         return;
                     }
 

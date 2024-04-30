@@ -155,6 +155,14 @@ namespace DatAR.Widgets.VisualisationTopicModel
 
                 }
 
+               else if (match.FilterSelectionState == FilterSelectionStateType.IndirectGeneRange)
+                {
+                    Material yellowMaterial = new Material(Shader.Find("Standard"));
+                    yellowMaterial.color = Color.yellow; // Set the material 
+                    point.Value.GetComponent<Renderer>().material = yellowMaterial;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = 1.0f;
+                }
+
                 else if (match.FilterSelectionState == FilterSelectionStateType.OutRange)
                 {
                     point.Value.GetComponent<Renderer>().material = _colorService.outFilterRangeColor;
