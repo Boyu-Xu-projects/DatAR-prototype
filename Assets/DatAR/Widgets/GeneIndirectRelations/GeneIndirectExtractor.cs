@@ -130,7 +130,8 @@ namespace DatAR.Widgets.QueryCooccurrences
 
         IEnumerator GetDataFromEndpoint()
         {
-            if(classReceptacle.SlottedResourceContainer.Resource.Id == "lbd:region")
+
+            if (classReceptacle.SlottedResourceContainer.Resource.Id == "lbd:region")
             {
                 string geneId = geneReceptacle.SlottedResourceContainer.Resource.Id;
                 string diseaseId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
@@ -178,10 +179,57 @@ namespace DatAR.Widgets.QueryCooccurrences
                                     new DynamicResource(entry.brainRegion, new List<string> { "Brain Region" }),
                                     0.0, // Placeholder for other metrics, if needed
                                     0.0, // Placeholder for other metrics, if needed
-                                    DatAR.DataModels.Misc.FilterSelectionStateType.InRange
+                                    DatAR.DataModels.Misc.FilterSelectionStateType.IndirectGeneRange
                                 );
                                 cooccurrences.Add(cooccurrence);
                             }
+
+                            List<CooccurrenceResource> backUp = new List<CooccurrenceResource>();
+                            string dataSourceBD = "brainregion-disease(29-4-22)";
+                            string concept = conceptReceptacle.SlottedResourceContainer.Resource.Id;
+                            string className = classReceptacle.SlottedResourceContainer.Resource.Id;
+                            string conceptBD = conceptReceptacle.SlottedResourceContainer.Resource.Id;
+                            string classNameBD = classReceptacle.SlottedResourceContainer.Resource.Id;
+
+                            List<string> conceptTypes = new List<string>();
+                            List<string> classTypes = new List<string>();
+                            string classTypeBD = "Brain Region";
+                            string conceptTypeBD = "Brain Disease";
+                            string matchTermBD = "\"disease\"";
+                            string searchTermBD = "\"brainregion\"";
+
+                            if (className == "lbd:region")
+                            {
+                                classTypeBD = "Brain Disease";
+                                conceptTypeBD = "Brain Region";
+                                matchTermBD = "\"brainregion\"";
+                                searchTermBD = "\"disease\"";
+                            }
+
+                            List<Dictionary<string, object>> dataBD = CSVReader.Read(dataSourceBD);
+
+                            List<string> conceptTypesBD = new List<string> { conceptTypeBD };
+                            List<string> classTypesBD = new List<string> { classTypeBD };
+
+                            for (var i = 0; i < dataBD.Count; i++)
+                            {
+                                if (concept == dataBD[i][searchTermBD].ToString())
+                                {
+                                    DynamicResource resource = new DynamicResource(dataBD[i][matchTermBD].ToString(), classTypesBD);
+                                    CooccurrenceResource cooccurrence = new CooccurrenceResource(
+                                        classTypesBD,
+                                        Convert.ToDouble(dataBD[i]["\"count\""]),
+                                        resource,
+                                        0.0, // No local data
+                                        0.0, // No local data
+                                        DatAR.DataModels.Misc.FilterSelectionStateType.InRange
+                                    );
+                                    cooccurrence.Label = dataBD[i][matchTermBD].ToString();
+                                    backUp.Add(cooccurrence);
+                                }
+                            }
+
+                            cooccurrences.AddRange(backUp);
 
                             var conceptResource = new DynamicResource(geneId, new List<string> { "Gene" });
                             var classResource = new DynamicResource(diseaseId, new List<string> { "Disease" });
@@ -249,6 +297,53 @@ namespace DatAR.Widgets.QueryCooccurrences
                                 );
                                 cooccurrences.Add(cooccurrence);
                             }
+
+                            List<CooccurrenceResource> backUp = new List<CooccurrenceResource>();
+                            string dataSourceBD = "brainregion-disease(29-4-22)";
+                            string concept = conceptReceptacle.SlottedResourceContainer.Resource.Id;
+                            string className = classReceptacle.SlottedResourceContainer.Resource.Id;
+                            string conceptBD = conceptReceptacle.SlottedResourceContainer.Resource.Id;
+                            string classNameBD = classReceptacle.SlottedResourceContainer.Resource.Id;
+
+                            List<string> conceptTypes = new List<string>();
+                            List<string> classTypes = new List<string>();
+                            string classTypeBD = "Brain Region";
+                            string conceptTypeBD = "Brain Disease";
+                            string matchTermBD = "\"disease\"";
+                            string searchTermBD = "\"brainregion\"";
+
+                            if (className == "lbd:region")
+                            {
+                                classTypeBD = "Brain Disease";
+                                conceptTypeBD = "Brain Region";
+                                matchTermBD = "\"brainregion\"";
+                                searchTermBD = "\"disease\"";
+                            }
+
+                            List<Dictionary<string, object>> dataBD = CSVReader.Read(dataSourceBD);
+
+                            List<string> conceptTypesBD = new List<string> { conceptTypeBD };
+                            List<string> classTypesBD = new List<string> { classTypeBD };
+
+                            for (var i = 0; i < dataBD.Count; i++)
+                            {
+                                if (concept == dataBD[i][searchTermBD].ToString())
+                                {
+                                    DynamicResource resource = new DynamicResource(dataBD[i][matchTermBD].ToString(), classTypesBD);
+                                    CooccurrenceResource cooccurrence = new CooccurrenceResource(
+                                        classTypesBD,
+                                        Convert.ToDouble(dataBD[i]["\"count\""]),
+                                        resource,
+                                        0.0, // No local data
+                                        0.0, // No local data
+                                        DatAR.DataModels.Misc.FilterSelectionStateType.InRange
+                                    );
+                                    cooccurrence.Label = dataBD[i][matchTermBD].ToString();
+                                    backUp.Add(cooccurrence);
+                                }
+                            }
+
+                            cooccurrences.AddRange(backUp);
 
                             var conceptResource = new DynamicResource(geneId, new List<string> { "Gene" });
                             var classResource = new DynamicResource(brainRegionId, new List<string> { "Brain Region" });

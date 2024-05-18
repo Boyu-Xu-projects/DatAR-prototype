@@ -156,7 +156,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
 
             try
             {
-                List<DynamicResource> inFilterItems = new List<DynamicResource>(), outFilterItems = new List<DynamicResource>();
+                List<DynamicResource> inFilterItems = new List<DynamicResource>(), outFilterItems = new List<DynamicResource>(), indirectGeneFilterItems = new List<DynamicResource>();
                 var outFilterItemsToMatch = passable.data.Resources
                     .FindAll(r => r.FilterSelectionState == FilterSelectionStateType.OutRange)
                     .Select(r => r.ClassItem.Id).ToList();
@@ -172,7 +172,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
 
                 // Perform parallel query
                 //var sbURL = "https://datar.local/ontology/";
-                (inFilterItems, outFilterItems) = await UniTask.WhenAll(_sparqlService.GetCloseMatchingIds(inFilterItemsToMatch), _sparqlService.GetCloseMatchingIds(outFilterItemsToMatch));
+                (inFilterItems, indirectGeneFilterItems, outFilterItems) = await UniTask.WhenAll(_sparqlService.GetCloseMatchingIds(inFilterItemsToMatch), _sparqlService.GetCloseMatchingIds(indirectGeneFilterItemsToMatch),  _sparqlService.GetCloseMatchingIds(outFilterItemsToMatch));
 
                 // Remove overlapping items from out-filter items
                 outFilterItems = outFilterItems.Except(inFilterItems).ToList();
@@ -331,6 +331,8 @@ namespace DatAR.Widgets.VisualisationBrainModel
                     }
                 }
 
+                UnityEngine.Debug.Log("--------------------------------------------------------------------");
+                UnityEngine.Debug.Log(indirectGeneFilterSBA_IDs);
                 foreach (string id in outFilterIDs)
                 {
                     foreach (KeyValuePair<string, string> SBA_ID in UMLS2SBA)
@@ -342,12 +344,13 @@ namespace DatAR.Widgets.VisualisationBrainModel
 
                 _pointsPool.ForEach(point =>
                 {
+                   
                     var matchInFilter = inFilterSBA_IDs.Find(item => item == point.Key);
                     if (matchInFilter != null)
                     {
                         Material yellowMaterial = new Material(Shader.Find("Standard"));
-                        yellowMaterial.color = Color.yellow; // Set the material 
-                        point.Value.GetComponent<Renderer>().material = yellowMaterial;
+                        yellowMaterial.color = Color.green; // Set the material 
+                        point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
                         point.Value.GetComponentInChildren<TMP_Text>().alpha = 1.0f;
                         return;
                     }
