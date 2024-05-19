@@ -34,6 +34,14 @@ public class ResourceSphereManufacturer : MonoBehaviour
         _colorService = services.GetComponent<ColorService>();
     }
 
+    public void Clear()
+    {
+        foreach (Transform child in defaultSpawnLocation)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
     public GameObject Spawn(IDynamicResource resource, Vector3 location = default, Transform parent = null)
     {
         if (parent == null)
