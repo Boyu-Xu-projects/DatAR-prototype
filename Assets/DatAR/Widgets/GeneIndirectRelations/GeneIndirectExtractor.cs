@@ -134,9 +134,10 @@ namespace DatAR.Widgets.QueryCooccurrences
             if (classReceptacle.SlottedResourceContainer.Resource.Id == "lbd:region")
             {
                 string geneId = geneReceptacle.SlottedResourceContainer.Resource.Id;
+                UnityEngine.Debug.Log("GENEEEE IDDDDDDDDDD: " + geneId);
                 string diseaseId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
-                //string url = $"https://api.krr.triply.cc/queries/BrainScienceKG/Indirect-relations-based-on-a-specific-G/2/run?gene={geneId}&disease={diseaseId}";
-                string geneDiseaseUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Indirect-relations-based-on-a-specific-G/2/run?gene=Heterozygote&disease=Functional+disorder";
+                string geneDiseaseUrl = $"https://api.krr.triply.cc/queries/BrainScienceKG/Indirect-relations-based-on-a-specific-G/2/run?gene={geneId}&disease={diseaseId}";
+                //string geneDiseaseUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Indirect-relations-based-on-a-specific-G/2/run?gene=Heterozygote&disease=Functional+disorder";
                 UnityWebRequest request = UnityWebRequest.Get(geneDiseaseUrl);
                 request.SetRequestHeader("Accept", "application/json");
 
@@ -154,12 +155,12 @@ namespace DatAR.Widgets.QueryCooccurrences
                     {
                         string geneDiseaseCount = responseWrapper.array[0].count;
                         //UnityEngine.Debug.Log("Count: " + geneDiseaseCount);
-                        //string geneBrainregionsUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Brain-Regions---Specific-Diseases---Coun/3/run?gene={geneId}";
-                        string geneBrainregionsUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Brain-Regions---Specific-Diseases---Coun/3/run?gene=Heterozygote";
+                        string geneBrainregionsUrl = $"https://api.krr.triply.cc/queries/BrainScienceKG/Brain-Regions---Specific-Diseases---Coun/3/run?gene={geneId}";
+                        //string geneBrainregionsUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Brain-Regions---Specific-Diseases---Coun/3/run?gene=Heterozygote";
 
                         UnityWebRequest requestBrainRegions = UnityWebRequest.Get(geneBrainregionsUrl);
                         requestBrainRegions.SetRequestHeader("Accept", "application/json");
-
+                         
                         yield return requestBrainRegions.SendWebRequest();
 
                         if (requestBrainRegions.result == UnityWebRequest.Result.ConnectionError || requestBrainRegions.result == UnityWebRequest.Result.ProtocolError)
@@ -168,13 +169,15 @@ namespace DatAR.Widgets.QueryCooccurrences
                         }
                         else
                         {
-                            //UnityEngine.Debug.Log("Received: " + requestBrainRegions.downloadHandler.text);
+                            UnityEngine.Debug.Log("Received: " + requestBrainRegions.downloadHandler.text);
                             BrainRegionResponseWrapper brainRegionsWrapper = JsonUtility.FromJson<BrainRegionResponseWrapper>($"{{\"array\":{requestBrainRegions.downloadHandler.text}}}");
                             List<CooccurrenceResource> cooccurrences = new List<CooccurrenceResource>();
+
+                            // Add indirect gene range cooccurrences
                             foreach (var entry in brainRegionsWrapper.array)
                             {
                                 CooccurrenceResource cooccurrence = new CooccurrenceResource(
-                                    new List<string> { "Brain Region" }, // Assuming "Brain Region" is the class type
+                                    new List<string> { "Brain Region" },
                                     Convert.ToDouble(entry.count),
                                     new DynamicResource(entry.brainRegion, new List<string> { "Brain Region" }),
                                     0.0, // Placeholder for other metrics, if needed
@@ -184,6 +187,7 @@ namespace DatAR.Widgets.QueryCooccurrences
                                 cooccurrences.Add(cooccurrence);
                             }
 
+                            // Add backup cooccurrences
                             List<CooccurrenceResource> backUp = new List<CooccurrenceResource>();
                             string dataSourceBD = "brainregion-disease(29-4-22)";
                             string concept = conceptReceptacle.SlottedResourceContainer.Resource.Id;
@@ -249,7 +253,7 @@ namespace DatAR.Widgets.QueryCooccurrences
             {
                 string geneId = geneReceptacle.SlottedResourceContainer.Resource.Id;
                 string brainRegionId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
-                string BrainRegionGeneUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Brain-region---Specific-Gene---Count/1/run?brainRegion=Cerebral+cortex&gene=Heterozygote";
+                string BrainRegionGeneUrl = $"https://api.krr.triply.cc/queries/BrainScienceKG/Brain-region---Specific-Gene---Count/1/run?brainRegion={brainRegionId}&gene={geneId}";
 
                 UnityWebRequest request = UnityWebRequest.Get(BrainRegionGeneUrl);
                 request.SetRequestHeader("Accept", "application/json");
@@ -268,7 +272,7 @@ namespace DatAR.Widgets.QueryCooccurrences
                     {
                         string geneBrainRegionCount = responseWrapper.array[0].count;
                         //UnityEngine.Debug.Log("Count: " + geneBrainRegionCount);
-                        string geneDiseasesUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Diseases---Gene-Count/run?gene=Heterozygote";
+                        string geneDiseasesUrl = $"https://api.krr.triply.cc/queries/BrainScienceKG/Diseases---Gene-Count/run?gene={geneId}";
 
                         UnityWebRequest requestDiseases = UnityWebRequest.Get(geneDiseasesUrl);
                         requestDiseases.SetRequestHeader("Accept", "application/json");

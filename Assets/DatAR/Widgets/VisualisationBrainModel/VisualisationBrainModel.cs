@@ -331,7 +331,7 @@ namespace DatAR.Widgets.VisualisationBrainModel
                     }
                 }
 
-                UnityEngine.Debug.Log("--------------------------------------------------------------------");
+                
                 UnityEngine.Debug.Log(indirectGeneFilterSBA_IDs);
                 foreach (string id in outFilterIDs)
                 {
@@ -348,37 +348,32 @@ namespace DatAR.Widgets.VisualisationBrainModel
                     var matchInFilter = inFilterSBA_IDs.Find(item => item == point.Key);
                     if (matchInFilter != null)
                     {
-                        Material yellowMaterial = new Material(Shader.Find("Standard"));
-                        yellowMaterial.color = Color.green; // Set the material 
+                        UnityEngine.Debug.Log("MPHKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA skata 2");
+                        //Material yellowMaterial = new Material(Shader.Find("Standard"));
+                        //yellowMaterial.color = Color.green; // Set the material 
                         point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
                         point.Value.GetComponentInChildren<TMP_Text>().alpha = 1.0f;
+
+                        
                         return;
                     }
 
                     var matchIndirectFilter = indirectFilterSBA_IDs.Find(item => item == point.Key);
                     if (matchIndirectFilter != null)
                     {
+                        UnityEngine.Debug.Log("MPHKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA skata 1");
                         point.Value.GetComponent<Renderer>().material = _colorService.indirectRelationColor;
                         point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.indirectRelationColor.color.a;
                         return;
                     }
 
-                    var matchIndirectGeneFilter = indirectGeneFilterSBA_IDs.Find(item => item == point.Key);
-                    if (matchIndirectGeneFilter != null)
-                    {
-                        UnityEngine.Debug.Log("MPHKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                        UnityEngine.Debug.Log(matchIndirectGeneFilter);
-                        Material yellowMaterial = new Material(Shader.Find("Standard"));
-                        yellowMaterial.color = Color.yellow; // Set the material 
-                        point.Value.GetComponent<Renderer>().material = yellowMaterial;
-                        point.Value.GetComponentInChildren<TMP_Text>().alpha = 1.0f;
-                        return;
-                    }
+                   
 
 
                     var matchOutFilter = outFilterSBA_IDs.Find(item => item == point.Key);
                     if (matchOutFilter != null)
                     {
+                        UnityEngine.Debug.Log("MPHKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA skata 3");
                         point.Value.GetComponent<Renderer>().material = _colorService.outFilterRangeColor;
                         point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.outFilterRangeColor.color.a;
                         return;
@@ -387,6 +382,22 @@ namespace DatAR.Widgets.VisualisationBrainModel
                     // Else
                     point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
                     point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
+                });
+
+
+                _pointsPool.ForEach(point1 =>
+                {
+                    var matchIndirectGeneFilter = indirectGeneFilterSBA_IDs.Find(item => item == point1.Key);
+                    if (matchIndirectGeneFilter != null)
+                    {
+                        UnityEngine.Debug.Log("MPHKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                        UnityEngine.Debug.Log(matchIndirectGeneFilter);
+                        Material yellowMaterial = new Material(Shader.Find("Standard"));
+                        yellowMaterial.color = Color.yellow; // Set the material 
+                        point1.Value.GetComponent<Renderer>().material = yellowMaterial;
+                        point1.Value.GetComponentInChildren<TMP_Text>().alpha = 1.0f;
+                        return;
+                    }
                 });
             }
             IsLoading.OnNext(QueryState.HasLoaded);
