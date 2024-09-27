@@ -89,6 +89,7 @@ namespace DatAR.Widgets.QueryCooccurrences
 
         [SerializeField] private Receptacle conceptReceptacle;
         [SerializeField] private Receptacle geneReceptacle;
+        [SerializeField] private Receptacle proteinReceptacle;
 
         //private QueryCooccurrences()
         //{
@@ -102,7 +103,7 @@ namespace DatAR.Widgets.QueryCooccurrences
             conceptReceptacle.slottedResourceContainerHasChanged.Subscribe(_ => RetrieveCooccurrences(), e => UnityEngine.Debug.LogError(e));
             classReceptacle.slottedResourceContainerHasChanged.Subscribe(_ => RetrieveCooccurrences(), e => UnityEngine.Debug.LogError(e));
             geneReceptacle.slottedResourceContainerHasChanged.Subscribe(_ => RetrieveCooccurrences(), e => UnityEngine.Debug.LogError(e));
-
+            proteinReceptacle.slottedResourceContainerHasChanged.Subscribe(_ => RetrieveCooccurrences(), e => UnityEngine.Debug.LogError(e));
 
 
         }
