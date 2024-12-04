@@ -18,7 +18,7 @@ namespace DatAR.Widgets.VisualisationTopicModel
     {
         public BehaviorSubject<QueryState> IsLoading { get; }
         public string ErrorMessage { get; private set; }
-        
+
         private readonly Dictionary<string, GameObject> _pointsPool = new Dictionary<string, GameObject>();
         public readonly Dictionary<string, Vector3> pointsLocation = new Dictionary<string, Vector3>();
 
@@ -26,6 +26,7 @@ namespace DatAR.Widgets.VisualisationTopicModel
         public float pointScale = 0.02f;
 
         public bool showLabels = true;
+        private bool failedDataRetrieval = false;
 
         // The prefab for the data points that will be instantiated
         public GameObject pointPrefab;
@@ -72,6 +73,37 @@ namespace DatAR.Widgets.VisualisationTopicModel
          */
         private void UpdateHighlights(Passable rawPassable)
         {
+            if (rawPassable == null) // Demo purposes
+            {
+                // First reset topic model
+                _pointsPool.ForEach(point =>
+                {
+                    point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
+                });
+
+                // Randomly assign highlights in the model
+                _pointsPool.ForEach(point =>
+                {
+                    if (UnityEngine.Random.Range(0, 100) < 5)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
+                    }
+                });
+
+                _pointsPool.ForEach(point =>
+                {
+                    if (UnityEngine.Random.Range(0, 100) < 5)
+                    {
+                        point.Value.GetComponent<Renderer>().material = _colorService.indirectRelationColor;
+                        point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.indirectRelationColor.color.a;
+                    }
+                });
+
+                return;
+            }
+
             // Check if correct type
             if (!(rawPassable is Passable<CooccurrenceListPassable>))
             {
@@ -88,14 +120,14 @@ namespace DatAR.Widgets.VisualisationTopicModel
             }
             _bufferedPassable = rawPassable;
 
-            var passable = (Passable<CooccurrenceListPassable>) rawPassable;
-        
+            var passable = (Passable<CooccurrenceListPassable>)rawPassable;
+
             if (passable.data.Resources.Count < 1)
             {
                 return;
             }
             // Debug.Log($"3D PLOT OBJECT: Received {passable.data.Resources.Count} items. Objects: {JsonConvert.SerializeObject(passable.data)}"); // DEBUG
-        
+
             _pointsPool.ForEach(point =>
             {
                 var match = passable.data.Resources.Find(item => item.ClassItem.Id == point.Key);
@@ -103,27 +135,81 @@ namespace DatAR.Widgets.VisualisationTopicModel
                 {
                     // Would trigger with every disease not at all related to the region
                     // Debug.Log("Did not find corresponding disease");
-                
+
                     point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
-                    point.Value.GetComponentInChildren<TMP_Text>().alpha =  _colorService.notFoundColor.color.a;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
                     return;
                 }
 
-                if (match.FilterSelectionState == FilterSelectionStateType.InRange)
+                if (match.FilterSelectionState == FilterSelectionStateType.IndirectRange)
+                {
+                    point.Value.GetComponent<Renderer>().material = _colorService.indirectRelationColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.indirectRelationColor.color.a;
+
+                }
+
+                else if (match.FilterSelectionState == FilterSelectionStateType.InRange)
                 {
                     point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
-                    point.Value.GetComponentInChildren<TMP_Text>().alpha =  _colorService.inFilterRangeColor.color.a;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
+
                 }
+
                 else if (match.FilterSelectionState == FilterSelectionStateType.OutRange)
                 {
                     point.Value.GetComponent<Renderer>().material = _colorService.outFilterRangeColor;
-                    point.Value.GetComponentInChildren<TMP_Text>().alpha =  _colorService.outFilterRangeColor.color.a;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.outFilterRangeColor.color.a;
                 }
                 else
                 {
                     Debug.LogError("Unknown state");
                 }
             });
+
+
+            Debug.Log("highlight topic model");
+
+            /*
+           _pointsPool.ForEach(point =>
+            {
+                var match = passable.data.Resources.Find(item => item.ClassItem.Id == point.Key);
+                if (match == null)
+                {
+                    // Would trigger with every disease not at all related to the region
+                    // Debug.Log("Did not find corresponding disease");
+
+                    point.Value.GetComponent<Renderer>().material = _colorService.notFoundColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.notFoundColor.color.a;
+                    return;
+                }
+
+                if (match.FilterSelectionState == FilterSelectionStateType.IndirectRange)
+                {
+                    point.Value.GetComponent<Renderer>().material = _colorService.indirectRelationColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.indirectRelationColor.color.a;
+
+                }
+
+                if (match.FilterSelectionState == FilterSelectionStateType.InRange)
+                {
+                    point.Value.GetComponent<Renderer>().material = _colorService.inFilterRangeColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.inFilterRangeColor.color.a;
+
+
+                }
+
+                else if (match.FilterSelectionState == FilterSelectionStateType.OutRange)
+                {
+                    point.Value.GetComponent<Renderer>().material = _colorService.outFilterRangeColor;
+                    point.Value.GetComponentInChildren<TMP_Text>().alpha = _colorService.outFilterRangeColor.color.a;
+                }
+                else
+                {
+                    Debug.LogError("Unknown state");
+                }
+            });
+        */
+
         }
 
         async UniTask<bool> UpdatePlot()
@@ -133,7 +219,7 @@ namespace DatAR.Widgets.VisualisationTopicModel
             {
                 return false;
             }
-            
+
             // Take class form receptacle
             await UpdatePlot(topicModelClassReceptacle.SlottedResourceContainer.Resource.Id);
             return true;
@@ -144,7 +230,8 @@ namespace DatAR.Widgets.VisualisationTopicModel
             // Clear previous plot data
             _pointsPool.Clear();
             pointsLocation.Clear();
-            for (int i = pointPool.transform.childCount - 1; i >= 0; --i) {
+            for (int i = pointPool.transform.childCount - 1; i >= 0; --i)
+            {
                 Destroy(pointPool.transform.GetChild(i).gameObject);
             }
             pointPool.transform.DetachChildren();
@@ -165,14 +252,36 @@ namespace DatAR.Widgets.VisualisationTopicModel
                     return false;
                 }
             }
-            catch (Exception e)
+            catch (Exception e) // Failed to retrieve coordinates from data source. Load back-up data instead.
             {
-                ErrorMessage = e.Message;
-                IsLoading.OnNext(QueryState.HasError);
-                return false;
+                // Show error message
+                // ErrorMessage = e.Message;
+                // ErrorMessage = e.Message;
+                // IsLoading.OnNext(QueryState.HasError);
+
+                List<Dictionary<string, object>> data = CSVReader.Read("NewTopic(27-07)");
+                List<string> data_type = new List<string>() { "disease" };
+                coords = new List<CoordsResource>();
+
+                for (var i = 0; i < data.Count; i++)
+                {
+                    CoordsResource coord = new CoordsResource(
+                        data[i]["disease Names"].ToString(),
+                        data_type,
+                        Convert.ToSingle(data[i][" X"].ToString().Replace(".", ",")),
+                        Convert.ToSingle(data[i][" Y"].ToString().Replace(".", ",")),
+                        Convert.ToSingle(data[i][" Z"].ToString().Replace(".", ",")));
+
+                    coords.Add(coord);
+
+
+                    Debug.Log("generate topic model");
+                }
+
+                failedDataRetrieval = true;
             }
             IsLoading.OnNext(QueryState.HasLoaded);
-            
+
             // Get max values on each axis
             float xMax = coords.Select(resource => resource.CoordX).Max();
             float yMax = coords.Select(resource => resource.CoordY).Max();
@@ -184,7 +293,7 @@ namespace DatAR.Widgets.VisualisationTopicModel
             float yMin = coords.Select(resource => resource.CoordY).Min();
             float zMin = coords.Select(resource => resource.CoordZ).Min();
             float trueMin = Math.Min(xMin, Math.Min(yMin, zMin));
-            
+
             coords.ForEach(resource =>
             {
                 float x, y, z;
@@ -219,10 +328,8 @@ namespace DatAR.Widgets.VisualisationTopicModel
                 var resourceComponent = dataPoint.GetComponent<ResourceComponent>();
                 resourceComponent.Resource = resource;
 
-                if (!showLabels)
-                {
-                    resourceComponent.transform.GetChild(0).gameObject.SetActive(false);
-                }
+                if (failedDataRetrieval) resourceComponent.transform.GetChild(0).GetComponent<TextMeshPro>().text = resource.Id;
+                if (!showLabels) resourceComponent.transform.GetChild(0).gameObject.SetActive(false);
 
                 dataPoint.transform.name = resourceComponent.Resource.Id;
                 dataPoint.transform.localScale = new Vector3(pointScale, pointScale, pointScale);

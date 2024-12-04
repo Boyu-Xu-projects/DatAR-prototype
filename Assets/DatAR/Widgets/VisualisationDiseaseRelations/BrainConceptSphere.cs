@@ -28,22 +28,22 @@ public class BrainConceptSphere : MonoBehaviour
 
         switch (brainClass)
         {
-            case "lbd:region":
+            case "Region":
                 GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_BrainRegion");
                 break;
-            case "lbd:transmitter":
-                GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_Neurotransmitter");
-                break;
-            case "lbd:function":
-                GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_CognitiveFunction");
-                break;
-            case "lbd:protein":
+            //case "lbd:transmitter":
+            //    GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_Neurotransmitter");
+            //    break;
+            //case "lbd:function":
+            //    GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_CognitiveFunction");
+            //    break;
+            case "Protein":
                 GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_Protein");
                 break;
-            case "lbd:neuron":
+            case "MentalP":
                 GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_Neuron");
                 break;
-            case "lbd:gene":
+            case "Gene":
                 GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_Gene");
                 break;
         }

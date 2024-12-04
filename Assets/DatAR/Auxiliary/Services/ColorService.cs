@@ -7,4 +7,6 @@ public class ColorService : MonoBehaviour
     public Material notFoundColor;
     public Material neutralColor;
     public Material classColor;
+    public Material matchingColor;
+    public Material indirectRelationColor;
 }

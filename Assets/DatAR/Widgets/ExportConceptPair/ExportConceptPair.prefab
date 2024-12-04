@@ -1082,7 +1082,7 @@ PrefabInstance:
     - target: {fileID: 1917702679333990774, guid: b20ae7c18784859489d557c193214171,
         type: 3}
       propertyPath: expectedType
-      value: lbd:disease
+      value: '!rdf:Class'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b20ae7c18784859489d557c193214171, type: 3}
@@ -1189,7 +1189,7 @@ PrefabInstance:
     - target: {fileID: 1917702679333990774, guid: b20ae7c18784859489d557c193214171,
         type: 3}
       propertyPath: expectedType
-      value: lbd:region
+      value: '!rdf:Class'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b20ae7c18784859489d557c193214171, type: 3}

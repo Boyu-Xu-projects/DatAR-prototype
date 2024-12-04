@@ -1,0 +1,9 @@
+﻿  pch.cpp
+  App.cpp
+  Main.cpp
+  UnityGenerated.cpp
+C:\Boyu Xu\Unity Projects\datar-hololens-FinalStudyG\datar-hololens-FinalStudyG-0924\build0926\DatARStudyVersion3\App.cpp(26,1): warning C4973: 'Windows::UI::ViewManagement::IApplicationView2::SuppressSystemOverlays::set': marked as deprecated
+C:\Boyu Xu\Unity Projects\datar-hololens-FinalStudyG\datar-hololens-FinalStudyG-0924\build0926\DatARStudyVersion3\App.cpp(26,1): message : Message: 'Use the TryEnterFullScreen method and IsFullScreenMode property instead of SuppressSystemOverlays. For more info, see MSDN.'
+  Generating code
+  Finished generating code
+  DatARStudyVersion3.vcxproj -> C:\Boyu Xu\Unity Projects\datar-hololens-FinalStudyG\datar-hololens-FinalStudyG-0924\build0926\build\bin\ARM64\Master\DatARStudyVersion3.exe
