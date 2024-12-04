@@ -461,6 +461,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FilterSliderConceptGivenClassItem
       objectReference: {fileID: 0}
+    - target: {fileID: 4969018447440470997, guid: a28973408cbc36f4ba076cc238564430,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5212914513864185162, guid: a28973408cbc36f4ba076cc238564430,
         type: 3}
       propertyPath: m_Mesh
@@ -789,6 +794,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FilterSliderClassItemGivenConcept
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969018447440470997, guid: a28973408cbc36f4ba076cc238564430,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5212914513864185162, guid: a28973408cbc36f4ba076cc238564430,
         type: 3}

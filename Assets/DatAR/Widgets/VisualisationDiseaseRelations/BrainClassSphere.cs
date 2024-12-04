@@ -23,32 +23,32 @@ public class BrainClassSphere : MonoBehaviour
     {
         switch (brainClassId)
         {
-            case "lbd:region":
+            case "Region":
                 brainClass = BrainClass.REGION;
                 classText.text = "Brain Region";
                 GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_BrainRegion");
                 break;
-            case "lbd:transmitter":
-                brainClass = BrainClass.TRANSMITTER;
-                classText.text = "Transmitter";
-                GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_Neurotransmitter");
-                break;
-            case "lbd:function":
-                brainClass = BrainClass.FUNCTION;
-                classText.text = "Cognitive Function";
-                GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_CognitiveFunction");
-                break;
-            case "lbd:protein":
+            //case "lbd:transmitter":
+            //    brainClass = BrainClass.TRANSMITTER;
+            //    classText.text = "Transmitter";
+            //    GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_Neurotransmitter");
+            //    break;
+            //case "lbd:function":
+            //    brainClass = BrainClass.FUNCTION;
+            //    classText.text = "Cognitive Function";
+            //    GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_CognitiveFunction");
+            //    break;
+            case "Protein":
                 brainClass = BrainClass.PROTEIN;
                 classText.text = "Protein";
                 GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_Protein");
                 break;
-            case "lbd:neuron":
-                brainClass = BrainClass.NEURON;
-                classText.text = "Neuron";
+            case "MentalP":
+                brainClass = BrainClass.MENTALP;
+                classText.text = "MentalP";
                 GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_Neuron");
                 break;
-            case "lbd:gene":
+            case "Gene":
                 brainClass = BrainClass.GENE;
                 classText.text = "Gene";
                 GetComponent<Renderer>().material = Resources.Load<Material>("BrainClasses/Concept_Gene");
@@ -115,5 +115,6 @@ public enum BrainClass
     GENE,
     NEURON,
     TRANSMITTER,
-    PROTEIN
+    PROTEIN,
+    MENTALP
 }

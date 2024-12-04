@@ -1,0 +1,7 @@
+#include "il2cpp-config.h"
+#include "C:\Boyu Xu\Unity Projects\datar-hololens-FinalStudyG\datar-hololens-FinalStudyG-0924\build0122\Il2CppOutputProject\IL2CPP\libil2cpp\mono\MonoPosixHelper.cpp"
+#include "C:\Boyu Xu\Unity Projects\datar-hololens-FinalStudyG\datar-hololens-FinalStudyG-0924\build0122\Il2CppOutputProject\IL2CPP\libil2cpp\mono\ThreadPool\ThreadPoolMonitorThread.cpp"
+#include "C:\Boyu Xu\Unity Projects\datar-hololens-FinalStudyG\datar-hololens-FinalStudyG-0924\build0122\Il2CppOutputProject\IL2CPP\libil2cpp\mono\ThreadPool\ThreadPoolWorkerThread.cpp"
+#include "C:\Boyu Xu\Unity Projects\datar-hololens-FinalStudyG\datar-hololens-FinalStudyG-0924\build0122\Il2CppOutputProject\IL2CPP\libil2cpp\mono\ThreadPool\threadpool-ms-io-poll.cpp"
+#include "C:\Boyu Xu\Unity Projects\datar-hololens-FinalStudyG\datar-hololens-FinalStudyG-0924\build0122\Il2CppOutputProject\IL2CPP\libil2cpp\mono\ThreadPool\threadpool-ms-io.cpp"
+#include "C:\Boyu Xu\Unity Projects\datar-hololens-FinalStudyG\datar-hololens-FinalStudyG-0924\build0122\Il2CppOutputProject\IL2CPP\libil2cpp\mono\ThreadPool\threadpool-ms.cpp"

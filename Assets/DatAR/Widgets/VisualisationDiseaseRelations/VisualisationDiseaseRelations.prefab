@@ -1114,7 +1114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a725fdd852cd6d8458acb1b4a84be6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brainClass: lbd:gene
+  brainClass: Gene
   visualization: {fileID: 2070672750774282204}
 --- !u!1 &611108168642917156
 GameObject:
@@ -2169,7 +2169,7 @@ GameObject:
   - component: {fileID: 3114147076955405931}
   - component: {fileID: 4399951284487807713}
   m_Layer: 0
-  m_Name: BrainNeuronToggle
+  m_Name: BrainMentalPToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2680,7 +2680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a725fdd852cd6d8458acb1b4a84be6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brainClass: lbd:neuron
+  brainClass: MentalP
   visualization: {fileID: 2070672750774282204}
 --- !u!1 &1234751144649160680
 GameObject:
@@ -3687,7 +3687,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a725fdd852cd6d8458acb1b4a84be6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brainClass: lbd:protein
+  brainClass: Protein
   visualization: {fileID: 2070672750774282204}
 --- !u!1 &1934938147809216789
 GameObject:
@@ -7533,7 +7533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a725fdd852cd6d8458acb1b4a84be6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brainClass: lbd:region
+  brainClass: Region
   visualization: {fileID: 2070672750774282204}
 --- !u!1 &4768004459773891986
 GameObject:
@@ -8372,6 +8372,7 @@ GameObject:
   - component: {fileID: 1796751203}
   - component: {fileID: 2162669194810390890}
   - component: {fileID: 5131528090697520413}
+  - component: {fileID: 311212141951692151}
   m_Layer: 0
   m_Name: VisualisationDiseaseRelations
   m_TagString: Deletable
@@ -8626,6 +8627,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea05885103958e84990ab31056f92bc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &311212141951692151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4918420673200661866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436856f6cf5299c4587e46f368c4d39b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disease1Receptacle: {fileID: 7297361434534473357}
+  disease2Receptacle: {fileID: 1303687156215074714}
+  disease1Text: {fileID: 7297361434683238464}
+  disease2Text: {fileID: 1303687156351519063}
+  BrainConcepts: {fileID: 3357082760953857783}
+  Buttons: {fileID: 4277369221121701955}
 --- !u!1 &5152321099327435022
 GameObject:
   m_ObjectHideFlags: 0
@@ -13032,7 +13051,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Neuron
+  m_text: MentalP
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a84f857bec7e7345843ae29404c57ce, type: 2}
   m_sharedMaterial: {fileID: 21202819797275496, guid: 6a84f857bec7e7345843ae29404c57ce,
@@ -14304,10 +14323,16 @@ PrefabInstance:
     - target: {fileID: 1917702679333990774, guid: b20ae7c18784859489d557c193214171,
         type: 3}
       propertyPath: expectedType
-      value: lbd:disease
+      value: '!rdf:Class'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b20ae7c18784859489d557c193214171, type: 3}
+--- !u!4 &1303687156215074713 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1917702679333990773, guid: b20ae7c18784859489d557c193214171,
+    type: 3}
+  m_PrefabInstance: {fileID: 615494388418887404}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1303687156215074714 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1917702679333990774, guid: b20ae7c18784859489d557c193214171,
@@ -14320,12 +14345,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d19ead3f6d5a34c9f0e03b201d08b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &1303687156215074713 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1917702679333990773, guid: b20ae7c18784859489d557c193214171,
+--- !u!114 &1303687156351519063 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1917702679197808571, guid: b20ae7c18784859489d557c193214171,
     type: 3}
   m_PrefabInstance: {fileID: 615494388418887404}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3637500168374417825
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14617,10 +14648,28 @@ PrefabInstance:
     - target: {fileID: 1917702679333990774, guid: b20ae7c18784859489d557c193214171,
         type: 3}
       propertyPath: expectedType
-      value: lbd:disease
+      value: '!rdf:Class'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b20ae7c18784859489d557c193214171, type: 3}
+--- !u!114 &7297361434683238464 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1917702679197808571, guid: b20ae7c18784859489d557c193214171,
+    type: 3}
+  m_PrefabInstance: {fileID: 9212222864085458939}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &7297361434534473358 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1917702679333990773, guid: b20ae7c18784859489d557c193214171,
+    type: 3}
+  m_PrefabInstance: {fileID: 9212222864085458939}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7297361434534473357 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1917702679333990774, guid: b20ae7c18784859489d557c193214171,
@@ -14633,9 +14682,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d19ead3f6d5a34c9f0e03b201d08b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &7297361434534473358 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1917702679333990773, guid: b20ae7c18784859489d557c193214171,
-    type: 3}
-  m_PrefabInstance: {fileID: 9212222864085458939}
-  m_PrefabAsset: {fileID: 0}
