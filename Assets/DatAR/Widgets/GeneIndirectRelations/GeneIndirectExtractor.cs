@@ -10,8 +10,12 @@ using System.Collections;
 
 namespace DatAR.Widgets.QueryCooccurrences
 {
-    public class GeneIndirectExtractor : MonoBehaviour
+    public class GeneIndirectExtractor : MonoBehaviour, IQueryState
     {
+        public BehaviorSubject<QueryState> IsLoading { get; private set; }
+        public string ErrorMessage { get; private set; }
+
+
         [System.Serializable]
         public class BrainRegionPassable : Passable
         {
@@ -91,14 +95,16 @@ namespace DatAR.Widgets.QueryCooccurrences
         [SerializeField] private Receptacle geneReceptacle;
         [SerializeField] private Receptacle proteinReceptacle;
 
-        //private QueryCooccurrences()
-        //{
-        //    IsLoading = new BehaviorSubject<QueryState>(QueryState.IsEmpty);
-        //}
+       // private QueryCooccurrences()
+       // {
+        //   IsLoading = new BehaviorSubject<QueryState>(QueryState.IsEmpty);
+       // }
 
         private void Awake()
         {
             //_services = GameObject.Find("Services");
+
+            IsLoading = new BehaviorSubject<QueryState>(QueryState.IsEmpty);
 
             conceptReceptacle.slottedResourceContainerHasChanged.Subscribe(_ => RetrieveCooccurrences(), e => UnityEngine.Debug.LogError(e));
             classReceptacle.slottedResourceContainerHasChanged.Subscribe(_ => RetrieveCooccurrences(), e => UnityEngine.Debug.LogError(e));
@@ -110,7 +116,7 @@ namespace DatAR.Widgets.QueryCooccurrences
 
         public void RetrieveCooccurrences()
         {
-            //IsLoading.OnNext(QueryState.IsEmpty);
+            IsLoading.OnNext(QueryState.IsEmpty);
             if (conceptReceptacle.SlottedResourceContainer == null
                   || classReceptacle.SlottedResourceContainer == null
                   || geneReceptacle.SlottedResourceContainer == null)
@@ -123,7 +129,7 @@ namespace DatAR.Widgets.QueryCooccurrences
             //UnityEngine.Debug.Log("Concept: " + conceptReceptacle.SlottedResourceContainer.Resource.Id);
             //UnityEngine.Debug.Log("Gene: " + geneReceptacle.SlottedResourceContainer.Resource.Id);
 
-            //IsLoading.OnNext(QueryState.IsLoading);
+            IsLoading.OnNext(QueryState.IsLoading);
 
             StartCoroutine(GetDataFromEndpoint());
 
@@ -349,7 +355,6 @@ namespace DatAR.Widgets.QueryCooccurrences
             }
 
         }
-
 
         IEnumerator GetDataFromEndpoint()
         {

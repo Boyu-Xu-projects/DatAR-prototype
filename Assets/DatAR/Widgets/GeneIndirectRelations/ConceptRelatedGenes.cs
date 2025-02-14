@@ -13,6 +13,7 @@ namespace DatAR.Widgets.QueryCooccurrences
 {
     public class ConceptRelatedGenes : MonoBehaviour
     {
+
         [System.Serializable]
         public class SPARQLResponse
         {
@@ -139,7 +140,7 @@ WHERE {{
 }}
 GROUP BY ?gene ?disease
 ORDER BY DESC(?count)
-LIMIT 10000";
+LIMIT 20";
 
                 yield return SendSparqlRequest(sparqlEndpoint, sparqlQuery);
             }
@@ -179,7 +180,7 @@ WHERE {{
 }}
 GROUP BY ?gene ?disease
 ORDER BY DESC(?count)
-LIMIT 10000";
+LIMIT 20";
 
                 yield return SendSparqlRequest(sparqlEndpoint, sparqlQuery);
             }
