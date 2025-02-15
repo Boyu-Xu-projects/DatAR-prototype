@@ -67,6 +67,8 @@ namespace DatAR.Widgets.QueryCooccurrences
         [SerializeField] private GameObject pool;
         [SerializeField] private TMP_Text noRelatedGenesText;
 
+        private readonly IndirectQueryHelper _helper = new IndirectQueryHelper();
+        
         private List<string> genesList = new List<string>();
         private List<DynamicResource> backUp = new List<DynamicResource>();
 
@@ -97,44 +99,9 @@ namespace DatAR.Widgets.QueryCooccurrences
             if (classReceptacle.SlottedResourceContainer.Resource.Id == "lbd:disease")
             {
                 
-                string brainRegionId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
-                string brainRegion = conceptReceptacle.SlottedResourceContainer.Resource.Label;
-                brainRegion = brainRegion.Replace("'", "\\'");
-                string query = $@"PREFIX snomed: <http://www.ihtsdo.org/SCT_>
-PREFIX sct: <http://wasp.cs.vu.nl/sct/sct#>
-PREFIX drugbank: <https://www.drugbank.ca/drugs/>
-PREFIX ztonekg: <http://www.ztonebv.nl/KG#>
-PREFIX pubmed: <http://www.ncbi.nlm.nih.gov/pubmed/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX umls: <http://linkedlifedata.com/resource/umls/id/>
-SELECT ?gene ?disease (COUNT(DISTINCT ?text) AS ?count)
-WHERE {{
-    ?id1 sct:hasTUI sct:T028.
-    ?t1s1 ztonekg:SenseURL ?id1.
-    ?id1 sct:hasEnglishLabel ?gene.
-    ?t1 ztonekg:hasSense ?t1s1.
-    ?s7 ztonekg:hasSenses ?t1.
-    ?s ztonekg:hasTerm ?s7.
-    ?s1 ztonekg:hasAnnotation ?s;
-        ztonekg:hasSource 'Abstract';
-        ztonekg:hasAnnotation ?sb.
-    ?sb ztonekg:hasTerm ?s7b.
-    ?s7b ztonekg:hasSenses ?t1b.
-    ?t1b ztonekg:hasSense ?t1s1b.
-    ?t1s1b ztonekg:SenseURL ?id2.
-    FILTER(?id2 != umls:C0012634)
-    ?id2 sct:hasTUI sct:T047;
-        sct:hasEnglishLabel ?disease.
-    FILTER(REGEX(?disease, '{brainRegion}', 'i'))
-    ?s1 ztonekg:hasText ?text.
-}}
-GROUP BY ?gene ?disease
-ORDER BY DESC(?count)
-LIMIT 10000";
-                string escapedQuery = UnityWebRequest.EscapeURL(query);
-                string genesRelatedBrainRegionURL = $"https://unity:unity@kgbs-sparql.project.cwi.nl/repositories/KnowledgeGraph-BrainScience?query={escapedQuery}";
-                UnityWebRequest request = UnityWebRequest.Get(genesRelatedBrainRegionURL);
+                // string brainRegionId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
+                var brainRegionLabel = conceptReceptacle.SlottedResourceContainer.Resource.Label;
+                var request = UnityWebRequest.Get(_helper.GetGenesRelatedWithBrainRegionURL(brainRegionLabel));
                 request.SetRequestHeader("Accept", "application/json");
                 request.certificateHandler = new BypassCertificate();
 
@@ -146,12 +113,13 @@ LIMIT 10000";
                 }
                 else
                 {
-                    GeneBrainRegionResponseWrapper responseWrapper = JsonUtility.FromJson<GeneBrainRegionResponseWrapper>($"{{\"array\":{request.downloadHandler.text}}}");
+                    string bindings = _helper.GetBindingsFromResponse(request.downloadHandler.text);
+                    GeneDiseaseResponseWrapper responseWrapper = JsonUtility.FromJson<GeneDiseaseResponseWrapper>($"{{\"array\":{bindings}}}");
                     List<string> type = new List<string> { "Gene" };
                     backUp.Clear();
                     foreach (var geneInfo in responseWrapper.array)
                     {
-                        DynamicResource resource = new DynamicResource(geneInfo.gene, type);
+                        DynamicResource resource = new DynamicResource(geneInfo.gene.value, type);
                         backUp.Add(resource);
                     }
                     if (backUp.Count == 0)
@@ -186,46 +154,14 @@ LIMIT 10000";
             
             if(classReceptacle.SlottedResourceContainer.Resource.Id == "lbd:region")
             {
+                // string diseaseId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
+                string diseaseLabel = conceptReceptacle.SlottedResourceContainer.Resource.Label;
+                diseaseLabel = diseaseLabel.Replace("'", "\\'");
                 
-                string diseaseId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
-                string disease = conceptReceptacle.SlottedResourceContainer.Resource.Label;
-                disease = disease.Replace("'", "\\'");
-                string query = $@"PREFIX snomed: <http://www.ihtsdo.org/SCT_>
-PREFIX sct: <http://wasp.cs.vu.nl/sct/sct#>
-PREFIX drugbank: <https://www.drugbank.ca/drugs/>
-PREFIX ztonekg: <http://www.ztonebv.nl/KG#>
-PREFIX pubmed: <http://www.ncbi.nlm.nih.gov/pubmed/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX umls: <http://linkedlifedata.com/resource/umls/id/>
-SELECT ?gene ?disease (COUNT(DISTINCT ?text) AS ?count)
-WHERE {{
-    ?id1 sct:hasTUI sct:T028.
-    ?t1s1 ztonekg:SenseURL ?id1.
-    ?id1 sct:hasEnglishLabel ?gene.
-    ?t1 ztonekg:hasSense ?t1s1.
-    ?s7 ztonekg:hasSenses ?t1.
-    ?s ztonekg:hasTerm ?s7.
-    ?s1 ztonekg:hasAnnotation ?s;
-        ztonekg:hasSource 'Abstract';
-        ztonekg:hasAnnotation ?sb.
-    ?sb ztonekg:hasTerm ?s7b.
-    ?s7b ztonekg:hasSenses ?t1b.
-    ?t1b ztonekg:hasSense ?t1s1b.
-    ?t1s1b ztonekg:SenseURL ?id2.
-    FILTER(?id2 != umls:C0012634)
-    ?id2 sct:hasTUI sct:T047;
-        sct:hasEnglishLabel ?disease.
-    FILTER(?disease = '{disease}')
-    ?s1 ztonekg:hasText ?text.
-}}
-GROUP BY ?gene ?disease
-ORDER BY DESC(?count)
-LIMIT 10000";
-                string escapedQuery = UnityWebRequest.EscapeURL(query);
-                string genesRelatedDiseaseURL = $"https://unity:unity@kgbs-sparql.project.cwi.nl/repositories/KnowledgeGraph-BrainScience?query={escapedQuery}";
-                UnityWebRequest request = UnityWebRequest.Get(genesRelatedDiseaseURL);
+                UnityWebRequest request = UnityWebRequest.Get(_helper.GetGenesRelatedWithDiseaseURL(diseaseLabel));
                 request.SetRequestHeader("Accept", "application/json");
+                
+                // todo delete after cwi renew SSL certificate
                 request.certificateHandler = new BypassCertificate();
 
                 yield return request.SendWebRequest();
@@ -236,15 +172,8 @@ LIMIT 10000";
                 }
                 else
                 {
-                    JObject parsedJson = JObject.Parse(request.downloadHandler.text);
-                    string bindings = parsedJson["results"]["bindings"].ToString();
+                    string bindings = _helper.GetBindingsFromResponse(request.downloadHandler.text);
                     GeneDiseaseResponseWrapper responseWrapper = JsonUtility.FromJson<GeneDiseaseResponseWrapper>($"{{\"array\":{bindings}}}");
-
-                    // string jsonResponse = request.downloadHandler.text;
-                    // string desktopPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
-                    // string fileName = "MyTextFile.txt";
-                    // string filePath = Path.Combine(desktopPath, fileName);
-                    // File.WriteAllText(filePath, jsonResponse);
                     
                     List<string> type = new List<string> { "Gene" };
                     backUp.Clear();

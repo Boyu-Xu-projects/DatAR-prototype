@@ -15,6 +15,7 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using DatAR.Auxiliary.SharedScripts;
 using Cysharp.Threading.Tasks;
+using DatAR.Widgets.QueryCooccurrences;
 
 public class SparqlService : MonoBehaviour
 {
@@ -716,7 +717,8 @@ public class SparqlService : MonoBehaviour
         webRequest.SetRequestHeader("Accept", returnType);
         webRequest.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         webRequest.SetRequestHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ1bmtub3duIiwiaXNzIjoiaHR0cHM6Ly9hcGkua3JyLnRyaXBseS5jYyIsImp0aSI6IjQ5ZDAxNDMwLTg1NWItNDY3NS1hZjkwLTVkNThiY2Q0MTk1NyIsInVpZCI6IjYyMjdkYmJjZmUzYTNjM2Y1YTA3YWQzYSIsImlhdCI6MTY1MDI3NTk5Nn0.ivqSezthy-CG11ASrIbvb5lAsRSzSN-wFKWWEaIJdpA");
-
+        webRequest.certificateHandler = new BypassCertificate();
+        
         // Combine prefixes and current query
         string combinedQuery = $"{_prefixes} {queryRequest}";
         form.AddField("query", combinedQuery);

@@ -22,13 +22,21 @@ namespace DatAR.Widgets.QueryCooccurrences
                 BrainRegions = brainRegions;
             }
         }
+        
+        [Serializable]
+        public class LiteralField
+        {
+            public string type;
+            public string value;
+            public string datatype;
+        }
 
         [System.Serializable]
         public class GeneDiseaseResponse
         {
-            public string gene;
-            public string disease;
-            public string count; // Since count is a string in the JSON, it's declared as a string here
+            public LiteralField gene;
+            public LiteralField disease;
+            public LiteralField count;
         }
 
         [System.Serializable]
@@ -40,9 +48,9 @@ namespace DatAR.Widgets.QueryCooccurrences
         [System.Serializable]
         public class BrainRegionEntry
         {
-            public string gene;
-            public string brainRegion;
-            public string count;
+            public LiteralField gene;
+            public LiteralField brainRegion;
+            public LiteralField count;
         }
 
         [System.Serializable]
@@ -54,9 +62,9 @@ namespace DatAR.Widgets.QueryCooccurrences
         [System.Serializable]
         public class GeneBrainRegionResponse
         {
-            public string gene;
-            public string brainRegion;
-            public string count; // Since count is a string in the JSON, it's declared as a string here
+            public LiteralField gene;
+            public LiteralField brainRegion;
+            public LiteralField count;
         }
 
         [System.Serializable]
@@ -68,9 +76,9 @@ namespace DatAR.Widgets.QueryCooccurrences
         [System.Serializable]
         public class DiseaseEntry
         {
-            public string gene;
-            public string disease;
-            public string count;
+            public LiteralField gene;
+            public LiteralField disease;
+            public LiteralField count;
         }
 
         [System.Serializable]
@@ -82,6 +90,8 @@ namespace DatAR.Widgets.QueryCooccurrences
         //public behaviorsubject<querystate> isloading { get; }
         //public string errormessage { get; private set; }
 
+        private readonly IndirectQueryHelper _helper = new IndirectQueryHelper();
+        
         [SerializeField] private DataflowOutlet dataSender;
 
         private GameObject _services;
@@ -133,7 +143,10 @@ namespace DatAR.Widgets.QueryCooccurrences
         {
             UnityWebRequest request = UnityWebRequest.Get(geneDiseaseUrl);
             request.SetRequestHeader("Accept", "application/json");
-
+            
+            // todo delete after cwi renew SSL certificate
+            request.certificateHandler = new BypassCertificate();
+            
             yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
@@ -142,13 +155,16 @@ namespace DatAR.Widgets.QueryCooccurrences
             }
             else
             {
-                GeneDiseaseResponseWrapper responseWrapper = JsonUtility.FromJson<GeneDiseaseResponseWrapper>($"{{\"array\":{request.downloadHandler.text}}}");
+                string bindings = _helper.GetBindingsFromResponse(request.downloadHandler.text);
+                GeneDiseaseResponseWrapper responseWrapper = JsonUtility.FromJson<GeneDiseaseResponseWrapper>($"{{\"array\":{bindings}}}");
                 if (responseWrapper.array != null && responseWrapper.array.Length > 0)
                 {
-                    string geneDiseaseCount = responseWrapper.array[0].count;
+                    string geneDiseaseCount = responseWrapper.array[0].count.value;
 
                     UnityWebRequest requestBrainRegions = UnityWebRequest.Get(geneBrainregionsUrl);
                     requestBrainRegions.SetRequestHeader("Accept", "application/json");
+                    requestBrainRegions.certificateHandler = new BypassCertificate();
+
 
                     yield return requestBrainRegions.SendWebRequest();
 
@@ -167,8 +183,8 @@ namespace DatAR.Widgets.QueryCooccurrences
                         {
                             CooccurrenceResource cooccurrence = new CooccurrenceResource(
                                 new List<string> { "Brain Region" },
-                                Convert.ToDouble(entry.count),
-                                new DynamicResource(entry.brainRegion, new List<string> { "Brain Region" }),
+                                Convert.ToDouble(entry.count.value),
+                                new DynamicResource(entry.brainRegion.value, new List<string> { "Brain Region" }),
                                 0.0, // Placeholder for other metrics, if needed
                                 0.0, // Placeholder for other metrics, if needed
                                 DatAR.DataModels.Misc.FilterSelectionStateType.IndirectGeneRange
@@ -246,6 +262,9 @@ namespace DatAR.Widgets.QueryCooccurrences
             UnityWebRequest request = UnityWebRequest.Get(BrainRegionGeneUrl);
             request.SetRequestHeader("Accept", "application/json");
 
+            // todo delete after cwi renew SSL certificate
+            request.certificateHandler = new BypassCertificate();
+            
             yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
@@ -254,16 +273,18 @@ namespace DatAR.Widgets.QueryCooccurrences
             }
             else
             {
-                GeneBrainRegionResponseWrapper responseWrapper = JsonUtility.FromJson<GeneBrainRegionResponseWrapper>($"{{\"array\":{request.downloadHandler.text}}}");
+                string bindings = _helper.GetBindingsFromResponse(request.downloadHandler.text);
+                GeneDiseaseResponseWrapper responseWrapper = JsonUtility.FromJson<GeneDiseaseResponseWrapper>($"{{\"array\":{bindings}}}");
 
                 if (responseWrapper.array != null && responseWrapper.array.Length > 0)
                 {
-                    string geneBrainRegionCount = responseWrapper.array[0].count;
+                    string geneBrainRegionCount = responseWrapper.array[0].count.value;
                     //UnityEngine.Debug.Log("Count: " + geneBrainRegionCount);
 
 
                     UnityWebRequest requestDiseases = UnityWebRequest.Get(geneDiseasesUrl);
                     requestDiseases.SetRequestHeader("Accept", "application/json");
+                    requestDiseases.certificateHandler = new BypassCertificate();
 
                     yield return requestDiseases.SendWebRequest();
 
@@ -280,8 +301,8 @@ namespace DatAR.Widgets.QueryCooccurrences
                         {
                             CooccurrenceResource cooccurrence = new CooccurrenceResource(
                                 new List<string> { "Disease" }, // Assuming "Brain Region" is the class type
-                                Convert.ToDouble(entry.count),
-                                new DynamicResource(entry.disease, new List<string> { "Disease" }),
+                                Convert.ToDouble(entry.count.value),
+                                new DynamicResource(entry.disease.value, new List<string> { "Disease" }),
                                 0.0, // Placeholder for other metrics, if needed
                                 0.0, // Placeholder for other metrics, if needed
                                 DatAR.DataModels.Misc.FilterSelectionStateType.IndirectGeneRange
@@ -357,10 +378,14 @@ namespace DatAR.Widgets.QueryCooccurrences
             if (classReceptacle.SlottedResourceContainer.Resource.Id == "lbd:region")
             {
                 string geneId = geneReceptacle.SlottedResourceContainer.Resource.Id;
+                
                 string diseaseId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
-                string geneDiseaseUrl = $"https://api.krr.triply.cc/queries/BrainScienceKG/Indirect-relations-based-on-a-specific-G/2/run?gene={geneId}&disease={diseaseId}";
-                //string geneDiseaseUrl = "https://api.krr.triply.cc/queries/BrainScienceKG/Indirect-relations-based-on-a-specific-G/2/run?gene=Heterozygote&disease=Functional+disorder";
-                string geneBrainregionsUrl = $"https://api.krr.triply.cc/queries/BrainScienceKG/Brain-Regions---Specific-Diseases---Coun/3/run?gene={geneId}";
+                string diseaseLabel = conceptReceptacle.SlottedResourceContainer.Resource.Label;
+                diseaseLabel = diseaseLabel.Replace("'", "\\'");
+                
+                // changed to label - differ from original diseaseId setup
+                string geneDiseaseUrl = _helper.GetIndirectRelationsBasedOnASpecificGeneURL(geneId, diseaseLabel);
+                string geneBrainregionsUrl = _helper.GetBrainRegionSpecificDiseasesURL(geneId);
 
                if (geneReceptacle.SlottedResourceContainer.Resource.Id != null)
                 {
@@ -371,8 +396,8 @@ namespace DatAR.Widgets.QueryCooccurrences
             {
                 string geneId = geneReceptacle.SlottedResourceContainer.Resource.Id;
                 string brainRegionId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
-                string BrainRegionGeneUrl = $"https://api.krr.triply.cc/queries/BrainScienceKG/Brain-region---Specific-Gene---Count/1/run?brainRegion={brainRegionId}&gene={geneId}";
-                string geneDiseasesUrl = $"https://api.krr.triply.cc/queries/BrainScienceKG/Diseases---Gene-Count/run?gene={geneId}";
+                string BrainRegionGeneUrl = _helper.GetBrainRegionSpecificGeneURL(brainRegionId, geneId);
+                string geneDiseasesUrl = _helper.GetDiseasesGeneCountURL(geneId);
 
                 if (geneReceptacle.SlottedResourceContainer.Resource.Id != null)
                 {
