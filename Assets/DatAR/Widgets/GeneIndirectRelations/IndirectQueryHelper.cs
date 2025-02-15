@@ -37,7 +37,7 @@ WHERE {{
     FILTER(?id2 != umls:C0012634)
     ?id2 sct:hasTUI sct:T047;
         sct:hasEnglishLabel ?disease.
-    FILTER(?disease = '{{brainRegion}}')
+    FILTER(?disease = '{brainRegionLabel}')
     ?s1 ztonekg:hasText ?text.
 }}
 GROUP BY ?gene ?disease
