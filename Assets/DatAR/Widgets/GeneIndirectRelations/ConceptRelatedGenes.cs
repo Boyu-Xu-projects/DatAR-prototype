@@ -7,11 +7,22 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine.Networking;
 using System.Collections;
+using System.IO;
+using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 using TMPro;
 
 namespace DatAR.Widgets.QueryCooccurrences
 {
+    // ! temporary code, insecure, delete when cwi server update SSL certificate
+    public class BypassCertificate : CertificateHandler
+    {
+        protected override bool ValidateCertificate(byte[] certificateData)
+        {
+            return true;
+        }
+    }
+    
     public class ConceptRelatedGenes : MonoBehaviour
     {
         [Serializable]
@@ -27,13 +38,21 @@ namespace DatAR.Widgets.QueryCooccurrences
         {
             public GeneBrainRegionResponse[] array;
         }
+        
+        [Serializable]
+        public class LiteralField
+        {
+            public string type;
+            public string value;
+            public string datatype;
+        }
 
         [Serializable]
         public class GeneDiseaseResponse
         {
-            public string gene;
-            public string disease;
-            public int count;
+            public LiteralField gene;
+            public LiteralField disease;
+            public LiteralField count;
         }
 
         [System.Serializable]
@@ -79,9 +98,45 @@ namespace DatAR.Widgets.QueryCooccurrences
             {
                 
                 string brainRegionId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
-                string genesRelatedBrainRegionURL = $"https://api.krr.triply.cc/queries/BrainScienceKG/Genes-Related-with-BrainRegion/run?brainRegion={brainRegionId}";
+                string brainRegion = conceptReceptacle.SlottedResourceContainer.Resource.Label;
+                brainRegion = brainRegion.Replace("'", "\\'");
+                string query = $@"PREFIX snomed: <http://www.ihtsdo.org/SCT_>
+PREFIX sct: <http://wasp.cs.vu.nl/sct/sct#>
+PREFIX drugbank: <https://www.drugbank.ca/drugs/>
+PREFIX ztonekg: <http://www.ztonebv.nl/KG#>
+PREFIX pubmed: <http://www.ncbi.nlm.nih.gov/pubmed/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX umls: <http://linkedlifedata.com/resource/umls/id/>
+SELECT ?gene ?disease (COUNT(DISTINCT ?text) AS ?count)
+WHERE {{
+    ?id1 sct:hasTUI sct:T028.
+    ?t1s1 ztonekg:SenseURL ?id1.
+    ?id1 sct:hasEnglishLabel ?gene.
+    ?t1 ztonekg:hasSense ?t1s1.
+    ?s7 ztonekg:hasSenses ?t1.
+    ?s ztonekg:hasTerm ?s7.
+    ?s1 ztonekg:hasAnnotation ?s;
+        ztonekg:hasSource 'Abstract';
+        ztonekg:hasAnnotation ?sb.
+    ?sb ztonekg:hasTerm ?s7b.
+    ?s7b ztonekg:hasSenses ?t1b.
+    ?t1b ztonekg:hasSense ?t1s1b.
+    ?t1s1b ztonekg:SenseURL ?id2.
+    FILTER(?id2 != umls:C0012634)
+    ?id2 sct:hasTUI sct:T047;
+        sct:hasEnglishLabel ?disease.
+    FILTER(REGEX(?disease, '{brainRegion}', 'i'))
+    ?s1 ztonekg:hasText ?text.
+}}
+GROUP BY ?gene ?disease
+ORDER BY DESC(?count)
+LIMIT 10000";
+                string escapedQuery = UnityWebRequest.EscapeURL(query);
+                string genesRelatedBrainRegionURL = $"https://unity:unity@kgbs-sparql.project.cwi.nl/repositories/KnowledgeGraph-BrainScience?query={escapedQuery}";
                 UnityWebRequest request = UnityWebRequest.Get(genesRelatedBrainRegionURL);
                 request.SetRequestHeader("Accept", "application/json");
+                request.certificateHandler = new BypassCertificate();
 
                 yield return request.SendWebRequest();
 
@@ -133,9 +188,45 @@ namespace DatAR.Widgets.QueryCooccurrences
             {
                 
                 string diseaseId = conceptReceptacle.SlottedResourceContainer.Resource.Id;
-                string genesRelatedDiseaseURL = $"https://api.krr.triply.cc/queries/BrainScienceKG/Genes-Related-with-Disease/1/run?disease={diseaseId}";
+                string disease = conceptReceptacle.SlottedResourceContainer.Resource.Label;
+                disease = disease.Replace("'", "\\'");
+                string query = $@"PREFIX snomed: <http://www.ihtsdo.org/SCT_>
+PREFIX sct: <http://wasp.cs.vu.nl/sct/sct#>
+PREFIX drugbank: <https://www.drugbank.ca/drugs/>
+PREFIX ztonekg: <http://www.ztonebv.nl/KG#>
+PREFIX pubmed: <http://www.ncbi.nlm.nih.gov/pubmed/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX umls: <http://linkedlifedata.com/resource/umls/id/>
+SELECT ?gene ?disease (COUNT(DISTINCT ?text) AS ?count)
+WHERE {{
+    ?id1 sct:hasTUI sct:T028.
+    ?t1s1 ztonekg:SenseURL ?id1.
+    ?id1 sct:hasEnglishLabel ?gene.
+    ?t1 ztonekg:hasSense ?t1s1.
+    ?s7 ztonekg:hasSenses ?t1.
+    ?s ztonekg:hasTerm ?s7.
+    ?s1 ztonekg:hasAnnotation ?s;
+        ztonekg:hasSource 'Abstract';
+        ztonekg:hasAnnotation ?sb.
+    ?sb ztonekg:hasTerm ?s7b.
+    ?s7b ztonekg:hasSenses ?t1b.
+    ?t1b ztonekg:hasSense ?t1s1b.
+    ?t1s1b ztonekg:SenseURL ?id2.
+    FILTER(?id2 != umls:C0012634)
+    ?id2 sct:hasTUI sct:T047;
+        sct:hasEnglishLabel ?disease.
+    FILTER(?disease = '{disease}')
+    ?s1 ztonekg:hasText ?text.
+}}
+GROUP BY ?gene ?disease
+ORDER BY DESC(?count)
+LIMIT 10000";
+                string escapedQuery = UnityWebRequest.EscapeURL(query);
+                string genesRelatedDiseaseURL = $"https://unity:unity@kgbs-sparql.project.cwi.nl/repositories/KnowledgeGraph-BrainScience?query={escapedQuery}";
                 UnityWebRequest request = UnityWebRequest.Get(genesRelatedDiseaseURL);
                 request.SetRequestHeader("Accept", "application/json");
+                request.certificateHandler = new BypassCertificate();
 
                 yield return request.SendWebRequest();
 
@@ -145,14 +236,23 @@ namespace DatAR.Widgets.QueryCooccurrences
                 }
                 else
                 {
-                    GeneDiseaseResponseWrapper responseWrapper = JsonUtility.FromJson<GeneDiseaseResponseWrapper>($"{{\"array\":{request.downloadHandler.text}}}");
+                    JObject parsedJson = JObject.Parse(request.downloadHandler.text);
+                    string bindings = parsedJson["results"]["bindings"].ToString();
+                    GeneDiseaseResponseWrapper responseWrapper = JsonUtility.FromJson<GeneDiseaseResponseWrapper>($"{{\"array\":{bindings}}}");
 
+                    // string jsonResponse = request.downloadHandler.text;
+                    // string desktopPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
+                    // string fileName = "MyTextFile.txt";
+                    // string filePath = Path.Combine(desktopPath, fileName);
+                    // File.WriteAllText(filePath, jsonResponse);
+                    
                     List<string> type = new List<string> { "Gene" };
                     backUp.Clear();
+                    
                     foreach (var geneInfo in responseWrapper.array)
                     {
                         UnityEngine.Debug.Log(geneInfo);
-                        DynamicResource resource = new DynamicResource(geneInfo.gene, type);
+                        DynamicResource resource = new DynamicResource(geneInfo.gene.value, type);
                         backUp.Add(resource);
                     }
                     if (backUp.Count == 0)
