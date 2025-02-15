@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine.Networking;
 using System.Collections;
+using System.IO;
 
 namespace DatAR.Widgets.QueryCooccurrences
 {
@@ -157,6 +158,14 @@ namespace DatAR.Widgets.QueryCooccurrences
             {
                 string bindings = _helper.GetBindingsFromResponse(request.downloadHandler.text);
                 GeneDiseaseResponseWrapper responseWrapper = JsonUtility.FromJson<GeneDiseaseResponseWrapper>($"{{\"array\":{bindings}}}");
+                
+                string res = request.downloadHandler.text;
+                string path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
+                string fileName1 = "MyTextFile1.txt";
+                string filePath1 = Path.Combine(path, fileName1);
+                File.WriteAllText(filePath1, res);
+
+                
                 if (responseWrapper.array != null && responseWrapper.array.Length > 0)
                 {
                     string geneDiseaseCount = responseWrapper.array[0].count.value;
@@ -175,7 +184,15 @@ namespace DatAR.Widgets.QueryCooccurrences
                     else
                     {
                         UnityEngine.Debug.Log("Received: " + requestBrainRegions.downloadHandler.text);
-                        BrainRegionResponseWrapper brainRegionsWrapper = JsonUtility.FromJson<BrainRegionResponseWrapper>($"{{\"array\":{requestBrainRegions.downloadHandler.text}}}");
+                        
+                        string jsonResponse = requestBrainRegions.downloadHandler.text;
+                        string desktopPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
+                        string fileName = "MyTextFile.txt";
+                        string filePath = Path.Combine(desktopPath, fileName);
+                        File.WriteAllText(filePath, jsonResponse);
+                        
+                        string brainRegionsBindings = _helper.GetBindingsFromResponse(requestBrainRegions.downloadHandler.text);
+                        BrainRegionResponseWrapper brainRegionsWrapper = JsonUtility.FromJson<BrainRegionResponseWrapper>($"{{\"array\":{brainRegionsBindings}}}");
                         List<CooccurrenceResource> cooccurrences = new List<CooccurrenceResource>();
 
                         // Add indirect gene range cooccurrences
@@ -294,7 +311,8 @@ namespace DatAR.Widgets.QueryCooccurrences
                     }
                     else
                     {
-                        DiseaseResponseWrapper diseasesWrapper = JsonUtility.FromJson<DiseaseResponseWrapper>($"{{\"array\":{requestDiseases.downloadHandler.text}}}");
+                        string diseasesBindings = _helper.GetBindingsFromResponse(requestDiseases.downloadHandler.text);
+                        DiseaseResponseWrapper diseasesWrapper = JsonUtility.FromJson<DiseaseResponseWrapper>($"{{\"array\":{diseasesBindings}}}");
                         List<CooccurrenceResource> cooccurrences = new List<CooccurrenceResource>();
 
                         foreach (var entry in diseasesWrapper.array)
