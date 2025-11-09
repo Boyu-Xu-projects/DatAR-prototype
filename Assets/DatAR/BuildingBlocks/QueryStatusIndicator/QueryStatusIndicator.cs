@@ -9,34 +9,19 @@ public class QueryStatusIndicator : MonoBehaviour
     [SerializeField] private MeshRenderer queryStatusIndicator;
     [SerializeField] private TMP_Text errorMessageDisplay;
     [SerializeField] private GameObject loadingAnimation;
-
-    private IQueryState _statusSource;
-
+    
     void Start()
     {
-        // Check if statusSource is valid
-        _statusSource = statusSource.GetComponent<IQueryState>();
+        // Check if statusSource is valid - Unity does not allow SerializeField with interfaces
+        var _statusSource = statusSource.GetComponent<IQueryState>();
         if (_statusSource == null)
         {
             Debug.LogError("Received invalid status source");
             return;
         }
 
-        if (_statusSource.IsLoading == null)
-        {
-            Debug.LogError("IsLoading is not initialized.");
-            return;
-        }
-
-        if (queryStatusIndicator == null || errorMessageDisplay == null || loadingAnimation == null)
-        {
-            Debug.LogError("Missing references in QueryStatusIndicator.");
-            return;
-        }
-
         var material = queryStatusIndicator.material;
-
-        // Subscribe to IsLoading observable
+        
         _statusSource.IsLoading.DistinctUntilChanged().Sample(TimeSpan.FromMilliseconds(500)).Subscribe(queryState =>
         {
             if (errorMessageDisplay)
@@ -44,7 +29,7 @@ public class QueryStatusIndicator : MonoBehaviour
                 errorMessageDisplay.text = _statusSource.ErrorMessage;
                 errorMessageDisplay.gameObject.SetActive(false);
             }
-
+            
             // Set defaults
             loadingAnimation.SetActive(false);
             errorMessageDisplay?.gameObject.SetActive(false);
@@ -66,9 +51,6 @@ public class QueryStatusIndicator : MonoBehaviour
                     errorMessageDisplay?.gameObject.SetActive(true);
                     break;
             }
-        },
-        error => Debug.LogError($"Error in IsLoading subscription: {error.Message}"),
-        () => Debug.Log("IsLoading subscription completed.")
-        );
+        });
     }
 }
