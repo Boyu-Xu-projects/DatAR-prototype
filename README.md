@@ -1,4 +1,4 @@
-﻿This repository contains the Hololens 2 version of the DatAR project, an experimental virtual environment for the exploration of neuroscientific literature. The code in this project is a ported version of [the original DatAR repository](https://git.science.uu.nl/g.tanhaei/datar) in order to move away from SteamVR and instead support Microsoft Mixed Reality Toolkit. For access and more information, contact [Ghazaleh Tanhei](mailto:g.tanhaei@uu.nl).
+﻿This repository contains the Hololens 2 version of the DatAR project, an experimental virtual environment for the exploration of neuroscientific literature. The code in this project is a ported version of [the original DatAR repository](https://git.science.uu.nl/g.tanhaei/datar) in order to move away from SteamVR and instead support Microsoft Mixed Reality Toolkit. For access and more information, contact [Boyu Xu](mailto:xuboyudesign@outlook.com).
 
 *Last updated 10-09-2021*
 *Unity version 2020.3.15f2*
